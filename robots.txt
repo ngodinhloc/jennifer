@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+User-Agent: *
+Disallow: /controllers/
+Disallow: /dashboard/
+Disallow: /css/
+Disallow: /models/
+Disallow: /js/
+Disallow: /plugins/
+Disallow: /sql/
