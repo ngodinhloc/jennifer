@@ -265,8 +265,7 @@ class View extends Model {
     if ($result) {
       foreach ($result as $row) {
         if (isset($row['id'])) {
-          $link       =
-            LIST_URL . $row['id'] . '/' . $row['day'] . $row['month'] . $row['year'] . '-' . $row['slug'] . URL_EXT;
+          $link       = Com::getDayLink($row);
           $photos     = trim($row['photos']);
           $firstPhoto = "";
           if ($photos != "") {
@@ -305,8 +304,7 @@ class View extends Model {
     if ($result) {
       foreach ($result as $row) {
         if (isset($row['id'])) {
-          $link       =
-            LIST_URL . $row['id'] . '/' . $row['day'] . $row['month'] . $row['year'] . '-' . $row['slug'] . URL_EXT;
+          $link       = Com::getDayLink($row);
           $photos     = trim($row['photos']);
           $firstPhoto = "";
           if ($photos != "") {
@@ -528,8 +526,8 @@ class View extends Model {
 
     $limit     = NUM_PER_PAGE * 2;
     $orderCond = ["year" => "ASC", "month" => "ASC", "day" => "ASC", "like" => "DESC"];
-    $result = $this->db->table("tbl_day")->where($searchCond)->orderBy($orderCond)->limit($limit)->get(true)->toArray();
-    $total  = $this->db->foundRows();
+    $result    = $this->db->table("tbl_day")->where($searchCond)->orderBy($orderCond)->limit($limit)->get(true)->toArray();
+    $total     = $this->db->foundRows();
 
     $html   = new HTML();
     $output = "";
@@ -565,8 +563,7 @@ class View extends Model {
     $html   = new HTML();
     $output = "";
     foreach ($result as $row) {
-      $link      =
-        LIST_URL . $row['id'] . '/' . $row['day'] . $row['month'] . $row['year'] . '-' . $row['slug'] . URL_EXT;
+      $link      = Com::getDayLink($row);
       $title     = $row['day'] . '/' . $row['month'] . '/' . $row['year'] . ': ' . $row['title'];
       $photos    = trim($row['photos']);
       $fistPhoto = "";

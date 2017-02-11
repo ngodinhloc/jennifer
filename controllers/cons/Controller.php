@@ -7,7 +7,7 @@ namespace cons;
 use sys\System;
 
 class Controller {
-  protected $requiredPermission = [];
+  protected $requiredPermission = false;
 
   public function __construct() {
     // do something
@@ -18,14 +18,19 @@ class Controller {
    * @return bool
    */
   protected function checkPermission() {
+    // no permission required
+    if (!$this->requiredPermission) {
+      return true;
+    }
+
     System::sessionStart();
     $permissionList = System::getPermission();
     if (!$permissionList) {
-      die("User does not have permission to access the controller");
+      die("User does not have permission to access this controller");
     }
     foreach ($this->requiredPermission as $per) {
       if (!in_array($per, $permissionList)) {
-        die("User does not have permission to access the controller");
+        die("User does not have permission to access this controller");
       }
     }
 

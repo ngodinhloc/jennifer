@@ -141,11 +141,11 @@ class Com {
    * @param $menu
    */
   public function getDashboardMenu($menu) {
-    $array  = ['home'    => 'home/',
-               'list'    => 'list/',
-               'about'   => 'about/',
-               'privacy' => 'privacy/',
-               'tool'    => 'tool/',];
+    $array  = ['home'    => '/back/home/',
+               'days'    => '/back/days/',
+               'about'   => '/back/about/',
+               'privacy' => '/back/privacy/',
+               'tools'    => '/back/tools/',];
     $html   = new HTML();
     $output = "";
     foreach ($array as $text => $page) {
@@ -171,11 +171,11 @@ class Com {
    */
   public static function getMenu($page) {
     $menuArray = ['index'    => ['title' => 'The Days Of Life', 'url' => SITE_URL],
-                  'like'     => ['title' => 'Most Liked Days', 'url' => SITE_URL . '/like/'],
-                  'calendar' => ['title' => 'The Calendar Of Life', 'url' => SITE_URL . '/calendar/'],
-                  'picture'  => ['title' => 'The Picture Of Life', 'url' => SITE_URL . '/picture/'],
-                  'about'    => ['title' => 'About', 'url' => SITE_URL . '/about/'],
-                  'privacy'  => ['title' => 'Privacy', 'url' => SITE_URL . '/privacy/']];
+                  'like'     => ['title' => 'Most Liked Days', 'url' => SITE_URL . '/front/like/'],
+                  'calendar' => ['title' => 'The Calendar Of Life', 'url' => SITE_URL . '/front/calendar/'],
+                  'picture'  => ['title' => 'The Picture Of Life', 'url' => SITE_URL . '/front/picture/'],
+                  'about'    => ['title' => 'About', 'url' => SITE_URL . '/front/about/'],
+                  'privacy'  => ['title' => 'Privacy', 'url' => SITE_URL . '/front/privacy/']];
     $html      = new HTML();
     $output    = "";
     foreach ($menuArray as $view => $menu) {

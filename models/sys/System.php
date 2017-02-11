@@ -5,6 +5,7 @@
  */
 namespace sys;
 
+use core\View;
 use jwt\JWT;
 
 class System {
@@ -13,9 +14,9 @@ class System {
    * @return array
    */
   public static function getPermission() {
-    $admin = self::checkJWT();
-    if ($admin) {
-      return explode(",", $admin->permission);
+    $user = self::checkJWT();
+    if ($user) {
+      return explode(",", $user->permission);
     }
 
     return false;
@@ -96,6 +97,7 @@ class System {
     if (session_status() == PHP_SESSION_NONE) {
       session_start();
     }
+
     return session_id();
   }
 
@@ -214,12 +216,10 @@ class System {
    * @return string
    */
   public static function getSearchPara() {
-    $uri    = $_SERVER['REQUEST_URI'];
-    $tag    = str_replace('/' . SYS_VIEW . '/', '', $uri);
-    $tag    = urldecode($tag);
-    $search = trim(substr($tag, 4, strlen($tag) - 4));
+    $uri = $_SERVER['REQUEST_URI'];
+    $tag = urldecode(trim(str_replace("/front/search/tag=", "", $uri)));
 
-    return $search;
+    return $tag;
   }
 
   /**
@@ -230,7 +230,7 @@ class System {
     $uri  = $_SERVER['REQUEST_URI'];
     $para = explode("/", $uri);
 
-    return (int)$para[2];
+    return (int)$para[3];
   }
 
   /**
@@ -254,7 +254,7 @@ class System {
     $viewName = $para[2];
 
     if ($viewName == 'logout') {
-      self::adminLogout();
+      self::userLogout();
     }
     if (file_exists(DASHBOARD_DIR . $viewName . VIEW_EXT)) {
       define('DASHBOARD_MODULE', $viewName);
@@ -269,11 +269,12 @@ class System {
    * @return string
    */
   public static function setView() {
-    $uri      = $_SERVER['REQUEST_URI'];
-    $para     = explode("/", $uri);
-    $viewName = $para[1];
+    $uri        = $_SERVER['REQUEST_URI'];
+    $para       = explode("/", $uri);
+    $moduleName = $para[1];
+    $viewName   = $para[2];
 
-    if (file_exists(VIEW_DIR . $viewName . VIEW_EXT)) {
+    if (file_exists(VIEW_DIR . $moduleName . "/" . $viewName . VIEW_EXT)) {
       define('SYS_VIEW', $viewName);
     }
     else {
@@ -282,17 +283,34 @@ class System {
   }
 
   /**
-   * Load the view: always call after getView()
-   * @see setView();
+   * @param $module
+   * @param $viewName
+   * @return bool|string
    */
   public static function loadView() {
-    $viewFile = VIEW_DIR . SYS_VIEW . VIEW_EXT;
-    include_once($viewFile);
+    $uri = $_SERVER['REQUEST_URI'];
+    list($domain, $module, $view) = explode("/", $uri);
+    $file = VIEW_DIR . $module . "/" . $view . VIEW_EXT;
+    if (file_exists($file)) {
+      $class = $module . "\\" . $view;
+    }
+    else {
+      if ($module == "back") {
+        $file  = VIEW_DIR . $module . "/login" . VIEW_EXT;
+        $class = $module . "\\" . "login";
+      }
+      else {
+        $file  = VIEW_DIR . DEFAULT_MODULE . "/" . DEFAULT_VIEW . VIEW_EXT;
+        $class = DEFAULT_MODULE . "\\" . DEFAULT_VIEW;
+      }
+    }
+    require_once($file);
+
+    return $class;
   }
 
   /**
-   * Load the view: always call after getView()
-   * @see setView();
+   *
    */
   public static function loadDasboardModule() {
     $viewFile = DASHBOARD_DIR . DASHBOARD_MODULE . VIEW_EXT;
@@ -300,15 +318,15 @@ class System {
   }
 
   /**
-   * Load the view: always call after getView()
-   * @see setView();
+   * @param $conName
+   * @return bool|string
    */
   public static function loadController($conName) {
-    $con  = CONTROLLER_DIR . "Controller.php";
-    $file = CONTROLLER_DIR . $conName . CONTROLLER_EXT;
+    $baseCon = CONTROLLER_DIR . "Controller.php";
+    $file    = CONTROLLER_DIR . $conName . CONTROLLER_EXT;
     if (file_exists($file)) {
       $class = str_replace("/", "", CONTROLLER_DIR) . "\\" . $conName;
-      require_once($con);
+      require_once($baseCon);
       require_once($file);
 
       return $class;
@@ -328,8 +346,14 @@ class System {
     return $path_info['extension'];
   }
 
-  public static function adminLogout() {
+  /**
+   * Admin log out
+   */
+  public static function userLogout() {
+    if (session_status() == PHP_SESSION_NONE) {
+      session_start();
+    }
     session_destroy();
-    System::redirectTo("login/");
+    System::redirectTo("back/login/");
   }
 }

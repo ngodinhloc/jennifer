@@ -8,9 +8,10 @@
 require_once("models/autoload.php");
 use sys\System;
 
-System::setView();
-System::obStart();
-include_once("views/include/header.php");
-System::loadView();
-include_once("views/include/footer.php");
-System::obFlush();
+$viewClass = System::loadView();
+if ($viewClass) {
+  $view = new $viewClass() or die("View not found: " . $viewClass);
+  System::obStart();
+  $view->render();
+  System::obFlush();
+}

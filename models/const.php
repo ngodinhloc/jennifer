@@ -1,25 +1,27 @@
 <?php
 // DATABASE
-define('DB_HOST', '****');
-define('DB_USER', '****');
-define('DB_PASSWORD', '****');
-define('DB_NAME', '****');
+define('DB_HOST', '***');
+define('DB_USER', '***');
+define('DB_PASSWORD', '***');
+define('DB_NAME', '***');
 // DITECTORY
 define("CLASS_DIR", "models/");
 define("VIEW_DIR", "views/");
+define("TEMPLATE_DIR", "templates/");
 define("DASHBOARD_DIR", "modules/");
 define("CONTROLLER_DIR", "cons/");
 define("CACHE_DIR", "caches/");
 define("DEFAULT_VIEW", "index");
-define("VIEW_EXT", ".php");
+define("DEFAULT_MODULE", "front");
+define("VIEW_EXT", ".class.php");
 define("CONTROLLER_EXT", ".php");
+define("TEMPLATE_EXT", ".tpl.php");
 define('DOC_ROOT', $_SERVER['DOCUMENT_ROOT']);
 define('SITE_URL', 'http://www.thedaysoflife.com');
-define('BASE_URL', SITE_URL . '/login.php');
+define('BASE_URL', SITE_URL . '/index.php');
 define('CONTROLLER_URL', SITE_URL . '/controllers/index.php');
-define('BASE_URL_DASHBOARD', SITE_URL . '/dashboard/login.php');
 define('URL_EXT', '.html');
-define('LIST_URL', SITE_URL . '/day/');
+define('LIST_URL', SITE_URL . '/front/day/');
 define('PHOTO_DIR', '/uploads/photos/');
 define('PHOTO_URL', 'http://photos.thedaysoflife.com/');
 define('SITE_TITLE', 'The Days Of Life');
@@ -58,10 +60,10 @@ define('PHOTO_TITLE_HEIGHT', 240);
 define('PHOTO_THUMB_WIDTH', 75);
 define('PHOTO_THUMB_HEIGHT', 75);
 // FB
-define('FB_APPID', '****');
-define('FB_SECRET', '****');
-define('FB_PAGEID', '****');
-define('FB_ALBUMID', '****');
+define('FB_APPID', '***');
+define('FB_SECRET', '***');
+define('FB_PAGEID', '***');
+define('FB_ALBUMID', '***');
 define('FB_TEXT', 'text');
 define('FB_FEED', 'feed');
 define('FB_ALBUM', 'album');
@@ -69,9 +71,9 @@ define('FB_LINK', 'link');
 // SALT
 define('ADMIN_ACTIVE', 'active');
 define('ADMIN_DISABLE', 'disable');
-define('SALT_MD5', '****');
-define('SALT_SHA256', '****');
-define('SALT_SHA512', '****');
-define("JWT_KEY", '*******');
+define('SALT_MD5', '***');
+define('SALT_SHA256', '***');
+define('SALT_SHA512', '***');
+define("JWT_KEY", '***');
 // LOGIN NOTICE
 define('NOTICE_SESSION_EXPIRED', 'Session time out. Please <a title="Login" href="#login" onclick="self.parent.reloadPage();return false">login again</a>');
