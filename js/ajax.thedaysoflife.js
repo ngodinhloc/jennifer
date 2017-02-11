@@ -46,7 +46,7 @@ $(document).ready(function () {
 $("#top-search-button").live("click", function () {
   search = $("#top-search-text").val();
   if (search != '') {
-    link = CONST.SITE_URL + '/search/tag=' + encodeURI(search);
+    link = CONST.SITE_URL + '/front/search/tag=' + encodeURI(search);
     window.location = link;
   }
 });
@@ -55,7 +55,7 @@ $("#top-search-text").live("keypress", function (e) {
   if (e.which == 13) {
     search = $("#top-search-text").val();
     if (search != '') {
-      link = CONST.SITE_URL + '/search/tag=' + encodeURI(search);
+      link = CONST.SITE_URL + '/front/search/tag=' + encodeURI(search);
       window.location = link;
     }
   }
@@ -64,7 +64,7 @@ $("#top-search-text").live("keypress", function (e) {
 $("#main-search-button").live("click", function () {
   search = $("#main-search-text").val();
   if (search != '') {
-    link = CONST.SITE_URL + '/search/tag=' + encodeURI(search);
+    link = CONST.SITE_URL + '/front/search/tag=' + encodeURI(search);
     window.location = link;
   }
 
@@ -74,7 +74,7 @@ $("#main-search-text").live("keypress", function (e) {
   if (e.which == 13) {
     search = $("#main-search-text").val();
     if (search != '') {
-      link = CONST.SITE_URL + '/search/tag=' + encodeURI(search);
+      link = CONST.SITE_URL + '/front/search/tag=' + encodeURI(search);
       window.location = link;
     }
   }
@@ -181,7 +181,7 @@ $("#search-more").live("click", function () {
  * @param actionPara object {"action":action, "controller":controller}
  * @param para object $.para({"name":value})
  * @param loader string
- * @param containerPara array ["#container_id", "replace|append"]
+ * @param containerPara array {"container" : container_id, "act": "replace|append"]
  * @param callback function
  */
 function ajaxAction(actionPara, para, loader, containerPara, callback) {
@@ -203,12 +203,12 @@ function ajaxAction(actionPara, para, loader, containerPara, callback) {
         return;
       }
       if (containerPara) {
-        container = containerPara[0];
-        conTo = containerPara[1];
-        if (conTo == "replace") {
+        container = containerPara.container;
+        act = containerPara.act;
+        if (act == "replace") {
           $(container).html(data);
         }
-        if (conTo == "append") {
+        if (act == "append") {
           $(container).append(data);
         }
       }
