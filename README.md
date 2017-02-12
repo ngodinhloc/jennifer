@@ -4,9 +4,14 @@ www.thedaysoflife.com
 #### Share Memories, Inspire People
 TheDaysOfLife was created in the hope that it would be a place where people would feel comfortable to share their memories, a place where people would drop by seeking for companionship when lonely , a place where people would find inspiration when feeling down.
 
-### Quick links
+### The Ajax MVC framework
 - [Ajax MVC Pattern](#ajax-mvc-pattern)
-- [Single Point entry](#single-point-entry)
+- [The Framework Structure](#the-framework-tructure)
+    - Models
+    - Views
+    - Controllers
+    - Templates
+- [Single Point Entry](#single-point-entry)
     - index.php
     - .htaccess
 - [Models](#models)
@@ -19,13 +24,15 @@ TheDaysOfLife was created in the hope that it would be a place where people woul
 - [Controllers](#controllers)
     - index.php
     - ControllerView.php
+- [Templates](#templates)
+    - fron\index.tpl.php
 - [Ajax](#ajax)
     - ajax.thedaysoflife.js
-    
+
+### The Framework Structure
 ### Ajax MVC Pattern
 In Ajax MVC Pattern (aMVC): actions are sent from views to controllers via ajax
 <pre>views -> ajax -> controllers -> models</pre>
-Views also have access to models when neccessary
 
 ### Single Point Entry
 #### index.php
