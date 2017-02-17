@@ -104,8 +104,11 @@ class Base {
    */
   public function render() {
     $this->renderMeta();
+    ob_start();
     include_once(TEMPLATE_DIR . $this->module . "/" . $this->headerTemplate . TEMPLATE_EXT);
     include_once(TEMPLATE_DIR . $this->module . "/" . $this->contentTemplate . TEMPLATE_EXT);
     include_once(TEMPLATE_DIR . $this->module . "/" . $this->footerTemplate . TEMPLATE_EXT);
+
+    return ob_get_clean();
   }
 }

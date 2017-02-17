@@ -11,7 +11,6 @@ use sys\System;
 $viewClass = System::loadView();
 if ($viewClass) {
   $view = new $viewClass() or die("View not found: " . $viewClass);
-  System::obStart();
-  $view->render();
-  System::obFlush();
+  $html = $view->render();
+  echo($html);
 }
