@@ -142,6 +142,10 @@ class System {
 
   }
 
+  /**
+   * @param $name
+   * @param $val
+   */
   public static function setSession($name, $val) {
     if (session_status() == PHP_SESSION_NONE) {
       session_start();
@@ -149,6 +153,11 @@ class System {
     $_SESSION[$name] = $val;
   }
 
+  /**
+   * @param string $name
+   * @param null $default
+   * @return bool|null
+   */
   public static function getSession($name = "", $default = null) {
     if (session_status() == PHP_SESSION_NONE) {
       session_start();
@@ -234,58 +243,7 @@ class System {
   }
 
   /**
-   * Get the parameter id for modules/day
-   * @return int
-   */
-  public static function getDashBoardDayPara() {
-    $uri  = $_SERVER['REQUEST_URI'];
-    $para = explode("/", $uri);
-
-    return (int)$para[3];
-  }
-
-  /**
-   * Get the view from uri (if not view found then get default) , define SYS_VIEW
    * @return string
-   */
-  public static function setDashboardModule() {
-    $uri      = $_SERVER['REQUEST_URI'];
-    $para     = explode("/", $uri);
-    $viewName = $para[2];
-
-    if ($viewName == 'logout') {
-      self::userLogout();
-    }
-    if (file_exists(DASHBOARD_DIR . $viewName . VIEW_EXT)) {
-      define('DASHBOARD_MODULE', $viewName);
-    }
-    else {
-      define('DASHBOARD_MODULE', 'login');
-    }
-  }
-
-  /**
-   * Get the view from uri (if not view found then get default) , define SYS_VIEW
-   * @return string
-   */
-  public static function setView() {
-    $uri        = $_SERVER['REQUEST_URI'];
-    $para       = explode("/", $uri);
-    $moduleName = $para[1];
-    $viewName   = $para[2];
-
-    if (file_exists(VIEW_DIR . $moduleName . "/" . $viewName . VIEW_EXT)) {
-      define('SYS_VIEW', $viewName);
-    }
-    else {
-      define('SYS_VIEW', 'index');
-    }
-  }
-
-  /**
-   * @param $module
-   * @param $viewName
-   * @return bool|string
    */
   public static function loadView() {
     $uri = $_SERVER['REQUEST_URI'];
@@ -307,14 +265,6 @@ class System {
     require_once($file);
 
     return $class;
-  }
-
-  /**
-   *
-   */
-  public static function loadDasboardModule() {
-    $viewFile = DASHBOARD_DIR . DASHBOARD_MODULE . VIEW_EXT;
-    include_once($viewFile);
   }
 
   /**
