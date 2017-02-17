@@ -37,29 +37,30 @@ In Ajax MVC Pattern (aMVC): actions are sent from views to controllers via ajax
 ### Single Point Entry
 #### index.php
 <pre>
+<?php
+<?php
 /**
  * Single point entry
- * mod_rewrite in to redirect all request to this index page (except for the listed directories)
+ * <pre>mod_rewrite in to redirect all request to this index page (except for the listed directories)
  * process request uri to get view and load view
- * 
+ * </pre>
  */
 require_once("models/autoload.php");
 use sys\System;
 
-System::getView();
-System::obStart()
-
-include_once("views/include/header.php");
-System::loadView();
-include_once("views/include/footer.php");
-System::obFlush();
+$viewClass = System::loadView();
+if ($viewClass) {
+  $view = new $viewClass() or die("View not found: " . $viewClass);
+  $html = $view->render();
+  echo($html);
+}
 </pre>
 
 #### .htaccess
 <pre>
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_URI} !(/controllers|/dashboard|/interface|/js|/plugins|/views)
+RewriteCond %{REQUEST_URI} !(/controllers|/interface|/js|/plugins|/views)
 RewriteRule ^(.*)$ index.php?q=$1 [L,QSA]
 </pre>
 
