@@ -101,14 +101,16 @@ class Base {
 
   /**
    * Render this view
+   * @return string
    */
   public function render() {
     $this->renderMeta();
-    ob_start();
+    ob_start("ob_gzhandler");
     include_once(TEMPLATE_DIR . $this->module . "/" . $this->headerTemplate . TEMPLATE_EXT);
     include_once(TEMPLATE_DIR . $this->module . "/" . $this->contentTemplate . TEMPLATE_EXT);
     include_once(TEMPLATE_DIR . $this->module . "/" . $this->footerTemplate . TEMPLATE_EXT);
+    $html = ob_get_clean();
 
-    return ob_get_clean();
+    return $html;
   }
 }

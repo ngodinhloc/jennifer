@@ -226,20 +226,20 @@ class System {
    */
   public static function getSearchPara() {
     $uri = $_SERVER['REQUEST_URI'];
-    $tag = urldecode(trim(str_replace("/front/search/tag=", "", $uri)));
+    $tag = urldecode(trim(str_replace("/search/tag=", "", $uri)));
 
     return $tag;
   }
 
   /**
-   * Get the parameter id for modules/day
+   * Get the parameter id for /day/para
    * @return int
    */
   public static function getDayPara() {
-    $uri  = $_SERVER['REQUEST_URI'];
-    $para = explode("/", $uri);
+    $uri = $_SERVER['REQUEST_URI'];
+    list($domain, $view, $para) = explode("/", $uri);
 
-    return (int)$para[3];
+    return (int)$para;
   }
 
   /**
@@ -248,19 +248,20 @@ class System {
   public static function loadView() {
     $uri = $_SERVER['REQUEST_URI'];
     list($domain, $module, $view) = explode("/", $uri);
+    if (!$view) {
+      $view = DEFAULT_VIEW;
+    }
+    if (!in_array($module, MODULE_LIST)) {
+      $view   = $module;
+      $module = DEFAULT_MODULE;
+    }
     $file = VIEW_DIR . $module . "/" . $view . VIEW_EXT;
     if (file_exists($file)) {
       $class = $module . "\\" . $view;
     }
     else {
-      if ($module == "back") {
-        $file  = VIEW_DIR . $module . "/login" . VIEW_EXT;
-        $class = $module . "\\" . "login";
-      }
-      else {
-        $file  = VIEW_DIR . DEFAULT_MODULE . "/" . DEFAULT_VIEW . VIEW_EXT;
-        $class = DEFAULT_MODULE . "\\" . DEFAULT_VIEW;
-      }
+      $file  = VIEW_DIR . DEFAULT_MODULE . "/" . DEFAULT_VIEW . VIEW_EXT;
+      $class = DEFAULT_MODULE . "\\" . DEFAULT_VIEW;
     }
     require_once($file);
 
@@ -304,6 +305,6 @@ class System {
       session_start();
     }
     session_destroy();
-    System::redirectTo("back/login/");
+    System::redirectTo("back/");
   }
 }

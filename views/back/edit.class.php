@@ -12,7 +12,7 @@ class edit extends Back {
     parent::__construct();
 
     $admin             = new Admin();
-    $id                = System::getDashBoardDayPara();
+    $id                = System::getDayPara();
     $row               = $admin->getDayById($id);
     $this->data["id"]  = $id;
     $this->data["row"] = $row;

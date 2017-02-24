@@ -1,5 +1,5 @@
 <div class="row no-front col-md-6 col-md-offset-2">
-  <form role="form" method="post" action="/back/login/">
+  <form role="form" method="post" action="/back/">
     <fieldset>
       <legend>Adminitration Login:</legend>
       <div class="col-md-12 form-contact form-group">

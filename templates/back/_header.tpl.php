@@ -16,7 +16,7 @@
     <div class="main_container region">
       <header class="navbar navbar-static-top bs-docs-nav" id="top" role="banner">
         <?
-        if ($this->view != 'login') {
+        if ($this->view != DEFAULT_VIEW) {
           include('include/_menu.inc.php');
         }
         ?>

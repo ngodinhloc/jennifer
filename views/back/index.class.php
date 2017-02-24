@@ -4,9 +4,9 @@ use view\Back;
 use core\Admin;
 use sys\System;
 
-class login extends Back {
+class index extends Back {
   protected $title = "Dashboard Login";
-  protected $contentTemplate = "login";
+  protected $contentTemplate = "index";
   protected $requiredPermission = false;
 
   public function __construct() {
@@ -29,7 +29,7 @@ class login extends Back {
         } // valid and active user
         else if ($status == ADMIN_ACTIVE) {
           System::setJWT($row["id"], $row["f_name"] . " " . $row["l_name"], $row['permission']);
-          System::jsRedirect('/back/home/');
+          System::redirectTo("back/home");
         }
       }
       else {
