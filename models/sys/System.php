@@ -236,10 +236,10 @@ class System {
    * @return int
    */
   public static function getDayPara() {
-    $uri = $_SERVER['REQUEST_URI'];
-    list($domain, $view, $para) = explode("/", $uri);
+    $uri  = $_SERVER['REQUEST_URI'];
+    $para = explode("/", $uri);
 
-    return (int)$para;
+    return (int)$para[2];
   }
 
   /**

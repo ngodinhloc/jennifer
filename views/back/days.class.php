@@ -6,7 +6,7 @@ use core\Admin;
 use Facebook;
 
 class days extends Back {
-  protected $title = "Dashboard :: List daysl";
+  protected $title = "Dashboard :: Days";
   protected $contentTemplate = "days";
 
   public function __construct() {

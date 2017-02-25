@@ -100,6 +100,25 @@ class Base {
   }
 
   /**
+   * Remove white space between tags
+   * @param $html
+   * @return array
+   */
+  protected function tidyHTML($html) {
+    $html   = str_replace(["\r\n", "\r"], "\n", $html);
+    $lines  = explode("\n", $html);
+    $output = [];
+
+    foreach ($lines as $line) {
+      if (!empty($line)) {
+        $output[] = trim($line);
+      }
+    }
+
+    return implode($output);
+  }
+
+  /**
    * Render this view
    * @return string
    */
@@ -111,6 +130,6 @@ class Base {
     include_once(TEMPLATE_DIR . $this->module . "/" . $this->footerTemplate . TEMPLATE_EXT);
     $html = ob_get_clean();
 
-    return $html;
+    return $this->tidyHTML($html);
   }
 }

@@ -5,6 +5,7 @@ use core\View;
 
 class like extends Front {
   protected $contentTemplate = "index";
+  protected $title = "Most Liked Days";
 
   public function __construct() {
     parent::__construct();
