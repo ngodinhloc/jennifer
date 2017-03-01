@@ -101,6 +101,39 @@ class System {
     return session_id();
   }
 
+  /**
+   * @param $name
+   * @param $val
+   */
+  public static function setSession($name, $val) {
+    if (session_status() == PHP_SESSION_NONE) {
+      session_start();
+    }
+    $_SESSION[$name] = $val;
+  }
+
+  /**
+   * @param string $name
+   * @param null $default
+   * @return bool|null
+   */
+  public static function getSession($name = "", $default = null) {
+    if (session_status() == PHP_SESSION_NONE) {
+      session_start();
+    }
+    if (isset($_SESSION[$name])) {
+      return $_SESSION[$name];
+    }
+    else {
+      if ($default) {
+        return $default;
+      }
+      else {
+        return false;
+      }
+    }
+  }
+
   public static function getGetPara($name = "", $default = null) {
 
   }
@@ -140,39 +173,6 @@ class System {
 
   public static function setCookie($name = "", $val = null) {
 
-  }
-
-  /**
-   * @param $name
-   * @param $val
-   */
-  public static function setSession($name, $val) {
-    if (session_status() == PHP_SESSION_NONE) {
-      session_start();
-    }
-    $_SESSION[$name] = $val;
-  }
-
-  /**
-   * @param string $name
-   * @param null $default
-   * @return bool|null
-   */
-  public static function getSession($name = "", $default = null) {
-    if (session_status() == PHP_SESSION_NONE) {
-      session_start();
-    }
-    if (isset($_SESSION[$name])) {
-      return $_SESSION[$name];
-    }
-    else {
-      if ($default) {
-        return $default;
-      }
-      else {
-        return false;
-      }
-    }
   }
 
   /**
@@ -248,9 +248,11 @@ class System {
   public static function loadView() {
     $uri = $_SERVER['REQUEST_URI'];
     list($domain, $module, $view) = explode("/", $uri);
+    // there is no view => get default view
     if (!$view) {
       $view = DEFAULT_VIEW;
     }
+    // module is not in module list => this is default module which does not require module name in uri
     if (!in_array($module, MODULE_LIST)) {
       $view   = $module;
       $module = DEFAULT_MODULE;
@@ -260,6 +262,7 @@ class System {
       $class = $module . "\\" . $view;
     }
     else {
+      // no class file exists => get default module and default view
       $file  = VIEW_DIR . DEFAULT_MODULE . "/" . DEFAULT_VIEW . VIEW_EXT;
       $class = DEFAULT_MODULE . "\\" . DEFAULT_VIEW;
     }
@@ -273,11 +276,9 @@ class System {
    * @return bool|string
    */
   public static function loadController($conName) {
-    $baseCon = CONTROLLER_DIR . "Controller.php";
-    $file    = CONTROLLER_DIR . $conName . CONTROLLER_EXT;
+    $file = CONTROLLER_DIR . $conName . CONTROLLER_EXT;
     if (file_exists($file)) {
       $class = str_replace("/", "", CONTROLLER_DIR) . "\\" . $conName;
-      require_once($baseCon);
       require_once($file);
 
       return $class;

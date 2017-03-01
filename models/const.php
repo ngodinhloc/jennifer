@@ -64,10 +64,10 @@ const PHOTO_TITLE_HEIGHT   = 240;
 const PHOTO_THUMB_WIDTH    = 75;
 const PHOTO_THUMB_HEIGHT   = 75;
 // FB
-const FB_APPID   = '******';
-const FB_SECRET  = '******';
-const FB_PAGEID  = '******';
-const FB_ALBUMID = '******';
+const FB_APPID   = '*****';
+const FB_SECRET  = '*****';
+const FB_PAGEID  = '*****';
+const FB_ALBUMID = '*****';
 const FB_TEXT    = 'text';
 const FB_FEED    = 'feed';
 const FB_ALBUM   = 'album';
@@ -75,7 +75,7 @@ const FB_LINK    = 'link';
 // SALT
 const ADMIN_ACTIVE  = 'active';
 const ADMIN_DISABLE = 'disable';
-const SALT_MD5      = '******';
-const SALT_SHA256   = '******';
-const SALT_SHA512   = '******';
-const JWT_KEY       = '******';
+const SALT_MD5      = '*****';
+const SALT_SHA256   = '*****';
+const SALT_SHA512   = '*****';
+const JWT_KEY       = '*****';

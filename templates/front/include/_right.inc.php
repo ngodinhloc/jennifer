@@ -24,7 +24,6 @@
       <?php echo($this->data["topDays"]); ?>
     </ul>
   </div>
-
 </div>
 <div class="panel panel-default facebook">
   <div class="fb-page" data-href="https://www.facebook.com/thedaysoflife" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true" data-show-posts="false">

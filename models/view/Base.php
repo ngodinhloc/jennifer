@@ -45,6 +45,20 @@ class Base {
   }
 
   /**
+   * Get the required permissions for this view
+   */
+  protected function getRequiredPermission() {
+    return $this->requiredPermission;
+  }
+
+  /**
+   * Load required permission from database or set required permission on each view
+   */
+  protected function loadRequiredPermission() {
+
+  }
+
+  /**
    * Add meta to header
    * @param string $file
    */
@@ -100,36 +114,32 @@ class Base {
   }
 
   /**
-   * Remove white space between tags
+   * Remove white space between html tags
    * @param $html
-   * @return array
+   * @return string
    */
   protected function tidyHTML($html) {
-    $html   = str_replace(["\r\n", "\r"], "\n", $html);
-    $lines  = explode("\n", $html);
-    $output = [];
+    $html = preg_replace('/(?<=>)\s+(?=<)/', "", $html);
 
-    foreach ($lines as $line) {
-      if (!empty($line)) {
-        $output[] = trim($line);
-      }
-    }
-
-    return implode($output);
+    return $html;
   }
 
   /**
    * Render this view
+   * @param $tidy bool
    * @return string
    */
-  public function render() {
+  public function render($tidy = true) {
     $this->renderMeta();
     ob_start("ob_gzhandler");
     include_once(TEMPLATE_DIR . $this->module . "/" . $this->headerTemplate . TEMPLATE_EXT);
     include_once(TEMPLATE_DIR . $this->module . "/" . $this->contentTemplate . TEMPLATE_EXT);
     include_once(TEMPLATE_DIR . $this->module . "/" . $this->footerTemplate . TEMPLATE_EXT);
     $html = ob_get_clean();
+    if ($tidy) {
+      $html = $this->tidyHTML($html);
+    }
 
-    return $this->tidyHTML($html);
+    return $html;
   }
 }

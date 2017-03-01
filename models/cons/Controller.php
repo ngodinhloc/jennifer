@@ -10,7 +10,7 @@ class Controller {
   protected $requiredPermission = false;
 
   public function __construct() {
-    // do something
+    $this->checkPermission();
   }
 
   /**

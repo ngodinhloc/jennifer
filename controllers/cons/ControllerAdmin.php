@@ -3,13 +3,15 @@ namespace cons;
 
 use com\Com;
 use core\Admin;
+use cons\Controller;
 
 class ControllerAdmin extends Controller {
-  private $admin;
   protected $requiredPermission = ["admin"];
+  private $admin;
 
   public function __construct() {
-    $this->checkPermission();
+    parent::__construct();
+
     $this->admin = new Admin();
   }
 

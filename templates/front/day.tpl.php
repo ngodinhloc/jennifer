@@ -6,7 +6,7 @@
       <h4 class="title">
         <?php echo $this->data["days"]['day'] . '/' . $this->data["days"]['month'] . '/' . $this->data["days"]['year'] .
                    ': ' . $this->data["days"]['title']; ?>
-        <input type="hidden" id="day-id" value="<?php echo $id; ?>">
+        <input type="hidden" id="day-id" value="<?php echo $this->data["days"]['id']; ?>">
       </h4>
       <div class="post-meta">
         <div class="author post">

@@ -14,7 +14,8 @@ class ControllerFacebook extends Controller {
   private $fbPermissions = 'manage_pages, publish_actions';
 
   public function __construct() {
-    $this->checkPermission();
+    parent::__construct();
+
     $this->admin  = new Admin();
     $this->fb     = new Facebook(['appId' => FB_APPID, 'secret' => FB_SECRET]);
     $this->fbUser = $this->fb->getUser();
@@ -192,8 +193,8 @@ class ControllerFacebook extends Controller {
       }
     }
     else {
-      $fbLoginURL = $this->fb->getLoginUrl(['redirect_uri' => SITE_URL . '/dashboard/list/',
-                                            'redirect-uri' => SITE_URL . '/dashboard/list/',
+      $fbLoginURL = $this->fb->getLoginUrl(['redirect_uri' => SITE_URL . '/back/days/',
+                                            'redirect-uri' => SITE_URL . '/back/days/',
                                             'scope'        => $this->fbPermissions]);
       echo '<a href="' . $fbLoginURL . '">FBLogin</a>';
 

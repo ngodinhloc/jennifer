@@ -33,12 +33,12 @@ class day extends Front {
           $img    = $imgs[0];
           $imgURL = Com::getPhotoURL($img, PHOTO_FULL_NAME);
         }
-        $comments          = $view->getComments($id);
-        $relatedDays       = $view->getRightRelatedDay($day, $month, $year, $location);
-        $topDays           = $view->getRightTopDay();
         $this->title       = $days['day'] . '/' . $days['month'] . '/' . $days['year'] . ': ' . $days['title'];
         $this->description = strip_tags(Com::getDescription($days['content']));
         $this->keyword     = $days['title'];
+        $comments          = $view->getComments($id);
+        $relatedDays       = $view->getRightRelatedDay($day, $month, $year, $location);
+        $topDays           = $view->getRightTopDay();
         $this->data        = ["pageTitle" => $this->title, "pageDesc" => $this->description, "imgURL" => $imgURL,
                               "uri"       => $uri, "days" => $days, "id" => $id, "photos" => $photos, "like" => $like,
                               "likeIP"    => $likeIP, "time" => $time, "ipaddress" => $ipaddress,

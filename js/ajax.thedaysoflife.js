@@ -370,11 +370,14 @@ function processMakeAComment(data) {
  */
 function processMakeAReply(data) {
   var getData = $.parseJSON(data);
-  com_id = getData.com_id;
-  content = getData.content;
-  comment_id = "#comment-" + com_id;
-  $(".reply-form").remove();
-  $(content).hide().insertAfter(comment_id).fadeIn(CONST.COM_FADE);
+  result = getData.result;
+  if (result == "true") {
+    com_id = getData.com_id;
+    content = getData.content;
+    comment_id = "#comment-" + com_id;
+    $(".reply-form").remove();
+    $(content).hide().insertAfter(comment_id).fadeIn(CONST.COM_FADE);
+  }
 }
 
 /**

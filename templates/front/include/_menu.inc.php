@@ -1,7 +1,4 @@
-<?php
-use com\Com;
-
-?>
+<?php use com\Com; ?>
 <div class="menu">
   <div class="navbar-header">
     <button class="navbar-toggle" type="button">
