@@ -4,8 +4,6 @@
  * such as: session, cookie, $_POST, $_GET, $_REQUEST, $_SERVER, define
  */
 namespace sys;
-
-use core\View;
 use jwt\JWT;
 
 class System {
@@ -221,25 +219,28 @@ class System {
   }
 
   /**
-   * Get search tag for modules/search
-   * @return string
+   * Get parameter from view uri
+   * @param $arg
+   * @return bool|int|string
    */
-  public static function getSearchPara() {
+  public static function getViewPara($arg) {
     $uri = $_SERVER['REQUEST_URI'];
-    $tag = urldecode(trim(str_replace("/search/tag=", "", $uri)));
+    switch($arg) {
+      case "day":
+        $para = explode("/", $uri);
+        if (isset($para[2])) {
+          return (int)$para[2];
+        }
+        break;
+      case "search":
+        $para = urldecode(trim(str_replace("/search/tag=", "", $uri)));
+        if ($para != "") {
+          return $para;
+        }
+        break;
+    }
 
-    return $tag;
-  }
-
-  /**
-   * Get the parameter id for /day/para
-   * @return int
-   */
-  public static function getDayPara() {
-    $uri  = $_SERVER['REQUEST_URI'];
-    $para = explode("/", $uri);
-
-    return (int)$para[2];
+    return false;
   }
 
   /**

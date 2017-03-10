@@ -11,8 +11,8 @@ class day extends Front {
   public function __construct() {
     parent::__construct();
 
-    $id = System::getDayPara();
-    if ($id > 0) {
+    $id = System::getViewPara("day");
+    if ($id) {
       $view = new View();
       $days = $view->getDayById($id);
       if (isset($days['id'])) {

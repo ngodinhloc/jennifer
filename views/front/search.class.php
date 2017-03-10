@@ -11,8 +11,8 @@ class search extends Front {
   public function __construct() {
     parent::__construct();
 
-    $tag = System::getSearchPara();
-    if ($tag != "") {
+    $tag = System::getViewPara("search");
+    if ($tag) {
       $view         = new View();
       $searchResult = $view->getSearch($tag);
       $this->data   = ["searchTerm" => $tag, "searchResult" => $searchResult];
