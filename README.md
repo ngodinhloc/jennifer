@@ -1,6 +1,6 @@
 # Jennifer - The PHP Framework #
 
-Jennifer is a PHP framework that I first created when I was doing my master at University of Sydney in 2009. There has been a few changes since the first version. The framework was recently named after my daughter.
+Jennifer is a PHP framework that I first created when I was doing my master at University of Sydney in 2009. There has been a few changes since the first version.
 
 The source code using in this example is the actual code of Thedaysoflife project https://github.com/ngodinhloc/thedaysoflife.com
 
