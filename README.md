@@ -1,4 +1,4 @@
-# Jennier - The PHP Framework #
+# Jennifer - The PHP Framework #
 
 ### The Ajax MVC framework
 - [Ajax MVC Pattern](#ajax-mvc-pattern)
