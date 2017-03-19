@@ -1,5 +1,7 @@
 # Jennifer - The PHP Framework #
 
+Jennifer is a PHP framework that I first created when I was doing my master at University of Sydney. There has been a few changes since the first version. The framework was named after my daughter.
+
 - [Ajax MVC Pattern](#ajax-mvc-pattern)
 - [The Framework Structure](#the-framework-tructure)
     - Models
