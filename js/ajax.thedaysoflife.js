@@ -46,7 +46,7 @@ $(document).ready(function () {
 $("#top-search-button").live("click", function () {
   search = $("#top-search-text").val();
   if (search != '') {
-    link = CONST.SITE_URL + '/front/search/tag=' + encodeURI(search);
+    link = CONST.SITE_URL + '/search/tag=' + encodeURI(search);
     window.location = link;
   }
 });
@@ -55,7 +55,7 @@ $("#top-search-text").live("keypress", function (e) {
   if (e.which == 13) {
     search = $("#top-search-text").val();
     if (search != '') {
-      link = CONST.SITE_URL + '/front/search/tag=' + encodeURI(search);
+      link = CONST.SITE_URL + '/search/tag=' + encodeURI(search);
       window.location = link;
     }
   }
@@ -64,7 +64,7 @@ $("#top-search-text").live("keypress", function (e) {
 $("#main-search-button").live("click", function () {
   search = $("#main-search-text").val();
   if (search != '') {
-    link = CONST.SITE_URL + '/front/search/tag=' + encodeURI(search);
+    link = CONST.SITE_URL + '/search/tag=' + encodeURI(search);
     window.location = link;
   }
 
@@ -74,7 +74,7 @@ $("#main-search-text").live("keypress", function (e) {
   if (e.which == 13) {
     search = $("#main-search-text").val();
     if (search != '') {
-      link = CONST.SITE_URL + '/front/search/tag=' + encodeURI(search);
+      link = CONST.SITE_URL + '/search/tag=' + encodeURI(search);
       window.location = link;
     }
   }
@@ -354,14 +354,17 @@ function processMakeADay(data) {
  */
 function processMakeAComment(data) {
   var getData = $.parseJSON(data);
-  rep_id = getData.day_id;
-  content = getData.content;
-  $("#content").val('');
-  $("#username").val('');
-  $("#email").val('');
-  $("#location").val('');
-  updateCount(rep_id);
-  $(content).hide().appendTo("#comment-container").fadeIn(CONST.COM_FADE);
+  result = getData.result;
+  if (result == true) {
+    rep_id = getData.day_id;
+    content = getData.content;
+    $("#content").val('');
+    $("#username").val('');
+    $("#email").val('');
+    $("#location").val('');
+    updateCount(rep_id);
+    $(content).hide().appendTo("#comment-container").fadeIn(CONST.COM_FADE);
+  }
 }
 
 /**
@@ -371,7 +374,7 @@ function processMakeAComment(data) {
 function processMakeAReply(data) {
   var getData = $.parseJSON(data);
   result = getData.result;
-  if (result == "true") {
+  if (result == true) {
     com_id = getData.com_id;
     content = getData.content;
     comment_id = "#comment-" + com_id;

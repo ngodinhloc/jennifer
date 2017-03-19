@@ -2,7 +2,8 @@
 <? include_once('include/_facebook.inc.php'); ?>
 <div class="row">
   <div class="col-md-12 col-md-8 no-front">
-    <?php if (isset($this->data["days"]['id'])) { ?>
+    <?php if (isset($this->data["days"]['id'])) {
+      echo $this->data["templates"]; ?>
       <h4 class="title">
         <?php echo $this->data["days"]['day'] . '/' . $this->data["days"]['month'] . '/' . $this->data["days"]['year'] .
                    ': ' . $this->data["days"]['title']; ?>

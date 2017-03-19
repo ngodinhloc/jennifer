@@ -34,11 +34,11 @@ class ControllerComment extends Controller {
       if ($re) {
         $this->view->updateCommentCount($day_id);
         $last_com = $this->view->getLastInsertComment($time, $session_id);
-        $arr      = ["result" => "true", "day_id" => $day_id, "content" => $this->view->getOneCommentHTML($last_com)];
+        $arr      = ["result" => true, "day_id" => $day_id, "content" => $this->view->getOneCommentHTML($last_com)];
       }
     }
     else {
-      $arr = ["result" => "false", "error" => "Please check inputs"];
+      $arr = ["result" => false, "error" => "Please check inputs"];
     }
     echo(json_encode($arr, JSON_UNESCAPED_SLASHES));
   }
@@ -64,11 +64,11 @@ class ControllerComment extends Controller {
       if ($re) {
         $this->view->updateCommentCount($day_id);
         $lastCom = $this->view->getLastInsertComment($time, $session_id);
-        $arr     = ["result" => "true", "com_id" => $com_id, "content" => $this->view->getOneCommentHTML($lastCom)];
+        $arr     = ["result" => true, "com_id" => $com_id, "content" => $this->view->getOneCommentHTML($lastCom)];
       }
     }
     else {
-      $arr = ["result" => "false", "error" => "Please check inputs"];
+      $arr = ["result" => false, "error" => "Please check inputs"];
     }
     echo(json_encode($arr, JSON_UNESCAPED_SLASHES));
   }

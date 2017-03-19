@@ -9,7 +9,6 @@ class about extends Front {
 
   public function __construct() {
     parent::__construct();
-
     $view       = new View();
     $info       = $view->getInfoByTag("about");
     $this->data = ["info" => $info];

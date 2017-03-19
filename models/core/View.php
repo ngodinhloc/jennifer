@@ -527,7 +527,7 @@ class View extends Model {
     $limit     = NUM_PER_PAGE * 2;
     $orderCond = ["year" => "ASC", "month" => "ASC", "day" => "ASC", "like" => "DESC"];
     $result    = $this->db->table("tbl_day")->where($searchCond)->orderBy($orderCond)->limit($limit)->get(true)->toArray();
-    $total     = $this->db->foundRows();
+    $total     = (int)$this->db->foundRows();
 
     $html   = new HTML();
     $output = "";
@@ -535,8 +535,10 @@ class View extends Model {
                $html->setClass("row row-offcanvas row-offcanvas-right")->open() .
                $html->setTag("ul")->setID("slide-show")->setClass("list-unstyled")->open();
 
-    foreach ($result as $row) {
-      $output .= $this->getOneDayHTML($row);
+    if ($result && count($result) > 0) {
+      foreach ($result as $row) {
+        $output .= $this->getOneDayHTML($row);
+      }
     }
     $output .= $html->close() .
                $html->setTag("div")->close();

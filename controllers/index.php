@@ -11,7 +11,5 @@ $controller = $para["controller"];
 $conClass   = System::loadController($controller);
 if ($conClass) {
   $con = new $conClass() or die("Controller not found: " . $conClass);
-  System::obStart();
   $con->$action($para);
-  System::obFlush();
 }

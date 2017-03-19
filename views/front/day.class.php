@@ -4,6 +4,7 @@ use view\Front;
 use sys\System;
 use com\Com;
 use core\View;
+use tpl\Template;
 
 class day extends Front {
   protected $contentTemplate = "day";
@@ -42,7 +43,7 @@ class day extends Front {
         $this->data        = ["pageTitle" => $this->title, "pageDesc" => $this->description, "imgURL" => $imgURL,
                               "uri"       => $uri, "days" => $days, "id" => $id, "photos" => $photos, "like" => $like,
                               "likeIP"    => $likeIP, "time" => $time, "ipaddress" => $ipaddress,
-                              "comments"  => $comments, "relatedDays" => $relatedDays, "topDays" => $topDays];
+                              "comments"  => $comments, "relatedDays" => $relatedDays, "topDays" => $topDays,];
         $this->addHeaderMetaHTML("<meta property='fb:admins' content='" . FB_PAGEID . "'/>");
         $this->addHeaderMetaHTML("<meta property='og:type' content='article'/>");
         $this->addHeaderMetaHTML("<meta property='og:url' content='{$uri}'/>");
