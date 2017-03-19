@@ -1,6 +1,5 @@
 # Jennifer - The PHP Framework #
 
-### The Ajax MVC framework
 - [Ajax MVC Pattern](#ajax-mvc-pattern)
 - [The Framework Structure](#the-framework-tructure)
     - Models
