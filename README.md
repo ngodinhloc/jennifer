@@ -29,10 +29,11 @@ The source code using in this example is the actual code of Thedaysoflife projec
 - [Ajax](#ajax)
     - ajax.thedaysoflife.js
 
-### The Framework Structure
 ### Ajax MVC Pattern
 In Ajax MVC Pattern (aMVC): actions are sent from views to controllers via ajax
 <pre>views -> ajax -> controllers -> models</pre>
+
+### The Framework Structure
 
 ### Single Point Entry
 #### index.php
