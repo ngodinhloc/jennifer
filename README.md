@@ -1,8 +1,4 @@
-# thedaysoflife.com #
-www.thedaysoflife.com
-
-#### Share Memories, Inspire People
-TheDaysOfLife was created in the hope that it would be a place where people would feel comfortable to share their memories, a place where people would drop by seeking for companionship when lonely , a place where people would find inspiration when feeling down.
+# Jennier - The PHP Framework #
 
 ### The Ajax MVC framework
 - [Ajax MVC Pattern](#ajax-mvc-pattern)
