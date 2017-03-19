@@ -4,7 +4,7 @@ Jennifer is a PHP framework that I first created when I was doing my master at U
 
 The source code using in this example is the actual code of Thedaysoflife project https://github.com/ngodinhloc/thedaysoflife.com
 
-### Contents
+### Jennifer Framework
 - [Ajax MVC Pattern](#ajax-mvc-pattern)
 - [The Framework Structure](#the-framework-tructure)
     - Models
