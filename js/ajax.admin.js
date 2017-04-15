@@ -52,10 +52,23 @@ function ajaxUpdateInfo() {
 function ajaxPostToFacebook(id, type) {
   loader = "#fb-post-" + id;
   data = $.param({"id": id, "type": type});
-  ajaxAction({"action": "ajaxPostToFacebook", "controller": "ControllerFacebook"}, data, loader,
-    {"container": loader, "act": "replace"}, false);
+  callback = processPostToFacebook;
+  ajaxAction({"action": "ajaxPostToFacebook", "controller": "ControllerFacebook"}, data, loader, false, callback);
 }
 
+function processPostToFacebook(data) {
+  getData = $.parseJSON(data);
+  if (getData.status == "login") {
+    $("#fb-post-" + getData.id).html(getData.url);
+  }
+  if (getData.status == "OK") {
+    $("#fb-post-" + getData.id).html(getData.status);
+    $("#fb-type-" + getData.id).addClass("fb-posted");
+  }
+  if (getData.status == "NO") {
+    $("#fb-post-" + getData.id).html(getData.status);
+  }
+}
 /**
  * Print list
  * @param page
@@ -87,6 +100,7 @@ function ajaxCheckDatabase() {
  * Update day
  */
 function ajaxUpdateADay() {
+  CKEDITOR.instances['content'].updateElement();
   content = $("#edit-day").find("select[name], textarea[name], input[name]").serialize();
   photos = getIDs();
   data = content + "&" + $.param({"photos": photos})

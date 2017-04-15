@@ -1,8 +1,8 @@
 <?php
 namespace front;
-use view\Front;
+
 use core\View;
-use sys\System;
+use view\Front;
 
 class search extends Front {
   protected $title = "Search";
@@ -11,11 +11,11 @@ class search extends Front {
   public function __construct() {
     parent::__construct();
 
-    $tag = System::getViewPara("search");
-    if ($tag) {
+    $search = $this->hasPara("search");
+    if ($search) {
       $view         = new View();
-      $searchResult = $view->getSearch($tag);
-      $this->data   = ["searchTerm" => $tag, "searchResult" => $searchResult];
+      $searchResult = $view->getSearch($search);
+      $this->data   = ["searchTerm" => $search, "searchResult" => $searchResult];
     }
   }
 }

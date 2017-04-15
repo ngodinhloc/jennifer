@@ -2,6 +2,7 @@
 namespace core;
 use com\Com;
 use html\HTML;
+use tpl\Template;
 
 class Admin extends Model {
   /**
@@ -139,41 +140,17 @@ class Admin extends Model {
   }
 
   /**
-   * @param $id
-   * @param $day
-   * @param $month
-   * @param $year
-   * @param $title
-   * @param $slug
-   * @param $content
-   * @param $preview
-   * @param $sanitize
-   * @param $photos
-   * @param $username
-   * @param $email
-   * @param $location
-   * @param $like
+   * Update day
+   * @param array $day
    * @return bool
    */
-  public function updateDay($id, $day, $month, $year, $title, $slug, $content, $preview, $sanitize, $photos, $username,
-                            $email, $location, $like) {
-    $title    = $this->escapeString($title);
-    $slug     = $this->escapeString($slug);
-    $content  = $this->escapeString($content);
-    $preview  = $this->escapeString($preview);
-    $sanitize = $this->escapeString($sanitize);
-    $photos   = $this->escapeString($photos);
-    $username = $this->escapeString($username);
-    $email    = $this->escapeString($email);
-    $location = $this->escapeString($location);
-
-    $result = $this->db->table("tbl_day")->where(["id" => $id])->set(["day"     => $day, "month" => $month,
-                                                                      "year"    => $year, "title" => $title,
-                                                                      "slug"    => $slug, "content" => $content,
-                                                                      "preview" => $preview, "sanitize" => $sanitize,
-                                                                      "photos"  => $photos, "username" => $username,
-                                                                      "email"   => $email, "location" => $location,
-                                                                      "like"    => $like])->update();
+  public function updateDay($day) {
+    $result = $this->db->table("tbl_day")->where(["id" => $day["id"]])
+                       ->set(["day"      => $day["day"], "month" => $day["month"], "year" => $day["year"],
+                              "title"    => $day["title"], "slug" => $day["slug"], "content" => $day["content"],
+                              "preview"  => $day["preview"], "sanitize" => $day["sanitize"], "photos" => $day["photos"],
+                              "username" => $day["username"], "email" => $day["email"], "location" => $day["location"],
+                              "like"     => $day["like"]])->update();
 
     return $result;
   }
@@ -191,45 +168,9 @@ class Admin extends Model {
                         ->limit($limit)->get(true)->toArray();
     $total   = $this->db->foundRows();
     $pageNum = ceil($total / $limit);
-    $html    = new HTML();
-    $output  = "<table>
-				<thead>
-				<tr>
-				<th>ID</th>
-				<th>Title</th>
-				<th>Author</th>
-				<th>Com</th>
-				<th>Like</th>
-				<th colspan='2'>To Facebook</th>
-				<th colspan='2'>Action</th>
-				</tr>
-				</thead>
-				<tbody>";
-    foreach ($result as $row) {
-      $link = Com::getDayLink($row);
-      $output .= '<tr id="row-' . $row['id'] . '">
-					<td>' . $row['id'] . '</td>
-					<td><a target="_blank" href="' . $link . '">' . $row['day'] . '/' . $row['month'] . '/' . $row['year'] .
-                 ': ' . stripslashes($row['title']) . '</a></td>
-					<td>' . stripslashes($row['username']) . '</td>
-					<td>' . number_format($row['count']) . '</td>
-					<td>' . number_format($row['like']) . '</td>
-					<td>
-						<select class="fb-type" id="fb-type-' . $row['id'] . '">';
-      $output .= Com::getFBAct($row["fb"]);
-      $output .= '</select>
-					</td>
-					<td id="fb-post-' . $row["id"] .
-                 '"><a title="Post to Facebook" href="javascript:void(0)" class="fb-post-button" data-id="' .
-                 $row['id'] . '"><span class="glyphicon glyphicon-send"></span></a></td>
-					<td><a title="Edit" href="/back/edit/' . $row['id'] . '/"><span class="glyphicon glyphicon-edit"></span></a></td>
-					<td><a title="Remove" href="javascript:void(0)" class="remove-day" id="remove-day-' . $row['id'] . '">
-					<span class="glyphicon glyphicon-remove"></span></a></td>
-					</tr>';
-    }
-    $output .= '</tbody></table>';
-    $output .= Com::getPagination("", $pageNum, $page, 4);
+    $tpl     = new Template("back/list_days", ["days"       => $result,
+                                               "pagination" => Com::getPagination("", $pageNum, $page, 4)]);
 
-    return $output;
+    return $tpl->render();
   }
 }

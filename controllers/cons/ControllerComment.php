@@ -15,26 +15,24 @@ class ControllerComment extends Controller {
   }
 
   public function ajaxMakeAComment($para) {
-    $day_id     = (int)$para['day_id'];
-    $content    = trim($para['content']);
-    $username   = trim($para['username']);
-    $email      = trim($para['email']);
-    $email      = Com::sanitizeString($email);
-    $reply_id   = 0;
-    $reply_name = '';
-    $like       = 0;
-    $time       = time();
-    $date       = date('Y-m-d h:i:s');
-    $ipaddress  = System::getRealIPaddress();
-    $session_id = System::sessionID();
-    $arr        = [];
-
-    if ($day_id > 0 && $content != "" && $username != "" && $email != "") {
-      $re = $this->view->addComment($day_id, $content, $username, $email, $reply_id, $reply_name, $like, $date, $time, $ipaddress, $session_id);
+    $comment = ["day_id"     => (int)$para['day_id'],
+                "content"    => $this->view->escapeString($para['content']),
+                "username"   => $this->view->escapeString($para['username']),
+                "email"      => $this->view->escapeString($para['email']),
+                "reply_id"   => 0,
+                "reply_name" => '',
+                "like"       => 0,
+                "time"       => time(), "date" => date('Y-m-d h:i:s'),
+                "ipaddress"  => System::getRealIPaddress(),
+                "session_id" => System::sessionID()];
+    $arr     = [];
+    if ($comment["day_id"] > 0 && $comment["content"] != "" && $comment["username"] != "" && $comment["email"] != "") {
+      $re = $this->view->addComment($comment);
       if ($re) {
-        $this->view->updateCommentCount($day_id);
-        $last_com = $this->view->getLastInsertComment($time, $session_id);
-        $arr      = ["result" => true, "day_id" => $day_id, "content" => $this->view->getOneCommentHTML($last_com)];
+        $this->view->updateCommentCount($comment["day_id"]);
+        $lastCom = $this->view->getLastInsertComment($comment["time"], $comment["session_id"]);
+        $arr     = ["result"  => true, "day_id" => $comment["day_id"],
+                    "content" => $this->view->getOneCommentHTML($lastCom)];
       }
     }
     else {
@@ -44,27 +42,29 @@ class ControllerComment extends Controller {
   }
 
   public function ajaxMakeAReply($para) {
-    $day_id     = (int)$para['day_id'];
-    $com_id     = (int)$para['com_id'];
-    $content    = trim($para['content']);
-    $username   = trim($para['username']);
-    $email      = trim($para['email']);
-    $email      = Com::sanitizeString($email);
-    $reply_id   = (int)$para['rep_id'];
-    $reply_name = trim($para['rep_name']);
-    $like       = 0;
-    $time       = time();
-    $date       = date('Y-m-d h:i:s');
-    $ipaddress  = System::getRealIPaddress();
-    $session_id = System::sessionID();
-    $arr        = [];
+    $comment = ["day_id"     => (int)$para['day_id'],
+                "com_id"     => (int)$para['com_id'],
+                "content"    => $this->view->escapeString($para['content']),
+                "username"   => $this->view->escapeString($para['username']),
+                "email"      => $this->view->escapeString($para['email']),
+                "reply_id"   => (int)$para['rep_id'],
+                "reply_name" => $this->view->escapeString($para['rep_name']),
+                "like"       => 0,
+                "time"       => time(),
+                "date"       => date('Y-m-d h:i:s'),
+                "ipaddress"  => System::getRealIPaddress(),
+                "session_id" => System::sessionID(),];
+    $arr     = [];
 
-    if ($day_id > 0 && $content != "" && $username != "" && $email != "" && $reply_id > 0) {
-      $re = $this->view->addComment($day_id, $content, $username, $email, $reply_id, $reply_name, $like, $date, $time, $ipaddress, $session_id);
+    if ($comment["day_id"] > 0 && $comment["content"] != "" && $comment["username"] != "" && $comment["email"] != "" &&
+        $comment["reply_id"] > 0
+    ) {
+      $re = $this->view->addComment($comment);
       if ($re) {
-        $this->view->updateCommentCount($day_id);
-        $lastCom = $this->view->getLastInsertComment($time, $session_id);
-        $arr     = ["result" => true, "com_id" => $com_id, "content" => $this->view->getOneCommentHTML($lastCom)];
+        $this->view->updateCommentCount($comment["day_id"]);
+        $lastCom = $this->view->getLastInsertComment($comment["time"], $comment["session_id"]);
+        $arr     = ["result"  => true, "com_id" => $comment["com_id"],
+                    "content" => $this->view->getOneCommentHTML($lastCom)];
       }
     }
     else {

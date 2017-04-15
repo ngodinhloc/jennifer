@@ -15,45 +15,37 @@ class ControllerMake extends Controller {
   }
 
   public function ajaxMakeADay($para) {
-    $day   = (int)$para['day'];
-    $month = (int)$para['month'];
-    $year  = (int)$para['year'];
-    $check = checkdate($month, $day, $year);
+    $day          = [];
+    $day["day"]   = (int)$para['day'];
+    $day["month"] = (int)$para['month'];
+    $day["year"]  = (int)$para['year'];
+    $check        = checkdate($day["month"], $day["day"], $day["year"]);
     if ($check) {
-      $title    = $para['title'];
-      $content  = $para['content'];
-      $username = $para['username'];
-      $email    = $para['email'];
-      $location = $para['loc'];
-      $photos   = $para['photos'];
+      $day["title"]      = $this->view->escapeString($para['title']);
+      $day["content"]    = $this->view->escapeString($para['content']);
+      $day["username"]   = $this->view->escapeString($para['username']);
+      $day["email"]      = $this->view->escapeString($para['email']);
+      $day["location"]   = $this->view->escapeString($para['loc']);
+      $day["photos"]     = $this->view->escapeString($para['photos']);
+      $day["slug"]       = Com::sanitizeString($day["title"]);
+      $day["preview"]    = Com::subString($day["content"], SUMMARY_LENGTH, 3);
+      $day["sanitize"]   = str_replace('-', ' ', Com::sanitizeString($day["title"]))
+                           . ' ' . str_replace('-', ' ', Com::sanitizeString($day["username"]))
+                           . ' ' . str_replace('-', ' ', Com::sanitizeString($day["location"]))
+                           . ' ' . str_replace('-', ' ', Com::sanitizeString($day["preview"]));
+      $day["like"]       = 0;
+      $day["notify"]     = "no";
+      $day["time"]       = time();
+      $day["date"]       = date('Y-m-d h:i:s');
+      $day["ipaddress"]  = System::getRealIPaddress();
+      $day["session_id"] = System::sessionID();
 
-      $slug     = Com::sanitizeString(strip_tags($title));
-      $preview  = $this->view->escapeString($content);
-      $preview  = Com::subString($preview, SUMMARY_LENGTH, 3);
-      $sanitize = str_replace('-', ' ', Com::sanitizeString($title))
-                  . ' ' . str_replace('-', ' ', Com::sanitizeString($username))
-                  . ' ' . str_replace('-', ' ', Com::sanitizeString($location))
-                  . ' ' . str_replace('-', ' ', Com::sanitizeString($preview));
-      //$email		= $Com->_sanitizeString($email);
-      $content    = $this->view->escapeString($content);
-      $like       = 0;
-      $notify     = "no";
-      $time       = time();
-      $date       = date('Y-m-d h:i:s');
-      $ipaddress  = System::getRealIPaddress();
-      $session_id = System::sessionID();
-
-      $re = $this->view->addDay($day, $month, $year, $title, $slug, $content, $preview, $sanitize, $username, $email, $location, $notify, $photos, $like, $date, $time, $ipaddress, $session_id);
+      $re = $this->view->addDay($day);
       if ($re) {
-        $row = $this->view->getLastInsertDay($time, $session_id);
-        $arr = ["status" => "success",
-                "id"     => $row['id'],
-                "slug"   => $row['slug'],
-                "day"    => $row['day'],
-                "month"  => $row['month'],
-                "year"   => $row['year']];
+        $row = $this->view->getLastInsertDay($day["time"], $day["session_id"]);
+        $arr = ["status" => "success", "id" => $row['id'], "slug" => $row['slug'], "day" => $row['day'],
+                "month"  => $row['month'], "year" => $row['year']];
         echo(json_encode($arr, JSON_UNESCAPED_SLASHES));
-        //          print('{"status": "success","id":"' . $row['id'] . '","slug":"' . $row['slug'] . '","day":"' . $row['day'] . '","month":"' . $row['month'] . '","year":"' . $row['year'] . '"}');
       }
     }
   }

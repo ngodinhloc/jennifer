@@ -183,49 +183,18 @@ class View extends Model {
 
   /**
    * Add new comment
-   * @param int $day_id
-   * @param string $content
-   * @param string $username
-   * @param string $email
-   * @param int $replyID
-   * @param string $replyName
-   * @param int $like
-   * @param string $date
-   * @param int $time
-   * @param string $ipaddress
-   * @param string $sessionID
+   * @param array $comment
    * @return bool
    */
-  public function addComment($day_id, $content, $username, $email, $replyID, $replyName, $like, $date, $time,
-                             $ipaddress, $sessionID) {
-
-    $content   = $this->escapeString($content);
-    $username  = $this->escapeString($username);
-    $email     = $this->escapeString($email);
-    $replyName = $this->escapeString($replyName);
-
-    $result = $this->db->table("tbl_comment")->columns(["day_id",
-                                                        "content",
-                                                        "username",
-                                                        "email",
-                                                        "reply_id",
-                                                        "reply_name",
-                                                        "like",
-                                                        "date",
-                                                        "time",
-                                                        "ipaddress",
-                                                        "session_id"])
-                       ->values([$day_id,
-                                 $content,
-                                 $username,
-                                 $email,
-                                 $replyID,
-                                 $replyName,
-                                 $like,
-                                 $date,
-                                 $time,
-                                 $ipaddress,
-                                 $sessionID])->insert();
+  public function addComment($comment) {
+    $result = $this->db->table("tbl_comment")
+                       ->columns(["day_id", "content", "username", "email",
+                                  "reply_id", "reply_name", "like",
+                                  "date", "time", "ipaddress", "session_id"])
+                       ->values([$comment["day_id"], $comment["content"], $comment["username"], $comment["email"],
+                                 $comment["reply_id"], $comment["reply_name"], $comment["like"],
+                                 $comment["date"], $comment["time"], $comment["ipaddress"], $comment["session_id"]])
+                       ->insert();
 
     return $result;
   }
@@ -237,8 +206,7 @@ class View extends Model {
    * @return array|null
    */
   public function getLastInsertComment($time, $session_id) {
-    $row = $this->db->table("tbl_comment")->where(["time"       => $time,
-                                                   "session_id" => $session_id])
+    $row = $this->db->table("tbl_comment")->where(["time" => $time, "session_id" => $session_id])
                     ->orderBy(["id" => "DESC"])->limit(1)->get()->first();
 
     return $row;
@@ -254,9 +222,8 @@ class View extends Model {
    */
   public function getRightRelatedDay($day, $month, $year, $location) {
     $result = $this->db->table("tbl_day")->select(["id", "day", "year", "month", "slug", "title", "photos"])
-                       ->where(["year"      => $year,
-                                "month"     => $month,
-                                "|location" => "~{$location}"])->orderBy(["day" => "ASC"])
+                       ->where(["year" => $year, "month" => $month, "|location" => "~{$location}"])
+                       ->orderBy(["day" => "ASC"])
                        ->limit(NUM_TOP_RIGHT)
                        ->get(false, "file")->toArray();
 
@@ -346,32 +313,19 @@ class View extends Model {
         array_push($years, $row['year']);
       }
       $yearsCond = implode(',', $years);
-      $result1   = $this->db->table("#tbl_day d")->select(["day",
-                                                           "month",
-                                                           "year",
-                                                           "#CONCAT(d.day,d.month,d.year) as days",
-                                                           "#COUNT(*) as num"])
-                            ->where(["year" => "@{$yearsCond}"])->groupBy(["#days"])->orderBy(["year"  => "DESC",
-                                                                                               "month" => "ASC",
-                                                                                               "day"   => "ASC"])
+      $result1   = $this->db->table("#tbl_day d")
+                            ->select(["day", "month", "year", "#CONCAT(d.day,d.month,d.year) as days",
+                                      "#COUNT(*) as num"])
+                            ->where(["year" => "@{$yearsCond}"])->groupBy(["#days"])
+                            ->orderBy(["year" => "DESC", "month" => "ASC", "day" => "ASC"])
                             ->get()->toArray();
       $days      = [];
       foreach ($result1 as $row1) {
         $days[$row1['year']][$row1['month']][$row1['day']] = $row1['num'];
       }
-      $months = ['Jan' => '01',
-                 'Feb' => '02',
-                 'Mar' => '03',
-                 'Apr' => '04',
-                 'May' => '05',
-                 'Jun' => '06',
-                 'Jul' => '07',
-                 'Aug' => '08',
-                 'Sep' => '09',
-                 'Oct' => '10',
-                 'Nov' => '11',
-                 'Dec' => '12'];
-      $search = SITE_URL . "/search/tag=";
+      $months = ['Jan' => '01', 'Feb' => '02', 'Mar' => '03', 'Apr' => '04', 'May' => '05', 'Jun' => '06',
+                 'Jul' => '07', 'Aug' => '08', 'Sep' => '09', 'Oct' => '10', 'Nov' => '11', 'Dec' => '12'];
+      $search = SITE_URL . "/search/";
 
       $html   = new HTML();
       $output = "";
@@ -644,8 +598,8 @@ class View extends Model {
     }
     $like_ip       = explode('|', $row['like_ip']);
     $ipaddress     = System::getTodayIPaddress();
-    $search_author = SITE_URL . "/search/tag=" . urlencode($row['username']);
-    $search_loc    = SITE_URL . "/search/tag=" . urlencode($row['location']);
+    $search_author = SITE_URL . "/search/" . urlencode($row['username']);
+    $search_loc    = SITE_URL . "/search/" . urlencode($row['location']);
     $authorLink    = $html->setTag("a")->setProp(["href" => $search_author])
                           ->setInnerHTML(stripslashes($row['username']))->create();
     $meta          = $authorLink;
@@ -699,44 +653,18 @@ class View extends Model {
 
   /**
    * Insert new day
-   * @param int $day
-   * @param int $month
-   * @param int $year
-   * @param string $title
-   * @param string $slug
-   * @param string $content
-   * @param string $preview
-   * @param string $sanitize
-   * @param string $username
-   * @param string $email
-   * @param string $location
-   * @param string $notify
-   * @param string $photos
-   * @param int $like
-   * @param string $date
-   * @param int $time
-   * @param string $ipaddress
-   * @param string $session_id
+   * @param array $day
    * @return bool|\mysqli_result
    */
-  public function addDay($day, $month, $year, $title, $slug, $content, $preview, $sanitize, $username, $email,
-                         $location, $notify, $photos, $like, $date, $time, $ipaddress, $session_id) {
-    $title    = $this->escapeString($title);
-    $slug     = $this->escapeString($slug);
-    $content  = $this->escapeString($content);
-    $preview  = $this->escapeString($preview);
-    $sanitize = $this->escapeString($sanitize);
-    $username = $this->escapeString($username);
-    $email    = $this->escapeString($email);
-    $location = $this->escapeString($location);
-    $photos   = $this->escapeString($photos);
-    $code     = mt_rand(100000, 999999);
-
+  public function addDay($day) {
+    $code   = mt_rand(100000, 999999);
     $result = $this->db->table("tbl_day")->columns(["day", "month", "year", "title", "slug", "content", "preview",
                                                     "sanitize", "username", "email", "location", "edit_code", "notify",
                                                     "photos", "like", "date", "time", "ipaddress", "session_id"])
-                       ->values([$day, $month, $year, $title, $slug, $content, $preview, $sanitize, $username, $email,
-                                 $location, $code, $notify, $photos, $like, $date, $time, $ipaddress, $session_id])
+                       ->values([$day["day"], $day["month"], $day["year"], $day["title"], $day["slug"], $day["content"],
+                                 $day["preview"], $day["sanitize"], $day["username"], $day["email"],
+                                 $day["location"], $code, $day["notify"], $day["photos"], $day["like"], $day["date"],
+                                 $day["time"], $day["ipaddress"], $day["session_id"]])
                        ->insert();
 
     return $result;
@@ -761,8 +689,8 @@ class View extends Model {
    */
   public function updateLikeDay($id, $ipaddress) {
     $result = $this->db->table("#tbl_day d")->where(["id" => $id])
-                       ->set(["like"    => "#(d.like + 1)",
-                              "like_ip" => "#CONCAT(like_ip,'|','$ipaddress')"])->update();
+                       ->set(["like" => "#(d.like + 1)", "like_ip" => "#CONCAT(like_ip,'|','$ipaddress')"])
+                       ->update();
 
     return $result;
   }
@@ -785,9 +713,8 @@ class View extends Model {
    * @return array
    */
   public function getLastInsertDay($time, $session_id) {
-    $row = $this->db->table("tbl_day")->where(["time"       => $time,
-                                               "session_id" => $session_id])->orderBy(["id" => "DESC"])->limit(1)->get()
-                    ->toArray();
+    $row = $this->db->table("tbl_day")->where(["time" => $time, "session_id" => $session_id])
+                    ->orderBy(["id" => "DESC"])->limit(1)->get()->first();
 
     return $row;
   }

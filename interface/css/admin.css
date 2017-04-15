@@ -35,3 +35,7 @@ input.cat-order,input.update-category-order {
 .page-list .current-page {
 	padding:1px 5px; background-color:#04699f; border:1px solid #04699f; margin:0px 1px; color:#FFF
 }
+.fb-posted{
+	/*border: 1px solid #428bca;*/
+	background-color: #ebebeb;
+}

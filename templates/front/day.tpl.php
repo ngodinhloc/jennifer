@@ -13,9 +13,9 @@
         <div class="author post">
           <i class="icon"></i>
           <?php
-          $searchAuthor = SITE_URL . "/search/tag=" . urlencode($this->data["days"]['username']);
-          $searchLoc    = SITE_URL . "/search/tag=" . urlencode($this->data["days"]['location']);
-          $searchDate   = SITE_URL . "/search/tag=" . $this->data["days"]['month'] . '/' . $this->data["days"]['year'];
+          $searchAuthor = SITE_URL . "/search/" . urlencode($this->data["days"]['username']);
+          $searchLoc    = SITE_URL . "/search/" . urlencode($this->data["days"]['location']);
+          $searchDate   = SITE_URL . "/search/" . $this->data["days"]['month'] . '/' . $this->data["days"]['year'];
           ?>
           <span><a href="<?php echo $searchAuthor ?>"><?php echo $this->data["days"]['username']; ?></a></span>
           <?php if ($this->data["days"]['location'] != '') {

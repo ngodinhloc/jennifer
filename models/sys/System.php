@@ -92,9 +92,7 @@ class System {
    * @return string
    */
   public static function sessionID() {
-    if (session_status() == PHP_SESSION_NONE) {
-      session_start();
-    }
+    self::checkSession();
 
     return session_id();
   }
@@ -104,9 +102,7 @@ class System {
    * @param $val
    */
   public static function setSession($name, $val) {
-    if (session_status() == PHP_SESSION_NONE) {
-      session_start();
-    }
+    self::checkSession();
     $_SESSION[$name] = $val;
   }
 
@@ -116,9 +112,7 @@ class System {
    * @return bool|null
    */
   public static function getSession($name = "", $default = null) {
-    if (session_status() == PHP_SESSION_NONE) {
-      session_start();
-    }
+    self::checkSession();
     if (isset($_SESSION[$name])) {
       return $_SESSION[$name];
     }
@@ -132,18 +126,30 @@ class System {
     }
   }
 
-  public static function getGetPara($name = "", $default = null) {
-
-  }
-
-  public static function getRequest($name = "", $default = null) {
-
+  private static function checkSession() {
+    if (session_status() == PHP_SESSION_NONE) {
+      session_start();
+    }
   }
 
   /**
    * @return mixed
    */
-  public static function getFiles() {
+  public static function getRequestURI() {
+    return $_SERVER['REQUEST_URI'];
+  }
+
+  /**
+   * @return mixed
+   */
+  public static function getSERVER() {
+    return $_SERVER;
+  }
+
+  /**
+   * @return mixed
+   */
+  public static function getFILES() {
     return $_FILES;
   }
 
@@ -162,6 +168,10 @@ class System {
   }
 
   public static function getPostPara($name = "", $default = null) {
+
+  }
+
+  public static function getGetPara($name = "", $default = null) {
 
   }
 
@@ -216,31 +226,6 @@ class System {
     $ip    = $today . '-' . $ip;
 
     return $ip;
-  }
-
-  /**
-   * Get parameter from view uri
-   * @param $arg
-   * @return bool|int|string
-   */
-  public static function getViewPara($arg) {
-    $uri = $_SERVER['REQUEST_URI'];
-    switch($arg) {
-      case "day":
-        $para = explode("/", $uri);
-        if (isset($para[2])) {
-          return (int)$para[2];
-        }
-        break;
-      case "search":
-        $para = urldecode(trim(str_replace("/search/tag=", "", $uri)));
-        if ($para != "") {
-          return $para;
-        }
-        break;
-    }
-
-    return false;
   }
 
   /**

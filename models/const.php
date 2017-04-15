@@ -26,11 +26,10 @@ const MODULE_LIST    = ["front", "back"];
 const DEFAULT_MODULE = "front";
 const DEFAULT_VIEW   = "index";
 // DIRECTORY
-const PHOTO_DIR      = '/uploads/photos/';
+const TEMPLATE_DIR   = DOC_ROOT . "/templates/";
+const PHOTO_DIR      = "/uploads/photos/";
 const CLASS_DIR      = "models/";
 const VIEW_DIR       = "views/";
-const TEMPLATE_DIR   = "templates/";
-const DASHBOARD_DIR  = "modules/";
 const CONTROLLER_DIR = "cons/";
 const CACHE_DIR      = "caches/";
 // EXTENSIONS

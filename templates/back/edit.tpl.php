@@ -109,7 +109,7 @@
     id = $(this).closest('li').attr('id');
     $(this).closest('li').remove();
   });
-  $(document).ready(function () {
+  $(function () {
     $("#sortable").sortable({
       placeholder: "placeholder"
     });
@@ -161,7 +161,7 @@
       $("#form-upload-photos").submit();
     });
   });
-  $(document).ready(function () {
+  $(function () {
     $('#content').autosize();
   });
 </script>

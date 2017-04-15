@@ -12,8 +12,6 @@ class Template {
 
   /**
    * Render templates
-   * @param string $template
-   * @param array $data
    * @param $tidy bool
    * @return string
    */

@@ -33,36 +33,35 @@ class ControllerAdmin extends Controller {
   }
 
   public function ajaxUpdateADay($para) {
-    $id    = (int)$para['id'];
-    $day   = (int)$para['day'];
-    $month = (int)$para['month'];
-    $year  = (int)$para['year'];
-    $check = checkdate($month, $day, $year);
+    $day          = [];
+    $day["id"]    = (int)$para['id'];
+    $day["day"]   = (int)$para['day'];
+    $day["month"] = (int)$para['month'];
+    $day["year"]  = (int)$para['year'];
+    $check        = checkdate($day["month"], $day["day"], $day["year"]);
     if ($check) {
-      $title    = $para['title'];
-      $slug     = Com::sanitizeString(strip_tags($title));
-      $content  = $para['content'];
-      $username = $para['username'];
-      $email    = $para['email'];
-      $location = $para['loc'];
-      $photos   = $para['photos'];
-      $like     = (int)$para['like'];
-      $preview  = $this->admin->escapeString($content);
-      $preview  = Com::subString($preview, SUMMARY_LENGTH, 3);
-      $sanitize = str_replace('-', ' ', Com::sanitizeString($title))
-                  . ' ' . str_replace('-', ' ', Com::sanitizeString($username))
-                  . ' ' . str_replace('-', ' ', Com::sanitizeString($location))
-                  . ' ' . str_replace('-', ' ', Com::sanitizeString($preview));
-      //$email		= $Com->_sanitizeString($email);
-      $re = $this->admin->updateDay($id, $day, $month, $year, $title, $slug, $content, $preview, $sanitize, $photos, $username, $email, $location, $like);
+      $day["title"]    = $this->admin->escapeString($para['title']);
+      $day["slug"]     = Com::sanitizeString(($day["title"]));
+      $day["content"]  = $this->admin->escapeString($para['content'], true);
+      $day["username"] = $this->admin->escapeString($para['username']);
+      $day["email"]    = $this->admin->escapeString($para['email']);
+      $day["location"] = $this->admin->escapeString($para['loc']);
+      $day["photos"]   = $this->admin->escapeString($para['photos']);
+      $day["like"]     = (int)$para['like'];
+      $day["preview"]  = Com::subString($day["content"], SUMMARY_LENGTH, 3);
+      $day["sanitize"] = str_replace('-', ' ', Com::sanitizeString($day["title"]))
+                         . ' ' . str_replace('-', ' ', Com::sanitizeString($day["username"]))
+                         . ' ' . str_replace('-', ' ', Com::sanitizeString($day["location"]))
+                         . ' ' . str_replace('-', ' ', Com::sanitizeString($day["preview"]));
+      $re              = $this->admin->updateDay($day);
       if ($re) {
-        $array = ["status" => "success", "id" => $id, "slug" => $slug, "day" => $day, "month" => $month,
-                  "year"   => $year];
+        $array = ["status" => "success", "id" => $day["id"], "slug" => $day["slug"], "day" => $day["day"],
+                  "month"  => $day["month"], "year" => $day["year"]];
         echo json_encode($array);
       }
     }
     else {
-      $array = ["status" => "failed", "id" => $id];
+      $array = ["status" => "failed", "id" => $day["id"]];
       echo json_encode($array);
     }
   }

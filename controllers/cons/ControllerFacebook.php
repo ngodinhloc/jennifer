@@ -1,203 +1,195 @@
 <?php
 namespace cons;
-require_once(DOC_ROOT . '/plugins/facebook/src/facebook.php');
+require_once(DOC_ROOT . '/plugins/facebook/autoload.php');
 use com\Com;
 use core\Admin;
+use sys\System;
 use Facebook;
 
 class ControllerFacebook extends Controller {
   protected $requiredPermission = ["admin"];
   private $admin;
   private $fb;
-  private $fbUser;
-  private $fbPageID = FB_PAGEID;
-  private $fbPermissions = 'manage_pages, publish_actions';
 
   public function __construct() {
     parent::__construct();
 
-    $this->admin  = new Admin();
-    $this->fb     = new Facebook(['appId' => FB_APPID, 'secret' => FB_SECRET]);
-    $this->fbUser = $this->fb->getUser();
+    $this->admin = new Admin();
+    $this->fb    = new Facebook\Facebook(['app_id'                => FB_APPID,
+                                          'app_secret'            => FB_SECRET,
+                                          'default_graph_version' => 'v2.8',]);
   }
 
   public function ajaxPostToFacebook($para) {
-    $type = $para['type'];
-    $id   = (int)$para['id'];
-    $day  = $this->admin->getDayById($id);
-
-    if ($this->fbUser) {
-      $result            = $this->fb->api("/me/accounts");
-      $page_access_token = "";
-
-      // loop through all pages to find the right one
-      if (!empty($result["data"])) {
-        foreach ($result["data"] as $page) {
-          if ($page["id"] == $this->fbPageID) {
-            $page_access_token = $page["access_token"];
+    $appAccessToken = System::getSession("FB_appAccessToken");
+    $id             = (int)$para['id'];
+    $type           = $para['type'];
+    if ($appAccessToken) {
+      $day = $this->admin->getDayById($id);
+      switch($type) {
+        case FB_TEXT:
+          $attachment = $this->fbText($day);
+          $response   = $this->fb->post('/' . FB_PAGEID . '/feed', $attachment, $appAccessToken);
+          $postID     = $response->getGraphNode();
+          if ($postID) {
+            $this->admin->updateFB($id, $type);
+            echo(json_encode(["status" => "OK", "id" => $id], JSON_UNESCAPED_SLASHES));
           }
-        }
-      }
-      // pageid not found:
-      if ($page_access_token == "") {
-        echo "No access_token. Check pageId: " . $this->fbPageID;
-      }
-      else {
-        // pageid found, access_token gained
-        $this->fb->setAccessToken($page_access_token);
+          break;
 
-        // post as text
-        if ($type == FB_TEXT) {
-          try {
-            $content     = stripslashes($day["content"]);
-            $content     = str_replace("<li>", "\n", $content);
-            $content     = str_replace("<br>", "\n", $content);
-            $content     = str_replace("&nbsp;", " ", $content);
-            $content     = strip_tags($content);
-            $msg         = $day['day'] . '/' . $day['month'] . '/' . $day['year'] . ': ' . $day["title"] . " (by " .
-                           $day["username"] . "): \n" . $content;
-            $msg         = html_entity_decode($msg, ENT_COMPAT, "UTF-8");
-            $action_name = "View on Thedaysoflife.com";
-            $action_link = LIST_URL . $day["id"] . '/' . $day['day'] . $day['month'] . $day['year'] . '-' .
-                           $day["slug"] . URL_EXT;
-            $attachment  = [
-              'message' => $msg,
-            ];
-            $result      = $this->fb->api("/" . $this->fbPageID . "/feed", "post", $attachment);
-            if ($result) {
-              $this->admin->updateFB($id, $type);
-              echo "OK";
-            }
+        case FB_FEED:
+          $attachment = $this->fbFeed($day);
+          $response   = $this->fb->post('/' . FB_PAGEID . '/feed', $attachment, $appAccessToken);
+          $postID     = $response->getGraphNode();
+          if ($postID) {
+            $this->admin->updateFB($id, $type);
+            echo(json_encode(["status" => "OK", "id" => $id], JSON_UNESCAPED_SLASHES));
           }
-          catch (FacebookApiException $e) {
-            echo $e->getMessage();
+          break;
+
+        case FB_LINK:
+          $attachment = $this->fbLink($day);
+          $response   = $this->fb->post('/' . FB_PAGEID . '/feed', $attachment, $appAccessToken);
+          $postID     = $response->getGraphNode();
+          if ($postID) {
+            $this->admin->updateFB($id, $type);
+            echo(json_encode(["status" => "OK", "id" => $id], JSON_UNESCAPED_SLASHES));
           }
-        }
+          break;
 
-        // post as feed
-        if ($type == FB_FEED) {
-          try {
-            $uri         = LIST_URL . $day['id'] . '/' . $day['day'] . $day['month'] . $day['year'] . '-' .
-                           $day['slug'] . URL_EXT;
-            $msg         = html_entity_decode($day['day'] . '/' . $day['month'] . '/' . $day['year'] . ': ' .
-                                              $day['title'] . ' (by ' . $day['username'] . ')', ENT_COMPAT, "UTF-8");
-            $title       = html_entity_decode($day['day'] . '/' . $day['month'] . '/' . $day['year'] . ': ' .
-                                              $day['title'], ENT_COMPAT, "UTF-8");
-            $content     = stripslashes($day["content"]);
-            $content     = str_replace("<li>", " - ", $content);
-            $content     = str_replace("<br>", "\n", $content);
-            $content     = str_replace("&nbsp;", " ", $content);
-            $content     = Com::subString(strip_tags($content), 300, 3);
-            $desc        = html_entity_decode($content, ENT_COMPAT, "UTF-8");
-            $photos      = explode(',', $day['photos']);
-            $pic         = Com::getPhotoURL($photos[0], PHOTO_TITLE_NAME);
-            $action_name = 'View on Thedaysoflife.com';
-            $action_link = LIST_URL . $day['id'] . '/' . $day['day'] . $day['month'] . $day['year'] . '-' .
-                           $day['slug'] . URL_EXT;
-            $attachment  = [
-              'message'     => $msg,
-              'name'        => $title,
-              'link'        => $uri,
-              'description' => $desc,
-              'picture'     => $pic,
-              'actions'     => json_encode(['name' => $action_name, 'link' => $action_link]),
-            ];
-            $result      = $this->fb->api('/' . $this->fbPageID . '/feed', 'post', $attachment);
-            if ($result) {
-              $this->admin->updateFB($id, $type);
-              echo "OK";
-            }
-          }
-          catch (FacebookApiException $e) {
-            echo $e->getMessage();
-          }
-        }
-
-        // post as link
-        if ($type == FB_LINK) {
-          try {
-            $uri     = LIST_URL . $day['id'] . '/' . $day['day'] . $day['month'] . $day['year'] . '-' . $day['slug'] .
-                       URL_EXT;
-            $content = stripslashes($day["content"]);
-            $content = str_replace("<li>", "\n", $content);
-            $content = str_replace("<br>", "\n", $content);
-            $content = str_replace("&nbsp;", " ", $content);
-            $content = strip_tags($content);
-            $msg     = $day['day'] . '/' . $day['month'] . '/' . $day['year'] . ': ' . $day["title"] . " (by " .
-                       $day["username"] . "): \n\n" . $content;
-            $msg     = html_entity_decode($msg, ENT_COMPAT, "UTF-8");
-
-            $attachment = [
-              'type'    => 'photo',
-              'message' => $msg,
-              'link'    => $uri,
-            ];
-
-            $result = $this->fb->api('/' . $this->fbPageID . '/links/', 'post', $attachment);
-            if ($result) {
-              $this->admin->updateFB($id, $type);
-              echo "OK";
-            }
-          }
-          catch (FacebookApiException $e) {
-            echo $e->getMessage();
-          }
-        }
-
-        // post as album
-        if ($type == FB_ALBUM) {
-          try {
-            $photos = explode(',', $day['photos']);
-            // there are photos to upload
-            if (sizeof($photos) > 0) {
-              $title      = $day['day'] . '/' . $day['month'] . '/' . $day['year'] . ': ' . $day["title"] . " (by " .
-                            $day["username"] . ")";
-              $content    = stripslashes($day["content"]);
-              $content    = str_replace("<li>", "\n", $content);
-              $content    = str_replace("<br>", "\n", $content);
-              $content    = str_replace("&nbsp;", " ", $content);
-              $content    = strip_tags($content);
-              $album_name = html_entity_decode($title, ENT_COMPAT, "UTF-8");
-              $album_desc = html_entity_decode($content, ENT_COMPAT, "UTF-8");
-
-              //$user_profile = $this->fb->api("/$pageid");
-              $album_data = [
-                "name"    => $album_name,
-                "message" => $album_desc,
-              ];
-              $new_album  = $this->fb->api("/$this->fbPageID/albums", "post", $album_data);
-              $album_id   = $new_album['id'];
-
-              $this->fb->setFileUploadSupport(true);
-
+        case FB_ALBUM:
+          $photos = explode(',', $day['photos']);
+          $title  = $day['day'] . '/' . $day['month'] . '/' . $day['year'] . ': ' . $day["title"] .
+                    " (by " . $day["username"] . ")";
+          $status = "NO";
+          if (sizeof($photos) > 0) {
+            $albumData = $this->fbAlbum($day);
+            $newAlbum  = $this->fb->post("/" . FB_PAGEID . "/albums", $albumData, $appAccessToken);
+            $album     = $newAlbum->getDecodedBody();
+            if (isset($album["id"])) {
               foreach ($photos as $i => $name) {
-                $photo_name = html_entity_decode($title . " - " . ($i + 1), ENT_COMPAT, "UTF-8");
-                $pic        = Com::getPhotoURL($name, PHOTO_FULL_NAME);
-                $photo      = [
-                  'message' => $photo_name,
-                  'url'     => $pic,
-                ];
-                $pho        = $this->fb->api('/' . $album_id . '/photos', 'POST', $photo);
-                if (isset($pho['id'])) {
+                $photoName = html_entity_decode($title . " - " . ($i + 1), ENT_COMPAT, "UTF-8");
+                $photoURL  = Com::getPhotoURL($name, PHOTO_FULL_NAME);
+                $photoData = ['message' => $photoName, 'url' => $photoURL];
+                $newPhoto  = $this->fb->post('/' . $album["id"] . '/photos', $photoData, $appAccessToken);
+                $photo     = $newPhoto->getDecodedBody();
+                if (isset($photo["id"])) {
                   $this->admin->updateFB($id, $type);
                   $status = "OK";
                 }
               }
             }
-            echo $status;
           }
-          catch (FacebookApiException $e) {
-            echo $e->getMessage();
-          }
-        }
+          echo(json_encode(["status" => $status, "id" => $id], JSON_UNESCAPED_SLASHES));
+          break;
       }
     }
     else {
-      $fbLoginURL = $this->fb->getLoginUrl(['redirect_uri' => SITE_URL . '/back/days/',
-                                            'redirect-uri' => SITE_URL . '/back/days/',
-                                            'scope'        => $this->fbPermissions]);
-      echo '<a href="' . $fbLoginURL . '">FBLogin</a>';
-
+      $permissions = ['manage_pages', 'publish_actions'];
+      $helper      = $this->fb->getRedirectLoginHelper();
+      $loginUrl    = $helper->getLoginUrl(SITE_URL . '/back/days/', $permissions);
+      echo json_encode(["status" => "login", "id" => $id,
+                        "url"    => '<a href="' . $loginUrl . '">FBLogin</a>'], JSON_UNESCAPED_SLASHES);
     }
+  }
+
+  /**
+   * @param array $day
+   * @return array
+   */
+  private function fbText($day) {
+    $content    = stripslashes($day["content"]);
+    $content    = str_replace("<li>", "\n", $content);
+    $content    = str_replace("<br>", "\n", $content);
+    $content    = str_replace("&nbsp;", " ", $content);
+    $content    = strip_tags($content);
+    $msg        = $day['day'] . '/' . $day['month'] . '/' . $day['year'] . ': ' . $day["title"] .
+                  " (by " . $day["username"] . "): \n" . $content;
+    $msg        = html_entity_decode($msg, ENT_COMPAT, "UTF-8");
+    $attachment = [
+      'message' => $msg,
+    ];
+
+    return $attachment;
+  }
+
+  /**
+   * @param array $day
+   * @return array
+   */
+  private function fbFeed($day) {
+    $uri         = LIST_URL . $day['id'] . '/' . $day['day'] . $day['month'] . $day['year'] . '-' .
+                   $day['slug'] . URL_EXT;
+    $msg         = html_entity_decode($day['day'] . '/' . $day['month'] . '/' . $day['year'] . ': ' .
+                                      $day['title'] . ' (by ' . $day['username'] . ')', ENT_COMPAT, "UTF-8");
+    $title       = html_entity_decode($day['day'] . '/' . $day['month'] . '/' . $day['year'] . ': ' .
+                                      $day['title'], ENT_COMPAT, "UTF-8");
+    $content     = stripslashes($day["content"]);
+    $content     = str_replace("<li>", " - ", $content);
+    $content     = str_replace("<br>", "\n", $content);
+    $content     = str_replace("&nbsp;", " ", $content);
+    $content     = Com::subString(strip_tags($content), 300, 3);
+    $desc        = html_entity_decode($content, ENT_COMPAT, "UTF-8");
+    $photos      = explode(',', $day['photos']);
+    $pic         = Com::getPhotoURL($photos[0], PHOTO_TITLE_NAME);
+    $action_name = 'View on Thedaysoflife.com';
+    $action_link = LIST_URL . $day['id'] . '/' . $day['day'] . $day['month'] . $day['year'] . '-' .
+                   $day['slug'] . URL_EXT;
+    $attachment  = [
+      'message'     => $msg,
+      'name'        => $title,
+      'link'        => $uri,
+      'description' => $desc,
+      'picture'     => $pic,
+      'actions'     => json_encode(['name' => $action_name, 'link' => $action_link]),
+    ];
+
+    return $attachment;
+  }
+
+  /**
+   * @param array $day
+   * @return array
+   */
+  private function fbLink($day) {
+    $uri        = LIST_URL . $day['id'] . '/' . $day['day'] . $day['month'] . $day['year'] . '-' . $day['slug'] .
+                  URL_EXT;
+    $content    = stripslashes($day["content"]);
+    $content    = str_replace("<li>", "\n", $content);
+    $content    = str_replace("<br>", "\n", $content);
+    $content    = str_replace("&nbsp;", " ", $content);
+    $content    = strip_tags($content);
+    $msg        = $day['day'] . '/' . $day['month'] . '/' . $day['year'] . ': ' . $day["title"] . " (by " .
+                  $day["username"] . "): \n\n" . $content;
+    $msg        = html_entity_decode($msg, ENT_COMPAT, "UTF-8");
+    $attachment = [
+      'type'    => 'photo',
+      'message' => $msg,
+      'link'    => $uri,
+    ];
+
+    return $attachment;
+  }
+
+  /**
+   * @param array $day
+   * @return array
+   */
+  private function fbAlbum($day) {
+    $title      = $day['day'] . '/' . $day['month'] . '/' . $day['year'] . ': ' . $day["title"] . " (by " .
+                  $day["username"] . ")";
+    $content    = stripslashes($day["content"]);
+    $content    = str_replace("<li>", "\n", $content);
+    $content    = str_replace("<br>", "\n", $content);
+    $content    = str_replace("&nbsp;", " ", $content);
+    $content    = strip_tags($content);
+    $album_name = html_entity_decode($title, ENT_COMPAT, "UTF-8");
+    $album_desc = html_entity_decode($content, ENT_COMPAT, "UTF-8");
+    $album_data = [
+      "name"    => $album_name,
+      "message" => $album_desc,
+    ];
+
+    return $album_data;
   }
 }

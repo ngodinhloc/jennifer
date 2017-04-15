@@ -61,7 +61,7 @@ class DB {
    * </pre>
    * @param bool $foundRows : get found row or not
    * @param bool|string $cache :'mem' => Memchached, 'file' => FileCache;
-   * @return $this|array
+   * @return $this|bool
    */
   public function get($foundRows = false, $cache = false) {
     if (!$this->checkTable()) {

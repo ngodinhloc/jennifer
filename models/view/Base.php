@@ -1,5 +1,6 @@
 <?php
 namespace view;
+
 use sys\System;
 
 class Base {
@@ -14,11 +15,73 @@ class Base {
   protected $metaFiles = ["header" => [], "footer" => []];
   protected $metaHTML = ["header" => "", "footer" => ""];
   protected $data;
+  protected $post = [];
+  protected $para = [];
   protected $requiredPermission = false;
 
   public function __construct() {
-    $this->checkPermission();
     list($this->module, $this->view) = explode("\\", static::class);
+    $this->checkPermission();
+    $this->processPara();
+  }
+
+  /**
+   * Check if a form or ajax is posted to the the view and store post para
+   * @return bool
+   */
+  public function posted() {
+    if (empty(System::getPOST())) {
+      return false;
+    }
+    foreach (System::getPOST() as $key => $value) {
+      $this->post[$key] = $value;
+    }
+
+    return true;
+  }
+
+  /**
+   * Check if post para exists then return value, else return false
+   * @param $name
+   * @return bool|mixed
+   */
+  public function hasPost($name) {
+    return isset($this->post[$name]) ? $this->post[$name] : false;
+  }
+
+  /**
+   * Check if uri para exists then return value, else return false
+   * @param $name
+   * @return bool|mixed
+   */
+  public function hasPara($name) {
+    return isset($this->para[$name]) ? $this->para[$name] : false;
+  }
+
+  /**
+   * Process URI and GET para
+   */
+  protected function processPara() {
+    $uri   = System::getRequestURI();
+    $paras = explode("/", $uri);
+    $index = ($this->module == DEFAULT_MODULE) ? 1 : 2;
+    if (isset($paras[$index])) {
+      switch($paras[$index]) {
+        case "day":
+          $this->para["day"] = $paras[$index + 1];
+          break;
+        case "search":
+          $this->para["search"] = urldecode(trim(str_replace("/search/", "", $uri)));
+          break;
+      }
+    }
+
+    $get = System::getGET();
+    if (!empty($get)) {
+      foreach ($get as $name => $value) {
+        $this->para[$name] = $value;
+      }
+    }
   }
 
   /**
@@ -33,11 +96,11 @@ class Base {
     System::sessionStart();
     $permissionList = System::getPermission();
     if (!$permissionList) {
-      die("User does not have permission to access this view");
+      System::redirectTo("back/");
     }
     foreach ($this->requiredPermission as $per) {
       if (!in_array($per, $permissionList)) {
-        die("User does not have permission to access this view");
+        System::redirectTo("back/");
       }
     }
 

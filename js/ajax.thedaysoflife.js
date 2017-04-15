@@ -46,7 +46,7 @@ $(document).ready(function () {
 $("#top-search-button").live("click", function () {
   search = $("#top-search-text").val();
   if (search != '') {
-    link = CONST.SITE_URL + '/search/tag=' + encodeURI(search);
+    link = CONST.SITE_URL + '/search/' + encodeURI(search);
     window.location = link;
   }
 });
@@ -55,7 +55,7 @@ $("#top-search-text").live("keypress", function (e) {
   if (e.which == 13) {
     search = $("#top-search-text").val();
     if (search != '') {
-      link = CONST.SITE_URL + '/search/tag=' + encodeURI(search);
+      link = CONST.SITE_URL + '/search/' + encodeURI(search);
       window.location = link;
     }
   }
@@ -64,7 +64,7 @@ $("#top-search-text").live("keypress", function (e) {
 $("#main-search-button").live("click", function () {
   search = $("#main-search-text").val();
   if (search != '') {
-    link = CONST.SITE_URL + '/search/tag=' + encodeURI(search);
+    link = CONST.SITE_URL + '/search/' + encodeURI(search);
     window.location = link;
   }
 
@@ -74,7 +74,7 @@ $("#main-search-text").live("keypress", function (e) {
   if (e.which == 13) {
     search = $("#main-search-text").val();
     if (search != '') {
-      link = CONST.SITE_URL + '/search/tag=' + encodeURI(search);
+      link = CONST.SITE_URL + '/search/' + encodeURI(search);
       window.location = link;
     }
   }
