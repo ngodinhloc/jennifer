@@ -12,11 +12,10 @@ class Back extends Base {
     parent::__construct();
 
     if ($this->view != DEFAULT_VIEW) {
-      $user = System::checkJWT();
-      if (!$user) {
+      $this->userData = System::checkJWT();
+      if (!$this->userData) {
         System::redirectTo("back/");
       }
-      $this->data["user"] = $user;
     }
   }
 }

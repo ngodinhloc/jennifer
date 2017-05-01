@@ -7,7 +7,31 @@
 <div id="page-wrapper">
   <div id="page">
     <div class="col-xs-12 container-fluid region">
-      <? include_once('include/_top.inc.php'); ?>
+      <div class="row">
+        <div class="col-md-12 header">
+          <div class="container">
+            <header class="navbar navbar-static-top bs-docs-nav menu-top" id="top" role="banner">
+              <? include('include/_menu.inc.php'); ?>
+            </header>
+            <div class="col-xs-6 wrapper clearfix">
+              <a class="logo navbar-btn pull-left" title="Home" href="<?= SITE_URL ?>">
+                <img alt="Home" src="<?= SITE_URL ?>/interface/images/logo.png">
+              </a>
+              <span class="slogan">Share Memories, Inspire People</span>
+            </div>
+            <div class="col-xs-2 reggion">
+              <div class="button_list">
+                <a href="<?= SITE_URL ?>/share/" class="btn btn-lg btn-primary" type="button">Share Your Day</a>
+              </div>
+            </div>
+            <div class="form-search">
+              <input type="text" id="top-search-text" class="input-medium search-query" placeholder="Search days"
+                     value="<?php if (isset($this->data["searchTerm"])) {echo $this->data["searchTerm"];} ?>"/>
+              <button type="button" id="top-search-button" class="btn btn-lg btn-primary">Search</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="slideshow container-fluid region" style="padding: 0;">
       <div class="main-search col-sm-5 input-group">

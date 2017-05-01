@@ -6,45 +6,39 @@
       <div>
         <select class=" form-control days" id="day" name="day">
           <option class="select" value="0">Day</option>
-          <?php
-          echo(Com::getDayDrop($this->data["row"]['day']));
-          ?>
+          <?= Com::getDayDrop($this->data["row"]['day']) ?>
         </select>
         <select class="form-control days" id="month" name="month">
           <option class="select" value="0">Month*</option>
-          <?php
-          echo(Com::getMonthDrop($this->data["row"]['month']));
-          ?>
+          <?= Com::getMonthDrop($this->data["row"]['month']) ?>
         </select>
         <select class="form-control days" id="year" name="year">
           <option class="select" value="0">Year*</option>
-          <?php
-          echo(Com::getYearDrop($this->data["row"]['year']));
-          ?>
+          <?= Com::getYearDrop($this->data["row"]['year']) ?>
         </select>
         <span id="check" class="error"></span>
       </div>
     </div>
     <div class="form-group col-md-9">
       <label>What happend on that day ?</label>
-      <input type="hidden" id="id" name="id" value="<?php echo $this->data["id"]; ?>"/>
-      <input type="text" class="form-control" id="title" name="title" value="<?php echo htmlentities($this->data["row"]['title']); ?>"/>
+      <input type="hidden" id="id" name="id" value="<?= $this->data["row"]["id"] ?>"/>
+      <input type="text" class="form-control" id="title" name="title" value="<?= htmlentities($this->data["row"]['title']) ?>"/>
     </div>
     <div class="form-group col-md-9">
       <label>Like:</label>
-      <input type="text" class="form-control" id="like" name="like" size="5" value="<?php echo $this->data["row"]['like']; ?>"/>
+      <input type="text" class="form-control" id="like" name="like" size="5" value="<?= $this->data["row"]['like'] ?>"/>
     </div>
 
     <div class="form-group col-md-9">
       <label>Share your memories of that day</label>
-      <textarea class="form-control" rows="3" id="content" name="content"><?php echo stripcslashes($this->data["row"]['content']); ?></textarea>
+      <textarea class="form-control" rows="3" id="content" name="content"><?= stripcslashes($this->data["row"]['content']) ?></textarea>
     </div>
 
     <form id="form-upload-photos" name="form-upload-photos" role="form" enctype="multipart/form-data">
       <div class="form-group col-md-8 image">
         <label for="inputfile">Have some photos to upload ?</label>
         <input type="file" class="form-group" id="inputfile" name="inputfile[]" multiple="true" accept="image/jpeg,image/gif,image/png">
-        <input type="hidden" id="date" name="date" value="<?php echo $this->data["row"]['date']; ?>"/>
+        <input type="hidden" id="date" name="date" value="<?= $this->data["row"]['date'] ?>"/>
         <div class="body form-group">
           <p class="help-block">&nbsp</p>
           <p class="help-block" id="photo-loader">File size limit is 5MB</p>
@@ -74,20 +68,20 @@
         <div class="icon">
           <label class="full-name sr-only">Full Name</label>
         </div>
-        <input type="text" class="full-name form-control" id="username" name="username" value="<?php echo htmlentities($this->data["row"]['username']); ?>">
+        <input type="text" class="full-name form-control" id="username" name="username" value="<?= htmlentities($this->data["row"]['username']) ?>">
       </div>
 
       <div class="form-group col-xs-12 col-sm-4">
         <div class="icon">
           <label class="email sr-only">Email address</label>
         </div>
-        <input type="email" class="email form-control" id="email" name="email" value="<?php echo htmlentities($this->data["row"]['email']); ?>">
+        <input type="email" class="email form-control" id="email" name="email" value="<?= htmlentities($this->data["row"]['email']) ?>">
       </div>
       <div class="form-group registering col-xs-12 col-sm-4">
         <div class="icon">
           <label class="website sr-only">Location</label>
         </div>
-        <input type="text" class="website form-control" id="loc" name="loc" value="<?php echo htmlentities($this->data["row"]['location']); ?>">
+        <input type="text" class="website form-control" id="loc" name="loc" value="<?= htmlentities($this->data["row"]['location']) ?>">
       </div>
     </div>
     <div class="col-md-10 form-contact form-group">

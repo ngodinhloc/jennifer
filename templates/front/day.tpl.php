@@ -2,12 +2,11 @@
 <? include_once('include/_facebook.inc.php'); ?>
 <div class="row">
   <div class="col-md-12 col-md-8 no-front">
-    <?php if (isset($this->data["days"]['id'])) {
-      echo $this->data["templates"]; ?>
+    <?php if (isset($this->data["days"]['id'])) { ?>
       <h4 class="title">
-        <?php echo $this->data["days"]['day'] . '/' . $this->data["days"]['month'] . '/' . $this->data["days"]['year'] .
-                   ': ' . $this->data["days"]['title']; ?>
-        <input type="hidden" id="day-id" value="<?php echo $this->data["days"]['id']; ?>">
+        <?= $this->data["days"]['day'] . '/' . $this->data["days"]['month'] . '/' . $this->data["days"]['year'] . ': '
+            . $this->data["days"]['title'] ?>
+        <input type="hidden" id="day-id" value="<?= $this->data["days"]['id'] ?>">
       </h4>
       <div class="post-meta">
         <div class="author post">
@@ -17,27 +16,27 @@
           $searchLoc    = SITE_URL . "/search/" . urlencode($this->data["days"]['location']);
           $searchDate   = SITE_URL . "/search/" . $this->data["days"]['month'] . '/' . $this->data["days"]['year'];
           ?>
-          <span><a href="<?php echo $searchAuthor ?>"><?php echo $this->data["days"]['username']; ?></a></span>
+          <span><a href="<?= $searchAuthor ?>"><?= $this->data["days"]['username'] ?></a></span>
           <?php if ($this->data["days"]['location'] != '') {
             echo(' - <a href="' . $searchLoc . '">' . $this->data["days"]['location'] . '</a>');
           } ?>
         </div>
         <div class="date post">
           <i class="icon"></i>
-          <span><a href="<?php echo $searchDate ?>"><?php echo $this->data["time"]; ?></a></span>
+          <span><a href="<?= $searchDate ?>"><?= $this->data["time"] ?></a></span>
         </div>
         <div class="stat post">
         <span class="view">
-          <a href="javascript:void(0)" class="comment-count" id="count-<?php echo $this->data["id"]; ?>">
-            <i class="icon"></i><?php echo number_format($this->data["days"]['count']); ?>
-            </a>
+          <a href="javascript:void(0)" class="comment-count" id="count-<?= $this->data["days"]["id"] ?>">
+            <i class="icon"></i><?= number_format($this->data["days"]['count']) ?>
+          </a>
         </span>
         </div>
       </div>
       <hr/>
       <div class="body">
         <p>
-          <?php echo($this->data["days"]['content']); ?>
+          <?= $this->data["days"]['content'] ?>
         </p>
       </div>
       <?php
@@ -48,17 +47,13 @@
           <div class="col-md-12 slide">
             <div id="slider" class="flexslider">
               <ul class="slides list-unstyled">
-                <?php
-                echo(Com::getPhotoSlideFull($photos));
-                ?>
+                <?= Com::getPhotoSlideFull($photos) ?>
               </ul>
             </div>
             <?php if (sizeof($photos) >= 2) { ?>
               <div id="carousel" class="flexslider">
                 <ul class="slides list-inline">
-                  <?php
-                  echo(Com::getPhotoSlideThumb($photos));
-                  ?>
+                  <?= Com::getPhotoSlideThumb($photos) ?>
                 </ul>
               </div>
             <?php } ?>
@@ -69,30 +64,25 @@
         <div class="stat">
           <?php if (in_array($this->data["ipaddress"], $this->data["likeIP"])) { ?>
             <span class="like liked" title="Liked">
-                  <i class="icon"></i><?php echo number_format($this->data["days"]['like']); ?>
-                </span>
+              <i class="icon"></i><?= number_format($this->data["days"]['like']) ?>
+            </span>
           <?php }
           else { ?>
             <span class="like" title="Like">
-                  <a href="javascript:void(0)" class="like-day" data-id="<?php echo $id; ?>" data-like="<?php echo $this->data["like"]; ?>">
-                    <i class="icon"></i><?php echo number_format($this->data["days"]['like']); ?>
+                  <a href="javascript:void(0)" class="like-day" data-id="<?= $this->data["days"]["id"] ?>" data-like="<?= $this->data["days"]["like"] ?>">
+                    <i class="icon"></i><?= number_format($this->data["days"]['like']) ?>
                   </a>
                 </span>
           <?php } ?>
           <span class="reply">
-                <a href="javascript:void(0)" class="reply-focus">
-                  <i class="icon"></i>Reply
-                  </a>
-                </span>
+            <a href="javascript:void(0)" class="reply-focus"><i class="icon"></i>Reply</a></span>
         </div>
         <div class="social-content">
-          <div class="fb-like" data-href="<?php echo $this->data["uri"]; ?>" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
+          <div class="fb-like" data-href="<?= $this->data["uri"] ?>" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
         </div>
       </div>
       <div class="comment" id="comment-container">
-        <?php
-        echo($this->data["comments"]);
-        ?>
+        <?= $this->data["comments"] ?>
       </div>
       <div class="form-contact form-group media comment">
         <h4>Share your thought</h4><br/>
@@ -155,10 +145,10 @@
     });
   });
 
-  $(document).ready(function () {
+  $(function () {
     $('.comment-text').autosize();
     $(".comment-count").live("click", function () {
-      scrollTo("#carousel");
+      scrollTo("#action-container");
     });
   });
 </script>

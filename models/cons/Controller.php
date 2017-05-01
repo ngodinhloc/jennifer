@@ -6,11 +6,31 @@ namespace cons;
 
 use sys\System;
 
-class Controller {
+class Controller implements ControllerInterface {
   protected $requiredPermission = false;
 
   public function __construct() {
     $this->checkPermission();
+  }
+
+  /**
+   * Controller response
+   * @param array|string $data
+   * @param bool $json
+   * @param int $jsonOpt
+   */
+  public function response($data, $json = false, $jsonOpt = JSON_UNESCAPED_SLASHES) {
+    if (is_array($data)) {
+      if ($json) {
+        header('Content-Type: application/json');
+        echo(json_encode($data, $jsonOpt));
+        exit;
+      }
+      echo(json_encode($data, $jsonOpt));
+      exit;
+    }
+    echo $data;
+    exit;
   }
 
   /**

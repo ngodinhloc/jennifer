@@ -169,7 +169,7 @@ class Admin extends Model {
     $total   = $this->db->foundRows();
     $pageNum = ceil($total / $limit);
     $tpl     = new Template("back/list_days", ["days"       => $result,
-                                               "pagination" => Com::getPagination("", $pageNum, $page, 4)]);
+                                               "pagination" => Com::getPagination("page-nav", $pageNum, $page, 4)]);
 
     return $tpl->render();
   }

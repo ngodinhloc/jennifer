@@ -1,9 +1,10 @@
 <?php
 namespace view;
 
+use html\JObject;
 use sys\System;
 
-class Base {
+class Base implements ViewInterface {
   protected $module;
   protected $view;
   protected $headerTemplate;
@@ -13,10 +14,11 @@ class Base {
   protected $description = SITE_DESCRIPTION;
   protected $keyword = SITE_KEYWORDS;
   protected $metaFiles = ["header" => [], "footer" => []];
-  protected $metaHTML = ["header" => "", "footer" => ""];
-  protected $data;
+  protected $metaTags = ["header" => "", "footer" => ""];
   protected $post = [];
   protected $para = [];
+  protected $data;
+  protected $userData = false;
   protected $requiredPermission = false;
 
   public function __construct() {
@@ -56,6 +58,60 @@ class Base {
    */
   public function hasPara($name) {
     return isset($this->para[$name]) ? $this->para[$name] : false;
+  }
+
+  /**
+   * Add html code to header
+   * @param $tag
+   */
+  public function addMetaTag($tag) {
+    $this->metaTags["header"] .= $tag;
+  }
+
+  /**
+   * Add meta file
+   * @param string $file
+   */
+  public function addMetaFile($file) {
+    $ext = System::getFileExtension($file);
+    switch($ext) {
+      case "css":
+        array_push($this->metaFiles["header"], ["type" => $ext, "src" => $file]);
+        break;
+      case "js":
+        array_push($this->metaFiles["footer"], ["type" => $ext, "src" => $file]);
+        break;
+    }
+  }
+
+  /**
+   * Register object meta files
+   * @param JObject $object
+   */
+  public function registerMetaFiles($object) {
+    $metaFiles = $object->metaFiles;
+    foreach ($metaFiles as $file) {
+      $this->addMetaFile($file);
+    }
+  }
+
+  /**
+   * Render this view
+   * @param $tidy bool
+   * @return string
+   */
+  public function render($tidy = true) {
+    $this->renderMeta();
+    ob_start("ob_gzhandler");
+    include_once(TEMPLATE_DIR . $this->module . "/" . $this->headerTemplate . TEMPLATE_EXT);
+    include_once(TEMPLATE_DIR . $this->module . "/" . $this->contentTemplate . TEMPLATE_EXT);
+    include_once(TEMPLATE_DIR . $this->module . "/" . $this->footerTemplate . TEMPLATE_EXT);
+    $html = ob_get_clean();
+    if ($tidy) {
+      $html = $this->tidyHTML($html);
+    }
+
+    return $html;
   }
 
   /**
@@ -122,55 +178,22 @@ class Base {
   }
 
   /**
-   * Add meta to header
-   * @param string $file
-   */
-  public function addHeaderMeta($file) {
-    $ext = System::getFileExtension($file);
-    array_push($this->metaFiles["header"], ["type" => $ext, "src" => $file]);
-  }
-
-  /**
-   * Add meta to footer
-   * @param string $file
-   */
-  public function addFooterMeta($file) {
-    $ext = System::getFileExtension($file);
-    array_push($this->metaFiles["footer"], ["type" => $ext, "src" => $file]);
-  }
-
-  /**
-   * Add html code to header
-   * @param $html
-   */
-  public function addHeaderMetaHTML($html) {
-    $this->metaHTML["header"] .= $html;
-  }
-
-  /**
-   * Add html code to footer
-   * @param $html
-   */
-  public function addFooterMetaHTML($html) {
-    $this->metaHTML["footer"] .= $html;
-  }
-
-  /**
    * Render meta to html
    */
   protected function renderMeta() {
     foreach ($this->metaFiles as $pos => $files) {
       if (!empty($files)) {
+        array_unique($files);
         foreach ($files as $file) {
           switch($file["type"]) {
             case "css":
-              $html = "<link rel='stylesheet' href='{$file["src"]}' type='text/css'/>";
+              $tag = "<link rel='stylesheet' href='{$file["src"]}' type='text/css'/>";
               break;
             case "js":
-              $html = "<script type='text/javascript' src='{$file["src"]}' ></script>";
+              $tag = "<script type='text/javascript' src='{$file["src"]}' ></script>";
               break;
           }
-          $this->metaHTML[$pos] .= $html;
+          $this->metaTags[$pos] .= $tag;
         }
       }
     }
@@ -183,25 +206,6 @@ class Base {
    */
   protected function tidyHTML($html) {
     $html = preg_replace('/(?<=>)\s+(?=<)/', "", $html);
-
-    return $html;
-  }
-
-  /**
-   * Render this view
-   * @param $tidy bool
-   * @return string
-   */
-  public function render($tidy = true) {
-    $this->renderMeta();
-    ob_start("ob_gzhandler");
-    include_once(TEMPLATE_DIR . $this->module . "/" . $this->headerTemplate . TEMPLATE_EXT);
-    include_once(TEMPLATE_DIR . $this->module . "/" . $this->contentTemplate . TEMPLATE_EXT);
-    include_once(TEMPLATE_DIR . $this->module . "/" . $this->footerTemplate . TEMPLATE_EXT);
-    $html = ob_get_clean();
-    if ($tidy) {
-      $html = $this->tidyHTML($html);
-    }
 
     return $html;
   }

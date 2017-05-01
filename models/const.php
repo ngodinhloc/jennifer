@@ -33,6 +33,7 @@ const VIEW_DIR       = "views/";
 const CONTROLLER_DIR = "cons/";
 const CACHE_DIR      = "caches/";
 // EXTENSIONS
+  const MODEL_EXT = ".php";
 const VIEW_EXT       = ".class.php";
 const CONTROLLER_EXT = ".php";
 const TEMPLATE_EXT   = ".tpl.php";

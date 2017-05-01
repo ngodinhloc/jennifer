@@ -10,12 +10,10 @@
   </div>
   <nav class="nav-content collapse navbar-collapse bs-navbar-collapse">
     <ul class="nav navbar-nav">
-      <?php
-      echo(Com::getDashboardMenu($this->view));
-      ?>
+      <?= Com::getDashboardMenu($this->view) ?>
     </ul>
   </nav>
   <div class="pull-right">
-    <? echo $this->data["user"]->name; ?> (<a href="/back/logout/">Logout</a>)
+    <?= $this->userData->name ?> (<a href="/back/logout/">Logout</a>)
   </div>
 </div>

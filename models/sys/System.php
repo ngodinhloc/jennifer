@@ -4,6 +4,7 @@
  * such as: session, cookie, $_POST, $_GET, $_REQUEST, $_SERVER, define
  */
 namespace sys;
+
 use jwt\JWT;
 
 class System {
@@ -120,10 +121,9 @@ class System {
       if ($default) {
         return $default;
       }
-      else {
-        return false;
-      }
     }
+
+    return false;
   }
 
   private static function checkSession() {
@@ -269,9 +269,8 @@ class System {
 
       return $class;
     }
-    else {
-      return false;
-    }
+
+    return false;
   }
 
   /**
@@ -292,6 +291,6 @@ class System {
       session_start();
     }
     session_destroy();
-    System::redirectTo("back/");
+    self::redirectTo("back/");
   }
 }

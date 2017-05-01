@@ -18,6 +18,22 @@ class Com {
   }
 
   /**
+   * @param array $day
+   * @return string
+   */
+  public static function getDayDescription($day) {
+    return self::subString(strip_tags($day['content']), DESC_LENGTH, 3);
+  }
+
+  /**
+   * @param array $day
+   * @return string
+   */
+  public static function getDayTitle($day) {
+    return $day['day'] . '/' . $day['month'] . '/' . $day['year'] . ': ' . $day['title'];
+  }
+
+  /**
    * @param string $linkClass : class of href
    * @param int $pageNum
    * @param int $page
@@ -33,23 +49,25 @@ class Com {
       $output .= $html->setTag("div")->setClass("page-list")->open() .
                  $html->setTag("span")->setID("loader")->create() . " Page " . $page . "/" . $pageNum . " ";
       if ($page > 1) {
-        $output .= $html->setTag("a")->setClass("page-nav")
-                        ->setProp(["href"  => "javascript:void(0)", "data-page" => $page - 1,
-                                   "title" => "Previous Page"])->setInnerHTML("<")->create();
+        $output .= $html->setTag("a")->setClass($linkClass)
+                        ->setProp(["href"      => "javascript:void(0)",
+                                   "data-page" => $page - 1,
+                                   "title"     => "Previous Page"])->setInnerHTML("<")->create();
       }
       for ($i = $start; $i <= $end; $i++) {
         if ($i == $page) {
           $output .= $html->setTag("span")->setClass("current-page")->setInnerHTML($i)->create();
         }
         else {
-          $output .= $html->setTag("a")->setClass("page-nav")
+          $output .= $html->setTag("a")->setClass($linkClass)
                           ->setProp(["href" => "javascript:void(0)", "data-page" => $i])->setInnerHTML($i)->create();
         }
       }
       if ($page < $pageNum) {
-        $output .= $html->setTag("a")->setClass("page-nav")
-                        ->setProp(["href"  => "javascript:void(0)", "data-page" => $page + 1,
-                                   "title" => "Next Page"])->setInnerHTML(">")->create();
+        $output .= $html->setTag("a")->setClass($linkClass)
+                        ->setProp(["href"      => "javascript:void(0)",
+                                   "data-page" => $page + 1,
+                                   "title"     => "Next Page"])->setInnerHTML(">")->create();
       }
       $output .= $html->setTag("div")->close();
 
@@ -138,14 +156,15 @@ class Com {
   }
 
   /**
-   * @param $menu
+   * @param string $menu
+   * @return string
    */
   public function getDashboardMenu($menu) {
     $array  = ['home'    => '/back/home/',
                'days'    => '/back/days/',
                'about'   => '/back/about/',
                'privacy' => '/back/privacy/',
-               'tools'    => '/back/tools/',];
+               'tools'   => '/back/tools/',];
     $html   = new HTML();
     $output = "";
     foreach ($array as $text => $page) {
@@ -200,14 +219,16 @@ class Com {
    * @return string
    */
   public static function getPhotoName($name, $type) {
-    if ($type == PHOTO_FULL_NAME) {
-      $name = $name . PHOTO_FULL_NAME . PHOTO_EXT;
-    }
-    if ($type == PHOTO_TITLE_NAME) {
-      $name = $name . PHOTO_TITLE_NAME . PHOTO_EXT;
-    }
-    if ($type == PHOTO_THUMB_NAME) {
-      $name = $name . PHOTO_THUMB_NAME . PHOTO_EXT;
+    switch($type) {
+      case PHOTO_FULL_NAME:
+        $name = $name . PHOTO_FULL_NAME . PHOTO_EXT;
+        break;
+      case PHOTO_TITLE_NAME:
+        $name = $name . PHOTO_TITLE_NAME . PHOTO_EXT;
+        break;
+      case PHOTO_THUMB_NAME:
+        $name = $name . PHOTO_THUMB_NAME . PHOTO_EXT;
+        break;
     }
 
     return $name;
@@ -347,16 +368,6 @@ class Com {
   }
 
   /**
-   * @param $str
-   * @return string
-   */
-  public static function getDescription($str) {
-    $str = self::subString(strip_tags($str), DESC_LENGTH, 3);
-
-    return $str;
-  }
-
-  /**
    * @param $time
    * @return string
    */
@@ -366,27 +377,22 @@ class Com {
     $year = round($sec / (60 * 60 * 24 * 30 * 12));
     if ($year > 0) {
       return $year . " years ago";
-      exit(0);
     }
     $month = round($sec / (60 * 60 * 24 * 30));
     if ($month > 0) {
       return $month . " months ago";
-      exit(0);
     }
     $day = round($sec / (60 * 60 * 24));
     if ($day > 0) {
       return $day . " days ago";
-      exit(0);
     }
     $hour = round($sec / (60 * 60));
     if ($hour > 0) {
       return $hour . " hours ago";
-      exit(0);
     }
     $min = round($sec / (60));
     if ($min > 0) {
       return $min . " minutes ago";
-      exit(0);
     }
 
     return $sec . " seconds ago";

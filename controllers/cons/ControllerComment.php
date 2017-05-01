@@ -38,7 +38,7 @@ class ControllerComment extends Controller {
     else {
       $arr = ["result" => false, "error" => "Please check inputs"];
     }
-    echo(json_encode($arr, JSON_UNESCAPED_SLASHES));
+    $this->response($arr);
   }
 
   public function ajaxMakeAReply($para) {
@@ -70,7 +70,7 @@ class ControllerComment extends Controller {
     else {
       $arr = ["result" => false, "error" => "Please check inputs"];
     }
-    echo(json_encode($arr, JSON_UNESCAPED_SLASHES));
+    $this->response($arr);
   }
 
   public function ajaxLikeADay($para) {

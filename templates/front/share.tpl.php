@@ -1,5 +1,6 @@
 <?php
 use com\Com;
+
 ?>
 <div class="row">
   <div id="div-day-content">
@@ -84,7 +85,8 @@ use com\Com;
     id = $(this).closest('li').attr('id');
     $(this).closest('li').remove();
   });
-  $(document).ready(function () {
+  $(function () {
+    $('#content').autosize();
     $("#sortable").sortable({
       placeholder: "placeholder"
     });
@@ -134,9 +136,6 @@ use com\Com;
 
     $("#inputfile").change(function () {
       $("#form-upload-photos").submit();
-    });
-    $(document).ready(function () {
-      $('#content').autosize();
     });
   });
 </script>

@@ -12,14 +12,4 @@
     $("#main-search-text").val('<?php echo $this->data["searchTerm"]; ?>');
     $("#top-search-text").val('<?php echo $this->data["searchTerm"]; ?>');
   });
-  $(window).scroll(function () {
-    if ($(window).scrollTop() == $(document).height() - $(window).height()) {
-      action = $("#search-more").attr("class");
-      if (action == 'show-more') {
-        search = $('#main-search-text').val();
-        from = $('#slide-show>li.item').length;
-        ajaxSearchMore(search, from);
-      }
-    }
-  });
 </script>

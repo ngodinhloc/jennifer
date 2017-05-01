@@ -13,11 +13,10 @@ class day extends Back {
 
     $id = $this->hasPara("day");
     if ($id) {
-      $admin             = new Admin();
-      $row               = $admin->getDayById($id);
-      $this->data["id"]  = $id;
-      $this->data["row"] = $row;
-      $this->addHeaderMeta(SITE_URL . "/plugins/ckeditor/ckeditor.js");
+      $admin      = new Admin();
+      $row        = $admin->getDayById($id);
+      $this->data = ["row" => $row];
+      $this->addMetaFile(SITE_URL . "/plugins/ckeditor/ckeditor.js");
     }
   }
 }

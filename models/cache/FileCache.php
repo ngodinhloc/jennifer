@@ -1,6 +1,8 @@
 <?php
 namespace cache;
 
+use exception\IOException;
+
 class FileCache {
   /**
    * Create key from sql string
@@ -13,7 +15,7 @@ class FileCache {
 
   /**
    * Write to cache file
-   * @param string $key
+   * @param string $sql
    * @param mixed $data
    * @return bool
    */
@@ -23,8 +25,13 @@ class FileCache {
     $array = ['time' => time(), 'data' => $data];
     $json  = json_encode($array);
     if ($json) {
-      if (file_put_contents($file, $json)) {
-        return true;
+      try {
+        $result = file_put_contents($file, $json);
+        if ($result) {
+          return true;
+        }
+      }
+      catch (IOException $e) {
       }
     }
 
@@ -36,17 +43,22 @@ class FileCache {
    * @param string $sql
    * @return bool|mixed
    */
-  public
-  static function getCache($sql) {
+  public static function getCache($sql) {
     $key  = self::createKey($sql);
     $file = CACHE_DIR . $key;
     if (file_exists($file)) {
-      $content = file_get_contents($file);
-      $arr     = json_decode($content, true);
-      $time    = $arr['time'];
-      $data    = $arr['data'];
-      if (CACHE_EXPIRE >= time() - $time) {
-        return $data;
+      try {
+        $content = file_get_contents($file);
+        if ($content) {
+          $arr  = json_decode($content, true);
+          $time = $arr['time'];
+          $data = $arr['data'];
+          if (CACHE_EXPIRE >= time() - $time) {
+            return $data;
+          }
+        }
+      }
+      catch (IOException $e) {
       }
     }
 

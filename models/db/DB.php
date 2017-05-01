@@ -28,7 +28,7 @@ class DB {
   private $devMode = false;
 
   public function __construct() {
-    $this->mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME) or die("Could not connect database");
+    $this->mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME) or die("Could not connect to database");
   }
 
   public function __destruct() {
@@ -61,7 +61,7 @@ class DB {
    * </pre>
    * @param bool $foundRows : get found row or not
    * @param bool|string $cache :'mem' => Memchached, 'file' => FileCache;
-   * @return $this|bool
+   * @return $this|boolean
    */
   public function get($foundRows = false, $cache = false) {
     if (!$this->checkTable()) {
@@ -497,9 +497,8 @@ class DB {
 
       return false;
     }
-    else {
-      return true;
-    }
+
+    return true;
   }
 
   /**
@@ -512,9 +511,8 @@ class DB {
 
       return false;
     }
-    else {
-      return true;
-    }
+
+    return true;
   }
 
   /**
@@ -527,9 +525,8 @@ class DB {
 
       return false;
     }
-    else {
-      return true;
-    }
+
+    return true;
   }
 
   /**
@@ -551,9 +548,8 @@ class DB {
     if ($this->foundRows) {
       return $this->foundRows;
     }
-    else {
-      return false;
-    }
+
+    return false;
   }
 
   /**
@@ -595,6 +591,8 @@ class DB {
     if ($this->result) {
       return $this->result[0];
     }
+
+    return false;
   }
 
   /**
@@ -627,6 +625,8 @@ class DB {
 
       return $arr;
     }
+
+    return false;
   }
 
   /**

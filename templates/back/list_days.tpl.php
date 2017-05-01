@@ -38,7 +38,7 @@
         </a>
       </td>
       <td><a title="Edit" href="/back/day/<?= $day['id'] ?>/"><span class="glyphicon glyphicon-edit"></span></a></td>
-      <td><a title="Remove" href="javascript:void(0)" class="remove-day" id="remove-day-<?= $day['id'] ?>">
+      <td><a title="Remove" href="javascript:void(0)" class="remove-day" id="remove-day-<?= $day['id'] ?>" data-day-id="<?= $day['id'] ?>">
           <span class="glyphicon glyphicon-remove"></span>
         </a>
       </td>

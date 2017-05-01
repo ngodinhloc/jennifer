@@ -8,7 +8,33 @@
 <div id="page-wrapper">
   <div id="page">
     <div class="col-xs-12 container-fluid region">
-      <? include_once('include/_top.inc.php'); ?>
+      <div class="row">
+        <div class="col-md-12 header">
+          <div class="container">
+            <header class="navbar navbar-static-top bs-docs-nav menu-top" id="top" role="banner">
+              <?
+              if ($this->view != DEFAULT_VIEW) {
+                include('include/_menu.inc.php');
+              }
+              ?>
+            </header>
+            <div class="col-xs-6 wrapper clearfix">
+              <a class="logo navbar-btn pull-left" title="Home" href="<?= SITE_URL ?>">
+                <img alt="Home" src="<?= SITE_URL ?>/interface/images/logo.png">
+              </a>
+            </div>
+            <div class="col-xs-2 reggion">
+              <div class="button_list">
+                <a href="<?= SITE_URL ?>/share/" class="btn btn-lg btn-primary" type="button">Share Your Day</a>
+              </div>
+            </div>
+            <form class="form-search">
+              <input type="text" class="input-medium search-query">
+              <button type="submit" class="btn btn-lg btn-primary">Search</button>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="dashboard container-fluid region" style="padding: 0;">
       <img class="img-rounded"/>

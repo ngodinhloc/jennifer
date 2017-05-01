@@ -21,10 +21,10 @@
     <tr>
       <td>Check Database tables</td>
       <td>
-        <input type="radio" name="checkdb" value="<?php echo ANALYZE_DB; ?>"> Analyze
-        <input type="radio" name="checkdb" value="<?php echo OPTIMIZE_DB; ?>"> Optimize
-        <input type="radio" name="checkdb" value="<?php echo CHECK_DB; ?>"> Check
-        <input type="radio" name="checkdb" value="<?php echo REPAIR_DB; ?>"> Repair
+        <input type="radio" name="checkdb" value="<?= ANALYZE_DB; ?>"> Analyze
+        <input type="radio" name="checkdb" value="<?= OPTIMIZE_DB; ?>"> Optimize
+        <input type="radio" name="checkdb" value="<?= CHECK_DB; ?>"> Check
+        <input type="radio" name="checkdb" value="<?= REPAIR_DB; ?>"> Repair
 
       </td>
       <td>

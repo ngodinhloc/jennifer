@@ -1,13 +1,31 @@
-<?php include_once('_const.inc.php'); ?>
-<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.0/jquery-ui.min.js"></script>
-<script type="text/javascript" src="<?php echo SITE_URL ?>/plugins/jquery/jquery-scrolltofixed-min.js"></script>
-<script type="text/javascript" src="<?php echo SITE_URL ?>/plugins/jquery/jquery.imagesloaded.js"></script>
-<script type="text/javascript" src="<?php echo SITE_URL ?>/plugins/jquery/jquery.wookmark.js"></script>
-<script type="text/javascript" src="<?php echo SITE_URL ?>/plugins/flexslider/jquery.easing.js"></script>
-<script type="text/javascript" src="<?php echo SITE_URL ?>/plugins/flexslider/jquery.mousewheel.js"></script>
-<script type="text/javascript" src="<?php echo SITE_URL ?>/plugins/flexslider/jquery.flexslider.js"></script>
-<script type="text/javascript" src="<?php echo SITE_URL ?>/plugins/jquery/jquery.autosize.min.js"></script>
-<script type="text/javascript" src="<?php echo SITE_URL ?>/plugins/bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="<?php echo SITE_URL ?>/js/ajax.thedaysoflife.js"></script>
-<script type="text/javascript" src="<?php echo SITE_URL ?>/js/ajax.admin.js"></script>
-<?php echo($this->metaHTML["footer"]); ?>
+<?php
+$const = ["SITE_URL"       => SITE_URL,
+          "CONTROLLER_URL" => CONTROLLER_URL,
+          "LIST_URL"       => SITE_URL . "/day/",
+          "EDIT_URL"       => SITE_URL . "/edit/",
+          "LIST_EXT"       => URL_EXT,
+          "NUM_PER_PAGE"   => NUM_PER_PAGE,
+          "NUM_CALENDAR"   => NUM_CALENDAR,
+          "NUM_PICTURE"    => NUM_PICTURE,
+          "LIST_FADE"      => 1000,
+          "COM_FADE"       => 500,
+          "LOADER_FADE"    => 3000];
+$json  = json_encode($const, JSON_UNESCAPED_SLASHES);
+?>
+  <script>
+    var AJAX_LOADER = '<img id="loading-tiny" src="<?= SITE_URL ?>/interface/images/ajax-loader.gif"/>';
+    var CONST = $.parseJSON('<?= $json ?>');
+  </script>
+  <script type="text/javascript" src="<?php echo SITE_URL ?>/plugins/bootstrap/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="<?php echo SITE_URL ?>/plugins/bootstrap/bootstrap.bootbox.min.js"></script>
+  <script type="text/javascript" src="<?php echo SITE_URL ?>/plugins/jquery/jquery.scrolltofixed.min.js"></script>
+  <script type="text/javascript" src="<?php echo SITE_URL ?>/plugins/jquery/jquery.imagesloaded.min.js"></script>
+  <script type="text/javascript" src="<?php echo SITE_URL ?>/plugins/jquery/jquery.wookmark.min.js"></script>
+  <script type="text/javascript" src="<?php echo SITE_URL ?>/plugins/jquery/jquery.autosize.min.js"></script>
+  <script type="text/javascript" src="<?php echo SITE_URL ?>/plugins/flexslider/jquery.easing.min.js"></script>
+  <script type="text/javascript" src="<?php echo SITE_URL ?>/plugins/flexslider/jquery.mousewheel.min.js"></script>
+  <script type="text/javascript" src="<?php echo SITE_URL ?>/plugins/flexslider/jquery.flexslider.min.js"></script>
+  <script type="text/javascript" src="<?php echo SITE_URL ?>/js/ajax.js"></script>
+  <script type="text/javascript" src="<?php echo SITE_URL ?>/js/front.js"></script>
+  <script type="text/javascript" src="<?php echo SITE_URL ?>/js/back.js"></script>
+<?= $this->metaTags["footer"] ?>

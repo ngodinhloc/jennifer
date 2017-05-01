@@ -28,10 +28,12 @@ $("#update-day").live("click", function () {
 });
 
 $("a.remove-day").live("click", function () {
-  tagid = $(this).attr("id");
-  id = tagid.replace("remove-day-", "");
-  removeADay(id);
-  return false;
+  id = $(this).data("day-id");
+  bootbox.confirm('Are you sure you want to delete this day?', function (response) {
+    if (response) {
+      ajaxRemoveADay(id);
+    }
+  });
 });
 
 /**
@@ -41,7 +43,7 @@ function ajaxUpdateInfo() {
   CKEDITOR.instances['content'].updateElement();
   data = $("#div-edit-info").find("select[name], textarea[name], input[name]").serialize();
   ajaxAction({"action": "ajaxUpdateInfo", "controller": "ControllerAdmin"}, data, "#ajax-loader",
-    {"container": "#ajax-loader", "act": "replace"}, false);
+             {"container": "#ajax-loader", "act": "replace"}, false);
 }
 
 /**
@@ -58,15 +60,9 @@ function ajaxPostToFacebook(id, type) {
 
 function processPostToFacebook(data) {
   getData = $.parseJSON(data);
-  if (getData.status == "login") {
-    $("#fb-post-" + getData.id).html(getData.url);
-  }
+  $("#fb-post-" + getData.id).html(getData.data);
   if (getData.status == "OK") {
-    $("#fb-post-" + getData.id).html(getData.status);
     $("#fb-type-" + getData.id).addClass("fb-posted");
-  }
-  if (getData.status == "NO") {
-    $("#fb-post-" + getData.id).html(getData.status);
   }
 }
 /**
@@ -76,7 +72,7 @@ function processPostToFacebook(data) {
 function ajaxPrintDay(page) {
   data = $.param({page: page});
   ajaxAction({"action": "ajaxPrintDay", "controller": "ControllerAdmin"}, data, "#loader",
-    {"container": "#print-list", "act": "replace"}, false);
+             {"container": "#print-list", "act": "replace"}, false);
 }
 
 /**
@@ -84,7 +80,7 @@ function ajaxPrintDay(page) {
  */
 function ajaxRemoveUnusedPhoto() {
   ajaxAction({"action": "ajaxRemoveUnusedPhoto", "controller": "ControllerAdmin"},
-    false, "#remove-photo-result", {"container": "#remove-photo-result", "act": "replace"}, false);
+             false, "#remove-photo-result", {"container": "#remove-photo-result", "act": "replace"}, false);
 }
 
 /**
@@ -93,7 +89,10 @@ function ajaxRemoveUnusedPhoto() {
 function ajaxCheckDatabase() {
   act = $('input[name=checkdb]:checked').val();
   ajaxAction({"action": "ajaxCheckDatabase", "controller": "ControllerAdmin"},
-    $.param({"act": act}), "#check-database-result", {"container": "#check-database-result", "act": "replace"}, false);
+             $.param({"act": act}), "#check-database-result", {
+               "container": "#check-database-result",
+               "act":       "replace"
+             }, false);
 }
 
 /**
@@ -119,33 +118,6 @@ function processUpdateADay(data) {
     //window.location = link;
   }
 }
-/**
- * Remove day
- * @param id
- */
-function removeADay(id) {
-  $("#confirm").dialog({
-    resizable: false,
-    title:     "Remove Day ?",
-    show:      {
-      effect:   "blind",
-      duration: 100
-    },
-    hide:      {
-      effect:   "blind",
-      duration: 100
-    },
-    buttons:   {
-      "Yes": function () {
-        ajaxRemoveADay(id);
-        $(this).dialog('close');
-      },
-      "No":  function () {
-        $(this).dialog('close');
-      }
-    }
-  });
-}
 
 /**
  * @param id
@@ -154,7 +126,7 @@ function ajaxRemoveADay(id) {
   loader = "#remove-day-" + id;
   callback = processRemoveADay;
   ajaxAction({"action": "ajaxRemoveADay", "controller": "ControllerAdmin"},
-    $.param({"id": id}), loader, false, callback);
+             $.param({"id": id}), loader, false, callback);
 }
 /**
  * @param data
@@ -162,8 +134,6 @@ function ajaxRemoveADay(id) {
 function processRemoveADay(data) {
   getData = $.parseJSON(data);
   if (getData.status = "success") {
-    row_id = '#row-' + id;
-    $(row_id).remove();
-    //window.location = link;
+    $('#row-' + getData.id).remove();
   }
 }

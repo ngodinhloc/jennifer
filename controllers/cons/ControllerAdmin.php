@@ -20,7 +20,7 @@ class ControllerAdmin extends Controller {
     $re = $this->admin->removeDay($id);
     if ($re) {
       $array = ["status" => "success", "id" => $id];
-      echo json_encode($array);
+      $this->response($array);
     }
   }
 
@@ -29,7 +29,7 @@ class ControllerAdmin extends Controller {
     if ($page == 0) {
       $page = 1;
     }
-    echo($this->admin->getDayList($page));
+    $this->response($this->admin->getDayList($page));
   }
 
   public function ajaxUpdateADay($para) {
@@ -57,12 +57,12 @@ class ControllerAdmin extends Controller {
       if ($re) {
         $array = ["status" => "success", "id" => $day["id"], "slug" => $day["slug"], "day" => $day["day"],
                   "month"  => $day["month"], "year" => $day["year"]];
-        echo json_encode($array);
+        $this->response($array);
       }
     }
     else {
       $array = ["status" => "failed", "id" => $day["id"]];
-      echo json_encode($array);
+      $this->response($array);
     }
   }
 
@@ -73,7 +73,7 @@ class ControllerAdmin extends Controller {
     if ($tag != "") {
       $re = $this->admin->updateInfo($tag, $title, $content);
       if ($re) {
-        echo("Info updated.");
+        $this->response("Info updated.");
       }
     }
   }
@@ -86,7 +86,7 @@ class ControllerAdmin extends Controller {
     $act = $para['act'];
     if ($act != "") {
       $re = $this->admin->checkDatabaseTables($act);
-      echo $re;
+      $this->response($re);
     }
   }
 }

@@ -1,4 +1,4 @@
-<ul id="picture" class="row list-unstyled">
+<ul id="picture" class="list-unstyled">
   <?php
   echo($this->data["picture"]);
   ?>
@@ -9,14 +9,5 @@
   $(document).ready(function () {
     $("#picture").sortable({});
     $("#picture").disableSelection();
-  });
-  $(window).scroll(function () {
-    if ($(window).scrollTop() == $(document).height() - $(window).height()) {
-      action = $("#show-picture").attr("class");
-      if (action == 'show-more') {
-        from = $('#picture>li').length;
-        ajaxShowPicture(from);
-      }
-    }
   });
 </script>

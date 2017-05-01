@@ -10,14 +10,4 @@
   $(document).ready(function () {
     wookmarkHandle();
   });
-  $(window).scroll(function () {
-    if ($(window).scrollTop() == $(document).height() - $(window).height()) {
-      action = $("#show-more").attr("class");
-      if (action == 'show-more') {
-        from = $('#slide-show>li.item').length;
-        order = $("#show-more").attr("order-tag");
-        ajaxShowDay(from, order);
-      }
-    }
-  });
 </script>

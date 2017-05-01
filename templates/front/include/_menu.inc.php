@@ -10,9 +10,7 @@
   </div>
   <nav class="nav-content collapse navbar-collapse bs-navbar-collapse">
     <ul class="nav navbar-nav">
-      <?php
-      echo(Com::getMenu($this->view));
-      ?>
+      <?= Com::getMenu($this->view) ?>
     </ul>
   </nav>
 </div>

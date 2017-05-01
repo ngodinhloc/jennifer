@@ -398,28 +398,23 @@ class View extends Model {
       $year  = $date[2];
       $check = checkdate($month, $day, $year);
       if ($check) {
-        //        $searchCond = "l.year=$year AND l.month=$month AND l.day=$day";
         $searchCond = ["year" => $year, "month" => $month, "day" => $day];
       }
 
     }
     else if ($matchedMonth) {
-      $date  = explode('/', $search);
-      $month = $date[0];
-      $year  = $date[1];
-      //      $searchCond = "l.year=$year AND l.month=$month";
+      $date       = explode('/', $search);
+      $month      = $date[0];
+      $year       = $date[1];
       $searchCond = ["year" => $year, "month" => $month];
     }
     else if ($matchedYear) {
       if (strlen($search) == 4) {
         $year = (int)$search;
       }
-      //      $searchCond = "l.year=$year";
       $searchCond = ["year" => $year];
     }
     else {
-      //      $searchCond = "l.title LIKE '%$search%' OR l.preview LIKE '%$search%' OR l.username LIKE '%$search%'
-      //                      OR l.location LIKE '%$search%' OR l.sanitize LIKE '%$search%'";
       $searchCond = ["title"     => "~{$search}",
                      "|preview"  => "~{$search}",
                      "|username" => "~{$search}",
@@ -427,7 +422,8 @@ class View extends Model {
                      "|sanitize" => "~{$search}"];
     }
     $orderCond = ["year" => "ASC", "month" => "ASC", "day" => "ASC", "like" => "DESC"];
-    $result    = $this->db->getRows("tbl_day", "*", $searchCond, null, $orderCond, $from, NUM_PER_PAGE)->toArray();
+    $result    = $this->db->table("tbl_day")->where($searchCond)->orderBy($orderCond)
+                          ->offset($from)->limit(NUM_PER_PAGE)->get()->toArray();
     $output    = "";
     foreach ($result as $row) {
       $output .= $this->getOneDayHTML($row);

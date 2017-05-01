@@ -19,6 +19,7 @@ class Model {
 
   /**
    * @param string $str
+   * @param bool $admin
    * @return mixed|string
    */
   public function escapeString($str, $admin = false) {

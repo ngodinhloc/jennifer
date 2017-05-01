@@ -1,7 +1,8 @@
 <?php
 namespace tpl;
+use tpl\TemplateInterface;
 
-class Template {
+class Template implements TemplateInterface {
   protected $template;
   protected $data;
 

@@ -1,6 +1,5 @@
 <?php
 namespace cons;
-
 use com\Com;
 use com\SimpleImage;
 use sys\System;
@@ -11,7 +10,7 @@ class ControllerUpload extends Controller {
     parent::__construct();
   }
 
-  public function uploadPhotos() {
+  public function uploadPhotos($para) {
     if (!empty($_FILES)) {
       System::sessionStart();
       $image = new SimpleImage();
@@ -54,7 +53,7 @@ class ControllerUpload extends Controller {
           $image->save($target_path . $thumb_name);
 
           $thumb_url = Com::getPhotoURL($name, PHOTO_THUMB_NAME);
-          print('<li id="' . $name . '">
+          $this->response('<li id="' . $name . '">
       							<div class="img-wrapper">
       								<img src="' . $thumb_url . '" class="photo-thumb"/>
       								<span class="glyphicon glyphicon-remove"></span>

@@ -45,7 +45,7 @@ class ControllerMake extends Controller {
         $row = $this->view->getLastInsertDay($day["time"], $day["session_id"]);
         $arr = ["status" => "success", "id" => $row['id'], "slug" => $row['slug'], "day" => $row['day'],
                 "month"  => $row['month'], "year" => $row['year']];
-        echo(json_encode($arr, JSON_UNESCAPED_SLASHES));
+        $this->response($arr);
       }
     }
   }

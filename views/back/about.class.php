@@ -10,11 +10,10 @@ class about extends Back {
   public function __construct() {
     parent::__construct();
 
-    $admin              = new Admin();
-    $tag                = "about";
-    $info               = $admin->getInfoByTag($tag);
-    $this->data["tag"]  = $tag;
-    $this->data["info"] = $info;
-    $this->addHeaderMeta(SITE_URL . "/plugins/ckeditor/ckeditor.js");
+    $admin      = new Admin();
+    $tag        = "about";
+    $info       = $admin->getInfoByTag($tag);
+    $this->data = ["tag" => $tag, "info" => $info];
+    $this->addMetaFile(SITE_URL . "/plugins/ckeditor/ckeditor.js");
   }
 }
