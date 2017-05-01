@@ -1,6 +1,5 @@
 <?php
 use com\Com;
-
 ?>
 <div class="row">
   <div id="div-day-content">
@@ -9,21 +8,15 @@ use com\Com;
       <div>
         <select class=" form-control days" id="day" name="day">
           <option class="select" value="0">Day</option>
-          <?php
-          echo(Com::getDayDrop());
-          ?>
+          <?= Com::getDayDrop() ?>
         </select>
         <select class="form-control days" id="month" name="month">
           <option class="select" value="0">Month*</option>
-          <?php
-          echo(Com::getMonthDrop());
-          ?>
+          <?= Com::getMonthDrop() ?>
         </select>
         <select class="form-control days" id="year" name="year">
           <option class="select" value="0">Year*</option>
-          <?php
-          echo(Com::getYearDrop());
-          ?>
+          <?= Com::getYearDrop() ?>
         </select>
         <span id="check" class="error"></span>
       </div>

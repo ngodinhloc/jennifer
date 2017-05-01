@@ -1,9 +1,7 @@
 <ul id="picture" class="list-unstyled">
-  <?php
-  echo($this->data["picture"]);
-  ?>
+  <?= $this->data["picture"] ?>
 </ul>
-<div id="show-picture" class="show-more" data="<?php echo NUM_PER_PAGE; ?>">+ Load More Photos
+<div id="show-picture" class="show-more" data="<?= NUM_PER_PAGE ?>">+ Load More Photos
 </div>
 <script>
   $(document).ready(function () {
