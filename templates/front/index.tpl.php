@@ -5,7 +5,7 @@
   + Load More Days
 </div>
 <script type="text/javascript">
-  $(document).ready(function () {
+  $(function () {
     wookmarkHandle();
   });
 </script>

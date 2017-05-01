@@ -4,7 +4,7 @@
 <div id="show-picture" class="show-more" data="<?= NUM_PER_PAGE ?>">+ Load More Photos
 </div>
 <script>
-  $(document).ready(function () {
+  $(function () {
     $("#picture").sortable({});
     $("#picture").disableSelection();
   });

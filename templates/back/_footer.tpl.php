@@ -9,8 +9,8 @@
       </div>
       <div class="col-xs-12 col-md-4 copyright-text">
         © 2014
-        <a href="<?= SITE_URL ?>/about.html">About</a>
-        <a href="<?= SITE_URL ?>/policy.html">Policy</a>
+        <a href="<?= SITE_URL ?>/about/">About</a>
+        <a href="<?= SITE_URL ?>/policy/">Policy</a>
       </div>
       <div class="col-xs-12 col-md-3 media-social">
         <ul class="social">

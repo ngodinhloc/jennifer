@@ -9,7 +9,9 @@
 </div>
 <div id="confirm"></div>
 <script>
-  CKEDITOR.replace('content', {
-    customConfig: 'config_admin.js'
-  });
+  $(function () {
+    CKEDITOR.replace('content', {
+      customConfig: 'config_admin.js'
+    });
+  })
 </script>

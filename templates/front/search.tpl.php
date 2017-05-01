@@ -7,7 +7,7 @@
   <img id="loading-tiny" src="<?= SITE_URL ?>/interface/images/ajax-loader.gif" class="hidden"/>
 </div>
 <script type="text/javascript">
-  $(document).ready(function () {
+  $(function () {
     wookmarkHandle();
     $("#main-search-text").val('<?= $this->data["searchTerm"] ?>');
     $("#top-search-text").val('<?= $this->data["searchTerm"] ?>');

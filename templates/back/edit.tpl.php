@@ -104,6 +104,7 @@
     $(this).closest('li').remove();
   });
   $(function () {
+    $('#content').autosize();
     $("#sortable").sortable({
       placeholder: "placeholder"
     });
@@ -154,8 +155,5 @@
     $("#inputfile").change(function () {
       $("#form-upload-photos").submit();
     });
-  });
-  $(function () {
-    $('#content').autosize();
   });
 </script>
