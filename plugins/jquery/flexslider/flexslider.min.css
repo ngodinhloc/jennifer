@@ -1,0 +1,124 @@
+/* Slide */
+.slide {
+  position: relative;
+  padding: 0;
+}
+
+#slider {
+  border: 1px solid #CDCDCD;
+  overflow: hidden;
+  padding: 5px;
+  margin-top: 10px;
+}
+
+#slider .flex-viewport {
+  height: auto;
+}
+
+#slider .flex-viewport ul > li {
+  width: 100%;
+  text-align: center;
+  overflow: hidden;
+}
+
+#slider .flex-active-slide > img, #slider li > img {
+  width: 100%;
+  display: inline-block;
+}
+
+#slider .flex-direction-nav {
+  margin: 0;
+}
+
+#slider .flex-direction-nav li {
+  background: none repeat scroll 0 0 #EBEBEB;
+  display: inline-block;
+  float: left;
+  height: 75px;
+  padding-top: 30px;
+  width: 20px;
+  list-style: none;
+  position: absolute;
+  z-index: 9;
+}
+
+#slider .flex-direction-nav li:nth-child(1) {
+  border-radius: 5px 0 0 5px;
+  left: 0;
+  bottom: 10px;
+}
+
+#slider .flex-direction-nav li:nth-child(2) {
+  border-radius: 0 5px 5px 0;
+  right: 0;
+  bottom: 10px;
+}
+
+#slider .flex-direction-nav li a {
+  background: url("icon_ds.png") no-repeat scroll 0 0 transparent;
+  display: inline-block;
+  height: 15px;
+  width: 15px;
+  overflow: hidden;
+  text-indent: -9999px;
+}
+
+#slider .flex-direction-nav li:nth-child(1) > a {
+  background-position: 1px -175px;
+}
+
+#slider .flex-direction-nav li:nth-child(1) > a:hover {
+  background-position: -15px -175px;
+}
+
+#slider .flex-direction-nav li:nth-child(2) > a {
+  background-position: 1px -191px;
+}
+
+#slider .flex-direction-nav li:nth-child(2) > a:hover {
+  background-position: -15px -191px;
+}
+
+#carousel {
+  display: inline-block;
+  height: auto;
+  margin: 20px 0px 10px 0px;
+  padding: 0 30px;
+  position: relative;
+}
+
+#carousel .slides, ul.slides {
+  margin: 0;
+}
+
+#carousel .slides li {
+  height: 75px;
+  padding: 0;
+  margin-right: 5px;
+  position: relative;
+  overflow: hidden;
+}
+
+#carousel .slides li > img {
+  /* width: 100%;*/
+}
+
+#carousel .slides li > span {
+  background: none repeat scroll 0 0 #000000;
+  display: block;
+  height: 75px;
+  opacity: 0.5;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+#carousel .slides li.flex-active-slide > span {
+  opacity: 0;
+}
+
+#carousel .flex-direction-nav {
+  display: none;
+}
+
+/* End Slide*/
