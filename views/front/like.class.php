@@ -1,10 +1,10 @@
 <?php
 namespace front;
 use view\Front;
-use core\View;
+use thedaysoflife\View;
 
 class like extends Front {
-  protected $contentTemplate = "index";
+  protected $contentTemplate = "like";
   protected $title = "Most Liked Days";
 
   public function __construct() {

@@ -15,9 +15,10 @@ RewriteRule ^(.*)$ http://www.thedaysoflife.com/$1 [R=301,L]
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_URI} !(/controllers|/dashboard|/interface|/js|/plugins|/views)
+RewriteCond %{REQUEST_URI} !(/controllers/|/interface/|/js/|/plugins/|/views/|/api/)
 RewriteRule ^(.*)$ index.php?q=$1 [L,QSA]
 
+RewriteRule ^dashboard/(.*) dashboard/index.php?q=$1 [L,QSA]
 #compress by gzip
 <IfModule mod_gzip.c>
     mod_gzip_on       Yes
@@ -39,4 +40,4 @@ AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application
 RewriteEngine On 
 RewriteCond %{HTTP_HOST} ^thedaysoflife.com 
 RewriteRule ^(.*)$ http://www.%{HTTP_HOST}/$1 [R=301,L] 
-# End CloudFlare rewrite.
+# End CloudFlare rewrite. 

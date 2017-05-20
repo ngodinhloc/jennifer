@@ -1,11 +1,11 @@
 <?php
 namespace back;
 use view\Back;
-use core\Admin;
+use thedaysoflife\Admin;
 
 class privacy extends Back {
   protected $title = "Dashboard :: Privacy";
-  protected $contentTemplate = "info";
+  protected $contentTemplate = "privacy";
 
   public function __construct() {
     parent::__construct();

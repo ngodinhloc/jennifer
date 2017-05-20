@@ -8,9 +8,15 @@ use sys\System;
 
 class Controller implements ControllerInterface {
   protected $requiredPermission = false;
+  protected $userData = false;
+  protected $post = [];
+  protected $messages = [
+    "NO_PERMISSION" => ["message" => "You do not have permission to access this controller."],
+  ];
 
   public function __construct() {
     $this->checkPermission();
+    $this->post = System::getPOST();
   }
 
   /**
@@ -38,19 +44,28 @@ class Controller implements ControllerInterface {
    * @return bool
    */
   protected function checkPermission() {
+    $this->userData = System::checkJWT();
+
     // no permission required
     if (!$this->requiredPermission) {
       return true;
     }
 
-    System::sessionStart();
-    $permissionList = System::getPermission();
-    if (!$permissionList) {
-      die("User does not have permission to access this controller");
+    // there is required permissions of the controller
+    $userPermission = false;
+    if ($this->userData) {
+      $userPermission = explode(",", $this->userData->permission);
     }
+
+    // if user has no permission data
+    if (!$userPermission) {
+      die($this->messages["NO_PERMISSION"]);
+    }
+
+    // check each required permission against user permission
     foreach ($this->requiredPermission as $per) {
-      if (!in_array($per, $permissionList)) {
-        die("User does not have permission to access this controller");
+      if (!in_array($per, $userPermission)) {
+        die($this->messages["NO_PERMISSION"]);
       }
     }
 

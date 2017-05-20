@@ -25,13 +25,11 @@
         <input type="radio" name="checkdb" value="<?= OPTIMIZE_DB; ?>"> Optimize
         <input type="radio" name="checkdb" value="<?= CHECK_DB; ?>"> Check
         <input type="radio" name="checkdb" value="<?= REPAIR_DB; ?>"> Repair
-
       </td>
       <td>
         <button type="button" id="check-database">Action</button>
       </td>
       <td id="check-database-result"></td>
-
     </tr>
     </tbody>
   </table>

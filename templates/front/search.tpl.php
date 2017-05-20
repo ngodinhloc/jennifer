@@ -1,9 +1,5 @@
 <div id="search-container">
-  <?php
-  if (isset($this->data["searchResult"])) {
-    echo($this->data["searchResult"]);
-  }
-  ?>
+  <?= $this->data["searchResult"] ?>
   <img id="loading-tiny" src="<?= SITE_URL ?>/interface/images/ajax-loader.gif" class="hidden"/>
 </div>
 <script type="text/javascript">

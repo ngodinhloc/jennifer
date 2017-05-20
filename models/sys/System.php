@@ -117,10 +117,8 @@ class System {
     if (isset($_SESSION[$name])) {
       return $_SESSION[$name];
     }
-    else {
-      if ($default) {
-        return $default;
-      }
+    if ($default) {
+      return $default;
     }
 
     return false;
@@ -167,12 +165,55 @@ class System {
     return $_GET;
   }
 
+  /**
+   * Get post para
+   * @param string $name
+   * @param null $default
+   * @return bool|string
+   */
   public static function getPostPara($name = "", $default = null) {
+    if (isset($_POST[$name])) {
+      return $_POST[$name];
+    }
+    if ($default) {
+      return $default;
+    }
 
+    return false;
   }
 
+  /**
+   * Get get para
+   * @param string $name
+   * @param null $default
+   * @return bool|string
+   */
   public static function getGetPara($name = "", $default = null) {
+    if (isset($_GET[$name])) {
+      return $_GET[$name];
+    }
+    if ($default) {
+      return $default;
+    }
 
+    return false;
+  }
+
+  /**
+   * Get get para
+   * @param string $name
+   * @param null $default
+   * @return bool|string
+   */
+  public static function getFilePara($name = "", $default = null) {
+    if (isset($_FILES[$name])) {
+      return $_FILES[$name];
+    }
+    if ($default) {
+      return $default;
+    }
+
+    return false;
   }
 
   public static function getCookie($name = "", $default = null) {
@@ -189,7 +230,7 @@ class System {
   public static function redirectTo($newpage) {
     $host = $_SERVER['HTTP_HOST'];
     $uri  = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
-    header("Location: http://$host$uri/$newpage");
+    header("Location: http://{$host}{$uri}{$newpage}");
     exit();
   }
 
@@ -258,16 +299,17 @@ class System {
   }
 
   /**
-   * @param $conName
-   * @return bool|string
+   * @return bool|array
    */
-  public static function loadController($conName) {
-    $file = CONTROLLER_DIR . $conName . CONTROLLER_EXT;
+  public static function loadController() {
+    $action     = self::getPostPara("action");
+    $controller = self::getPostPara("controller");
+    $file       = CONTROLLER_DIR . $controller . CONTROLLER_EXT;
     if (file_exists($file)) {
-      $class = str_replace("/", "", CONTROLLER_DIR) . "\\" . $conName;
+      $class = str_replace("/", "", CONTROLLER_DIR) . "\\" . $controller;
       require_once($file);
 
-      return $class;
+      return [$class, $action];
     }
 
     return false;
@@ -278,9 +320,9 @@ class System {
    * @return mixed
    */
   public static function getFileExtension($filename) {
-    $path_info = pathinfo($filename);
+    $pathInfo = pathinfo($filename);
 
-    return $path_info['extension'];
+    return $pathInfo['extension'];
   }
 
   /**
@@ -291,6 +333,6 @@ class System {
       session_start();
     }
     session_destroy();
-    self::redirectTo("back/");
+    self::redirectTo("/back/");
   }
 }

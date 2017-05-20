@@ -1,9 +1,9 @@
 <?php
 namespace back;
 require_once(DOC_ROOT . '/plugins/facebook/autoload.php');
-use sys\System;
 use view\Back;
-use core\Admin;
+use sys\System;
+use thedaysoflife\Admin;
 use Facebook;
 
 class days extends Back {

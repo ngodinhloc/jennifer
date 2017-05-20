@@ -1,11 +1,11 @@
 <?php
 namespace back;
 use view\Back;
-use core\Admin;
+use thedaysoflife\Admin;
 
 class about extends Back {
   protected $title = "Dashboard :: About";
-  protected $contentTemplate = "info";
+  protected $contentTemplate = "about";
 
   public function __construct() {
     parent::__construct();

@@ -1,4 +1,3 @@
-<?php use com\Com; ?>
 <? include_once('include/_facebook.inc.php'); ?>
 <div class="row">
   <div class="col-md-12 col-md-8 no-front">
@@ -12,9 +11,9 @@
         <div class="author post">
           <i class="icon"></i>
           <?php
-          $searchAuthor = SITE_URL . "/search/" . urlencode($this->data["days"]['username']);
-          $searchLoc    = SITE_URL . "/search/" . urlencode($this->data["days"]['location']);
-          $searchDate   = SITE_URL . "/search/" . $this->data["days"]['month'] . '/' . $this->data["days"]['year'];
+            $searchAuthor = SITE_URL . "/search/" . urlencode($this->data["days"]['username']);
+            $searchLoc = SITE_URL . "/search/" . urlencode($this->data["days"]['location']);
+            $searchDate = SITE_URL . "/search/" . $this->data["days"]['month'] . '/' . $this->data["days"]['year'];
           ?>
           <span><a href="<?= $searchAuthor ?>"><?= $this->data["days"]['username'] ?></a></span>
           <?php if ($this->data["days"]['location'] != '') {
@@ -35,39 +34,16 @@
       </div>
       <hr/>
       <div class="body">
-        <p>
-          <?= $this->data["days"]['content'] ?>
-        </p>
+        <p><?= $this->data["days"]['content'] ?></p>
       </div>
-      <?php
-      if ($this->data["photos"] != "") {
-        $photos = explode(',', $this->data["photos"]);
-        if (sizeof($photos) >= 1) {
-          ?>
-          <div class="col-md-12 slide">
-            <div id="slider" class="flexslider">
-              <ul class="slides list-unstyled">
-                <?= Com::getPhotoSlideFull($photos) ?>
-              </ul>
-            </div>
-            <?php if (sizeof($photos) >= 2) { ?>
-              <div id="carousel" class="flexslider">
-                <ul class="slides list-inline">
-                  <?= Com::getPhotoSlideThumb($photos) ?>
-                </ul>
-              </div>
-            <?php } ?>
-          </div>
-        <?php }
-      } ?>
+      <?= $this->data["slider"] ?>
       <div class="action-content" id="action-container">
         <div class="stat">
           <?php if (in_array($this->data["ipaddress"], $this->data["likeIP"])) { ?>
             <span class="like liked" title="Liked">
               <i class="icon"></i><?= number_format($this->data["days"]['like']) ?>
             </span>
-          <?php }
-          else { ?>
+          <?php } else { ?>
             <span class="like" title="Like">
                   <a href="javascript:void(0)" class="like-day" data-id="<?= $this->data["days"]["id"] ?>" data-like="<?= $this->data["days"]["like"] ?>">
                     <i class="icon"></i><?= number_format($this->data["days"]['like']) ?>
@@ -112,8 +88,7 @@
         </div>
       </div>
       <div class="clear-both"></div>
-    <?php }
-    else { ?>
+    <?php } else { ?>
       <h4>Day not found</h4>
     <?php } ?>
   </div>
@@ -122,29 +97,6 @@
   </div>
 </div>
 <script type="text/javascript">
-  $(window).load(function () {
-    $('#carousel').flexslider({
-      animation:     "slide",
-      controlNav:    false,
-      animationLoop: false,
-      slideshow:     false,
-      itemWidth:     75,
-      itemMargin:    5,
-      asNavFor:      '#slider'
-    });
-    $('#slider').flexslider({
-      animation:     "slide",
-      smoothHeight:  true,
-      controlNav:    false,
-      animationLoop: false,
-      slideshow:     false,
-      sync:          "#carousel",
-      start:         function (slider) {
-        $('body').removeClass('loading');
-      }
-    });
-  });
-
   $(function () {
     $('.comment-text').autosize();
     $(".comment-count").live("click", function () {

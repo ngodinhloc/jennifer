@@ -12,6 +12,8 @@ interface ViewInterface {
 
   public function addMetaFile($file);
 
+  public function redirect($url, $paras = []);
+
   public function render();
 }
 

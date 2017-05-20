@@ -1,7 +1,6 @@
 <?php
 namespace back;
 use view\Back;
-use core\Admin;
 
 class tools extends Back {
   protected $title = "Dashboard :: Tools";

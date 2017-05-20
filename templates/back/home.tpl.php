@@ -19,4 +19,8 @@
     <label>Signature</label>
     <?= $this->data["signature"] ?>
   </div>
+  <div class="form-group col-md-6">
+    <label>QRCode</label>
+    <?= $this->data["qrcode"] ?>
+  </div>
 </div>

@@ -4,14 +4,7 @@
   </div>
   <div class="panel-body">
     <ul class="list-unstyled">
-      <?php
-      if ($this->data["relatedDays"] != "") {
-        echo($this->data["relatedDays"]);
-      }
-      else {
-        echo("No related days found");
-      }
-      ?>
+      <?= $this->data["relatedDays"] ?>
     </ul>
   </div>
 </div>

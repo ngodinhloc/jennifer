@@ -3,6 +3,11 @@
     <fieldset>
       <legend>Adminitration Login:</legend>
       <div class="col-md-12 form-contact form-group">
+        <?php if (isset($this->para["message"])) { ?>
+          <div class="form-group col-xs-12">
+            <b class="error"><?= $this->para["message"] ?></b>
+          </div>
+        <?php } ?>
         <div class="form-group col-xs-12">
           <div class="icon">
             <label class="email sr-only">Email</label>
@@ -17,12 +22,7 @@
         </div>
         <div class="form-group  col-xs-12">
           <button type="submit" class="btn btn-primary" id="make-list">Login</button>
-          <span id="ajax-loader" class="error">
-            <?php
-            if (isset($this->data["para"]["email"])) {
-              echo($this->data["inform"]);
-            } ?>
-          </span>
+          <span id="ajax-loader" class="error"></span>
         </div>
       </div>
     </fieldset>

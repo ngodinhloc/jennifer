@@ -3,7 +3,7 @@ namespace cache;
 
 use exception\IOException;
 
-class FileCache {
+class FileCache implements FileCacheInterface {
   /**
    * Create key from sql string
    * @param string $sql

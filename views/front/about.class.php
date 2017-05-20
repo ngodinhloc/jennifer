@@ -1,11 +1,11 @@
 <?php
 namespace front;
 use view\Front;
-use core\View;
+use thedaysoflife\View;
 
 class about extends Front {
   protected $title = "About";
-  protected $contentTemplate = "info";
+  protected $contentTemplate = "about";
 
   public function __construct() {
     parent::__construct();

@@ -1,5 +1,5 @@
 <?php
-namespace html\jobject;
+  namespace html\jobject;
 
 use html\JObject;
 

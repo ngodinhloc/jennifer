@@ -7,7 +7,7 @@ namespace db;
 use cache\FileCache;
 use mysqli;
 
-class DB {
+class DB implements DBInterface {
   private $mysqli;
   private $tableName;
   private $sql;

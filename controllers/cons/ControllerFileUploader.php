@@ -13,7 +13,7 @@ class ControllerFileUploader extends Controller {
     parent::__construct();
   }
 
-  public function ajaxUpload($para) {
+  public function ajaxUpload() {
     // initialize the FileUploader
     $FileUploader = new FileUploader('files', [
       // limit of files {null, Number}

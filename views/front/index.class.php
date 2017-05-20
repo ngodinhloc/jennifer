@@ -1,7 +1,7 @@
 <?php
 namespace front;
 use view\Front;
-use core\View;
+use thedaysoflife\View;
 
 class index extends Front {
   protected $contentTemplate = "index";

@@ -21,11 +21,9 @@ $json  = json_encode($const, JSON_UNESCAPED_SLASHES);
   <script type="text/javascript" src="<?php echo SITE_URL ?>/plugins/jquery/jquery.scrolltofixed.min.js"></script>
   <script type="text/javascript" src="<?php echo SITE_URL ?>/plugins/jquery/jquery.imagesloaded.min.js"></script>
   <script type="text/javascript" src="<?php echo SITE_URL ?>/plugins/jquery/jquery.wookmark.min.js"></script>
-  <script type="text/javascript" src="<?php echo SITE_URL ?>/plugins/jquery/jquery.autosize.min.js"></script>
-  <script type="text/javascript" src="<?php echo SITE_URL ?>/plugins/flexslider/jquery.easing.min.js"></script>
-  <script type="text/javascript" src="<?php echo SITE_URL ?>/plugins/flexslider/jquery.mousewheel.min.js"></script>
-  <script type="text/javascript" src="<?php echo SITE_URL ?>/plugins/flexslider/jquery.flexslider.min.js"></script>
+  <script type="text/javascript" src="<?php echo SITE_URL ?>/plugins/jquery/jquery.easing.min.js"></script>
+  <script type="text/javascript" src="<?php echo SITE_URL ?>/plugins/jquery/jquery.mousewheel.min.js"></script>
   <script type="text/javascript" src="<?php echo SITE_URL ?>/js/ajax.js"></script>
-  <script type="text/javascript" src="<?php echo SITE_URL ?>/js/front.js"></script>
-  <script type="text/javascript" src="<?php echo SITE_URL ?>/js/back.js"></script>
+  <script type="text/javascript" src="<?php echo SITE_URL ?>/js/thedaysoflife.front.js"></script>
+  <script type="text/javascript" src="<?php echo SITE_URL ?>/js/thedaysoflife.back.js"></script>
 <?= $this->metaTags["footer"] ?>

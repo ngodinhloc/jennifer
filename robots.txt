@@ -1,10 +1,12 @@
 User-agent: *
 Allow: /
 User-Agent: *
+Disallow: /caches/
 Disallow: /controllers/
-Disallow: /dashboard/
-Disallow: /css/
+Disallow: /interface/
 Disallow: /models/
 Disallow: /js/
 Disallow: /plugins/
 Disallow: /sql/
+Disallow: /templates/
+Disallow: /views/

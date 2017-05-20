@@ -11,10 +11,10 @@ const SITE_AUTHOR      = 'The Days Of Life';
 const SITE_DESCRIPTION = 'Share memories, inspire people';
 const SITE_KEYWORDS    = 'the days of life, share to inspire, share memories, best day of life, best memories, inspiration';
 // DATABASE
-const DB_HOST       = '*****';
-const DB_USER       = '*****';
-const DB_PASSWORD   = '*****';
-const DB_NAME       = '*****';
+const DB_HOST       = 'localhost';
+const DB_USER       = 'theday8_theday';
+const DB_PASSWORD   = '290719832003';
+const DB_NAME       = 'theday8_thedaysoflife';
 const CHECK_DB      = 'check_all_tables';
 const ANALYZE_DB    = 'analyze_all_tables';
 const REPAIR_DB     = 'repair_all_tables';
@@ -63,11 +63,12 @@ const PHOTO_TITLE_WIDTH    = 320;
 const PHOTO_TITLE_HEIGHT   = 240;
 const PHOTO_THUMB_WIDTH    = 75;
 const PHOTO_THUMB_HEIGHT   = 75;
+  const PHOTO_MAX_SIZE     = 5; // MB
 // FB
-const FB_APPID   = '*****';
-const FB_SECRET  = '*****';
-const FB_PAGEID  = '*****';
-const FB_ALBUMID = '*****';
+const FB_APPID   = '669167829848338';
+const FB_SECRET  = 'cbaf649ffad79559d532aca04b423804';
+const FB_PAGEID  = '1494869507451041';
+const FB_ALBUMID = '1502559646682027';
 const FB_TEXT    = 'text';
 const FB_FEED    = 'feed';
 const FB_ALBUM   = 'album';
@@ -75,7 +76,7 @@ const FB_LINK    = 'link';
 // SALT
 const ADMIN_ACTIVE  = 'active';
 const ADMIN_DISABLE = 'disable';
-const SALT_MD5      = '*****';
-const SALT_SHA256   = '*****';
-const SALT_SHA512   = '*****';
-const JWT_KEY       = '*****';
+const SALT_MD5      = '$1$asdfghjk$';
+const SALT_SHA256   = '$5$rounds=1000$asdfghjklzxcvbnm$';
+const SALT_SHA512   = '$6$rounds=1000$asdfghjklzxcvbnm$';
+const JWT_KEY       = '@asdfghjkl0987654321mnbvcxz*';

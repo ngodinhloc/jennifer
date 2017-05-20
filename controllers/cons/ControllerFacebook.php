@@ -2,7 +2,7 @@
 namespace cons;
 require_once(DOC_ROOT . '/plugins/facebook/autoload.php');
 use com\Com;
-use core\Admin;
+use thedaysoflife\Admin;
 use sys\System;
 use Facebook;
 
@@ -20,10 +20,13 @@ class ControllerFacebook extends Controller {
                                           'default_graph_version' => 'v2.8',]);
   }
 
-  public function ajaxPostToFacebook($para) {
+  /**
+   * Post days to facebook
+   */
+  public function ajaxPostToFacebook() {
     $appAccessToken = System::getSession("FB_appAccessToken");
-    $id             = (int)$para['id'];
-    $type           = $para['type'];
+    $id             = (int)$this->post['id'];
+    $type           = $this->post['type'];
     if ($appAccessToken) {
       $day = $this->admin->getDayById($id);
       switch($type) {

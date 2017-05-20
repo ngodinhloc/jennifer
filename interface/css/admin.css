@@ -39,3 +39,6 @@ input.cat-order,input.update-category-order {
 	/*border: 1px solid #428bca;*/
 	background-color: #ebebeb;
 }
+.glyphicon:hover{
+	color: orange;
+}

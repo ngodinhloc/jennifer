@@ -1,7 +1,7 @@
 <?php
 namespace front;
 use view\Front;
-use core\View;
+use thedaysoflife\View;
 
 class picture extends Front {
   protected $title = "The Picture Of Life";

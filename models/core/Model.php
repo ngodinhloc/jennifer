@@ -1,6 +1,8 @@
 <?php
 /**
  * Base model class: this should be the only class that initiate DB
+ * All business classes should extend this core\Model
+ * @see thedaysoflife
  */
 namespace core;
 

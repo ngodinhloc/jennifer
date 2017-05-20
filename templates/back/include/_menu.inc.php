@@ -14,6 +14,6 @@
     </ul>
   </nav>
   <div class="pull-right">
-    <?= $this->userData->name ?> (<a href="/back/logout/">Logout</a>)
+    <?= $this->userData->name ?> | <a href="/back/logout/">Logout</a>
   </div>
 </div>

@@ -1,8 +1,7 @@
 <?php
 namespace front;
-
-use core\View;
 use view\Front;
+use thedaysoflife\View;
 
 class search extends Front {
   protected $title = "Search";

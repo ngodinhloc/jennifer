@@ -12,7 +12,7 @@
         <div class="col-md-12 header">
           <div class="container">
             <header class="navbar navbar-static-top bs-docs-nav menu-top" id="top" role="banner">
-              <?
+              <?php
               if ($this->view != DEFAULT_VIEW) {
                 include('include/_menu.inc.php');
               }
@@ -41,7 +41,7 @@
     </div>
     <div class="main_container region">
       <header class="navbar navbar-static-top bs-docs-nav" id="top" role="banner">
-        <?
+        <?php
         if ($this->view != DEFAULT_VIEW) {
           include('include/_menu.inc.php');
         }
