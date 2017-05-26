@@ -380,6 +380,7 @@ class ClockPicker extends JObject {
 }
 </pre>
 #### thedaysoflife\User.php
+This is the acutal bussiness class of Thedaysoflife project which handle user activities
 <pre>
 namespace thedaysoflife;
 use html\HTML;
@@ -422,6 +423,7 @@ class User extends Model {
 }
 </pre>
 #### thedaysoflife\Admin.php
+This is the acutal bussiness class of Thedaysoflife project which handle admin activities
 <pre>
 namespace thedaysoflife;
 use com\Common;
