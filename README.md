@@ -34,7 +34,7 @@ The source code using in this example is the actual code of Thedaysoflife projec
     - index.php
     - ControllerView.php
 - [Templates](#templates)
-    - fron\index.tpl.php
+    - front\index.tpl.php
     - jobject\clockpicer.tpl.php
 - [Ajax](#ajax)
     - js/ajax.js
