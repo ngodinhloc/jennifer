@@ -38,7 +38,6 @@ In Ajax MVC Pattern (aMVC): actions are sent from views to controllers via ajax
 <pre>views -> ajax -> controllers -> models</pre>
 
 ### The Framework Structure
-<pre> 
 - models: contains all the packages and models which are the heart of Jennifer framework
 - views: contains all view classes. View classes are placed under each module. In the sample code, we have 2 modules: "back" and "front", each module has serveral views.
 - controllers: contains all controller classes. Each module may have one or more controllers
@@ -46,7 +45,6 @@ In Ajax MVC Pattern (aMVC): actions are sent from views to controllers via ajax
 - js: contains ajax.js and other js files
 - plugins: contains all plugins, such as: bootstrap, ckeditor, jquery
 - caches: contains cache files for mysql queries
-</pre>
 ### Single Point Entry
 #### View single point entry
 index.php
