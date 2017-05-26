@@ -19,8 +19,12 @@ The source code using in this example is the actual code of Thedaysoflife projec
     - .htaccess
 - [Models](#models)
     - db\DB.php
+    - view\Base.php
+    - tpl\Template.php
+    - cons\Controller.php
     - sys\System.php
     - html\HTML.php
+    - cache\FileCache.php
     - thedaysoflife\User.php
     - thedaysoflife\Admin.php
 - [Views](#views)
@@ -146,7 +150,125 @@ class DB implements DBInterface {
   }
 }
 </pre>
-#### sys\Sysmte.php
+#### view\Base.php
+<pre>
+/**
+* Base view class: all view classes will extend this base class
+*/
+namespace view;
+use com\Common;
+use html\JObject;
+use sys\System;
+class Base implements ViewInterface {
+    protected $module;
+    protected $view;
+    protected $headerTemplate;
+    protected $footerTemplate;
+    protected $contentTemplate;
+    protected $title = SITE_TITLE;
+    protected $description = SITE_DESCRIPTION;
+    protected $keyword = SITE_KEYWORDS;
+    protected $metaFiles = ["header" => [], "footer" => []];
+    protected $metaTags = ["header" => "", "footer" => ""];
+    protected $post = [];
+    protected $para = [];
+    protected $data;
+    protected $userData = false;
+    protected $requiredPermission = false;
+    protected $messages = [
+      "NO_PERMISSION"          => ["message" => "You do not have permission to access this view."],
+      "NO_AUTHENTICATION"      => ["message" => "The view you tried to access requires authentication."],
+      "INVALID_AUTHENTICATION" => ["message" => "Incorrect username or password."],
+      "DISABLE_USER"           => ["message" => "This user is disabled."],
+    ];
+    
+    /**
+     * Render this view
+     * @param $tidy bool
+     * @return string
+     */
+    public function render($tidy = true) {
+      $this->renderMeta();
+      ob_start("ob_gzhandler");
+      include_once(TEMPLATE_DIR . $this->module . "/" . $this->headerTemplate . TEMPLATE_EXT);
+      include_once(TEMPLATE_DIR . $this->module . "/" . $this->contentTemplate . TEMPLATE_EXT);
+      include_once(TEMPLATE_DIR . $this->module . "/" . $this->footerTemplate . TEMPLATE_EXT);
+      $html = ob_get_clean();
+      if ($tidy) {
+        $html = $this->tidyHTML($html);
+      }
+
+      return $html;
+    }
+}
+</pre>
+#### tpl\Template.php
+<pre>
+namespace tpl;
+use tpl\TemplateInterface;
+class Template implements TemplateInterface {
+  protected $template;
+  protected $data;
+  /**
+   * Render templates
+   * @param $tidy bool
+   * @return string
+   */
+  public function render($tidy = true) {
+    ob_start("ob_gzhandler");
+    include_once(TEMPLATE_DIR . $this->template . TEMPLATE_EXT);
+    $html = ob_get_clean();
+    if ($tidy) {
+      $html = $this->tidyHTML($html);
+    }
+
+    return $html;
+  }
+}
+</pre>
+#### cons\Controller.php
+<pre>
+/**
+ * The base controller class: all controller will extend this class
+ * Each public function of controller class is an action
+ */
+namespace cons;
+use sys\System;
+class Controller implements ControllerInterface {
+    protected $requiredPermission = false;
+  protected $userData = false;
+  protected $post = [];
+  protected $messages = [
+    "NO_PERMISSION" => ["message" => "You do not have permission to access this controller."],
+  ];
+
+  public function __construct() {
+    $this->checkPermission();
+    $this->post = System::getPOST();
+  }
+
+  /**
+   * Controller response
+   * @param array|string $data
+   * @param bool $json
+   * @param int $jsonOpt
+   */
+  public function response($data, $json = false, $jsonOpt = JSON_UNESCAPED_SLASHES) {
+    if (is_array($data)) {
+      if ($json) {
+        header('Content-Type: application/json');
+        echo(json_encode($data, $jsonOpt));
+        exit;
+      }
+      echo(json_encode($data, $jsonOpt));
+      exit;
+    }
+    echo $data;
+    exit;
+  }
+}
+</pre>
+#### sys\System.php
 <pre>
 /**
  * System utility static class, this is the only model that deals with system variables
@@ -248,6 +370,7 @@ namespace thedaysoflife;
 use html\HTML;
 use sys\System;
 use com\Com;
+use core\Model;
 
 class User extends Model {
 
@@ -328,22 +451,54 @@ class Admin extends Model {
 #### ControllerView.php
 <pre>
 namespace cons;
-  use core\View;
-  class ControllerView extends Controller {
-    private $view;
-
-    public function __construct() {
-      $this->view = new View();
-    }
-
-    public function ajaxShowDay($para) {
-      $from = (int)$para['from'];
-      $order = $para['order'];
+use com\Common;
+use sys\System;
+use thedaysoflife\User;
+class ControllerFront extends Controller {
+    private $user;
+    
+    /**
+     * Show list of days
+     */
+    public function ajaxShowDay() {
+      $from = (int)$this->post['from'];
+      $order = $this->post['order'];
       if ($from > 0) {
-        echo($this->view->getBestDays($from, $order));
+        $this->response($this->user->getBestDays($from, $order));
       }
-      exit();
     }
+    
+    /**
+     * Add new comment
+     */
+    public function ajaxMakeAComment() {
+      $comment = ["day_id"     => (int)$this->post['day_id'],
+                  "content"    => $this->user->escapeString($this->post['content']),
+                  "username"   => $this->user->escapeString($this->post['username']),
+                  "email"      => $this->user->escapeString($this->post['email']),
+                  "reply_id"   => 0,
+                  "reply_name" => '',
+                  "like"       => 0,
+                  "time"       => time(),
+                  "date"       => date('Y-m-d h:i:s'),
+                  "ipaddress"  => System::getRealIPaddress(),
+                  "session_id" => System::sessionID()];
+      $arr = [];
+      if ($comment["day_id"] > 0 && $comment["content"] != "" && $comment["username"] != "" && $comment["email"] != "") {
+        $re = $this->user->addComment($comment);
+        if ($re) {
+          $this->user->updateCommentCount($comment["day_id"]);
+          $lastCom = $this->user->getLastInsertComment($comment["time"], $comment["session_id"]);
+          $arr = ["result"  => true,
+                  "day_id"  => $comment["day_id"],
+                  "content" => $this->user->getOneCommentHTML($lastCom)];
+        }
+      } else {
+        $arr = ["result" => false, "error" => "Please check inputs"];
+      }
+      $this->response($arr);
+    }
+}
 </pre>
 
 ### Ajax
