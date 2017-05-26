@@ -1,18 +1,22 @@
 # Jennifer - The PHP Framework #
 
-Jennifer is a PHP framework that I first created when I was doing my master at University of Sydney in 2009. There has been a few changes since the first version.
+Jennifer is a simple PHP framework that implements the Ajax MVC pattern. I created Jennifer framework when I was doing my master at University of Sydney in 2009, there has been a few changes since the first version.
 
 The source code using in this example is the actual code of Thedaysoflife project https://github.com/ngodinhloc/thedaysoflife.com
 
 ### Jennifer Framework
 - [Ajax MVC Pattern](#ajax-mvc-pattern)
 - [The Framework Structure](#the-framework-tructure)
-    - Models
-    - Views
-    - Controllers
-    - Templates
+    - models
+    - views 
+    - controllers 
+    - templates 
+    - js 
+    - plugins 
+    - caches
 - [Single Point Entry](#single-point-entry)
-    - index.php
+    - View single point entry: index.php(#view-single-point-entry)
+    - Controller single poin entry: /controllers/index.php(#controller-single-point-entry)
     - .htaccess
 - [Models](#models)
     - db\DB.php
@@ -34,12 +38,19 @@ In Ajax MVC Pattern (aMVC): actions are sent from views to controllers via ajax
 <pre>views -> ajax -> controllers -> models</pre>
 
 ### The Framework Structure
-
+<pre> 
+- models: contains all the packages and models which are the heart of Jennifer framework </pre>
+- views: contains all view classes. View classes are placed under each module. In the sample code, we have 2 modules: "back" and "front", each module has serveral views.
+- controllers: contains all controller classes. Each module may have one or more controllers
+- templates: contains all templates using in views, models and controllers. Templates are organised under module just like view. There are view templates and content templates. Each view has one view template with similar file name. For example: the index view (index.class.php) is using index template (index.tpl.php). Content templates are placed inside "tpl" folder, content templates may be used to render html content in views, models or controllers.
+- js: contains ajax.js and other js files
+- plugins: contains all plugins, such as: bootstrap, ckeditor, jquery
+- caches: contains cache files for mysql queries
+</pre>
 ### Single Point Entry
-#### index.php
+#### View single point entry
+index.php
 <pre>
-<?php
-<?php
 /**
  * Single point entry
  * <pre>mod_rewrite in to redirect all request to this index page (except for the listed directories)
@@ -56,12 +67,26 @@ if ($viewClass) {
   echo($html);
 }
 </pre>
+#### Controller single point entry
+/controllers/index.php
+<pre>
+  /**
+   * Single entry point for controllers: all ajax actions point to this page with a pair of {action, controller}
+   */
+  require_once("../models/autoload.php");
+  use sys\System;
 
+  list($controller, $action) = System::loadController();
+  if ($controller) {
+    $con = new $controller() or die("Controller not found: " . $controller);
+    $con->$action();
+  }
+</pre>
 #### .htaccess
 <pre>
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_URI} !(/controllers|/interface|/js|/plugins|/views)
+RewriteCond %{REQUEST_URI} !(/controllers/|/interface/|/js/|/plugins/|/views/|/api/)
 RewriteRule ^(.*)$ index.php?q=$1 [L,QSA]
 </pre>
 
