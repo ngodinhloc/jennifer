@@ -501,17 +501,17 @@ class ControllerFront extends Controller {
 ### Templates
 #### templates/front/index.tpl.php
 <pre>
-    <ul id="slide-show" class="list-unstyled">
-      <?= $this->data["days"] ?>
-    </ul>
-    <div id="show-more" class="show-more" order-tag="<?= $this->data["order"] ?>" data="<?= NUM_PER_PAGE * 2 ?>">
+    &lt;ul id="slide-show" class="list-unstyled"&gt;
+      &lt;?= $this->data["days"] ?&gt;
+    &lt;/ul&gt;
+    &lt;div id="show-more" class="show-more" order-tag="&lt;?= $this->data["order"] ?&gt;" data="&lt;?= NUM_PER_PAGE * 2 ?&gt;"&gt;
       + Load More Days
-    </div>
-    <script type="text/javascript">
+    &lt;/div&gt;
+    &lt;script type="text/javascript"&gt;
       $(function () {
         wookmarkHandle();
       });
-    </script>
+    &lt;/script&gt;
 </pre>
 ### Ajax
 #### ajax.thedaysoflife.js
