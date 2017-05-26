@@ -28,7 +28,7 @@ The source code using in this example is the actual code of Thedaysoflife projec
     - thedaysoflife\User.php
     - thedaysoflife\Admin.php
 - [Views](#views)
-    - about.php
+    - views/front/index.class.php
 - [Controllers](#controllers)
     - index.php
     - ControllerView.php
@@ -433,6 +433,25 @@ class Admin extends Model {
   }
 }
 </pre>
+### Views
+#### views/front/index.class.php
+<pre>
+namespace front;
+use view\Front;
+use thedaysoflife\User;
+
+class index extends Front {
+  protected $contentTemplate = "index";
+
+  public function __construct() {
+    parent::__construct();
+
+    $user       = new User();
+    $days       = $user->getBestDays(0, ORDER_BY_ID);
+    $this->data = ["days" => $days, "order" => ORDER_BY_ID];
+  }
+}
+</pre>
 ### Controllers
 #### index.php
 <pre>
@@ -500,42 +519,61 @@ class ControllerFront extends Controller {
 </pre>
 ### Templates
 #### templates/front/index.tpl.php
+This template is a view template of view\front\index.class.php;  $this->data is set in index.class.php(#views)
 <pre>
-    &lt;ul id="slide-show" class="list-unstyled"&gt;
-      &lt;?= $this->data["days"] ?&gt;
-    &lt;/ul&gt;
-    &lt;div id="show-more" class="show-more" order-tag="&lt;?= $this->data["order"] ?&gt;" data="&lt;?= NUM_PER_PAGE * 2 ?&gt;"&gt;
-      + Load More Days
-    &lt;/div&gt;
-    &lt;script type="text/javascript"&gt;
-      $(function () {
-        wookmarkHandle();
-      });
-    &lt;/script&gt;
+&lt;ul id="slide-show" class="list-unstyled"&gt;
+  &lt;?= $this->data["days"] ?&gt;
+&lt;/ul&gt;
+&lt;div id="show-more" class="show-more" order-tag="&lt;?= $this->data["order"] ?&gt;" data="&lt;?= NUM_PER_PAGE * 2 ?&gt;"&gt;
+  + Load More Days
+&lt;/div&gt;
+&lt;script type="text/javascript"&gt;
+  $(function () {
+    wookmarkHandle();
+  });
+&lt;/script&gt;
 </pre>
 ### Ajax
-#### ajax.thedaysoflife.js
+#### js/ajax.js
 <pre>
 /**
- * Do ajax action
- * @param actionPara array ["action", "controller]
- * @param method "POST", "GET"
- * @param para object {"para":"value",...}
- * @param loader string #loader
- * @param containerPara array ["container", "append|replace"]
- * @param callback callback function
+ * @param actionPara object {"action":action, "controller":controller}
+ * @param para object $.para({"name":value})
+ * @param loader string
+ * @param containerPara array {"container" : container_id, "act": "replace|append"]
+ * @param callback function
  */
-function ajaxAction(actionPara, method, para, loader, containerPara, callback) {
+function ajaxAction(actionPara, para, loader, containerPara, callback) {
+  para = para + "&" + $.param(actionPara);
+  if (loader) {
+    $(loader).html(AJAX_LOADER);
+  }
+  $.ajax({
+    url:     CONST.CONTROLLER_URL,
+    type:    "POST",
+    cache:   false,
+    data:    para,
+    success: function (data, textStatus, jqXHR) {
+      if (loader) {
+        $(loader).html('');
+      }
+      if (callback) {
+        callback(data);
+        return;
+      }
+      if (containerPara) {
+        container = containerPara.container;
+        act = containerPara.act;
+        if (act == "replace") {
+          $(container).html(data);
+        }
+        if (act == "append") {
+          $(container).append(data);
+        }
+      }
+    },
+    error:   function (jqXHR, textStatus, errorThrown) {
+    }
+  });
 }
-/**
- * show more days
- * @param from
- * @param order
- */
-function ajaxShowDay(from, order) {
-  callback = processDays;
-  ajaxAction({"action": "ajaxShowDay", "controller": "ControllerView"}, $.param({"from": from, "order": order}),
-    "#show-more", false, callback);
-}
-...
 </pre>
