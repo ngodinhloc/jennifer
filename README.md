@@ -24,6 +24,7 @@ The source code using in this example is the actual code of Thedaysoflife projec
     - cons\Controller.php
     - sys\System.php
     - html\HTML.php
+    - html\jobject\ClockerPicker.php
     - cache\FileCache.php
     - thedaysoflife\User.php
     - thedaysoflife\Admin.php
@@ -34,8 +35,10 @@ The source code using in this example is the actual code of Thedaysoflife projec
     - ControllerView.php
 - [Templates](#templates)
     - fron\index.tpl.php
+    - jobject\clockpicer.tpl.php
 - [Ajax](#ajax)
-    - ajax.thedaysoflife.js
+    - js/ajax.js
+    - js/thedaysoflife.front.js
 
 ### Ajax MVC Pattern
 In Ajax MVC Pattern (aMVC): actions are sent from views to controllers via ajax
@@ -363,7 +366,19 @@ class HTML {
   }
 }
 </pre>
+#### html\jobject\ClockPicker.php
+html\jobject is the package of Jquery object classes which use to generate Jquery plugins like clock picer, color picker, date picker, qr code, signature
+<pre>
+namespace html\jobject;
+use html\JObject;
 
+class ClockPicker extends JObject {
+  public $metaFiles = [SITE_URL . "/plugins/jquery/clockpicker/bootstrap.clockpicker.min.js",
+                       SITE_URL . "/plugins/jquery/clockpicker/bootstrap.clockpicker.min.css",];
+  protected $template = "jobject/clockpicker";
+  protected $data = ["value" => "", "autoClose" => true];
+}
+</pre>
 #### thedaysoflife\User.php
 <pre>
 namespace thedaysoflife;
@@ -533,6 +548,19 @@ This template is a view template of view\front\index.class.php;  $this->data is 
   });
 &lt;/script&gt;
 </pre>
+#### templates/jobject/clockpicker.tpl.php
+<pre>
+&lt;div class="input-group clockpicker" data-autoclose="&lt;?= $this->data["autoClose"] ?>"&gt;
+&lt;input type="text" class="form-control &lt;?= $this->class ?&gt;"
+     id="&lt;?= $this->id ?&gt;" name="&lt;?= $this->id ?&gt;" value="&lt;?= $this->data["value"] ?&gt;" placeholder="hh:mm"&gt;
+&lt;span class="input-group-addon"&gt;&lt;i class="glyphicon glyphicon-time"&gt;&lt;/i&gt;&lt;/span&gt;
+&lt;/div&gt;
+&lt;script type="text/javascript"&gt;
+$(function () {
+$('.input-group.clockpicker').clockpicker();
+})
+&lt;/script&gt;
+</pre>
 ### Ajax
 #### js/ajax.js
 <pre>
@@ -575,5 +603,32 @@ function ajaxAction(actionPara, para, loader, containerPara, callback) {
     error:   function (jqXHR, textStatus, errorThrown) {
     }
   });
+}
+</pre>
+#### js/thedaysoflife.front.js
+<pre>
+/**
+ * Add new day
+ */
+function ajaxMakeADay() {
+  content = $("#div-day-content").find("select[name], textarea[name], input[name]").serialize();
+  info = $("#div-author-info").find("select[name], textarea[name], input[name]").serialize();
+  photos = getIDs();
+  data = content + "&" + info + "&" + $.param({"photos": photos});
+  callback = processMakeADay;
+  ajaxAction({"action": "ajaxMakeADay", "controller": "ControllerFront"}, data, "#ajax-loader", false, callback);
+}
+
+/**
+ * process returned data when add day
+ * @param data
+ */
+function processMakeADay(data) {
+  var getData = $.parseJSON(data);
+  if (getData.status = "success") {
+    link = CONST.LIST_URL + getData.id + "/" + getData.day + getData.month +
+           getData.year + '-' + getData.slug + CONST.LIST_EXT;
+    window.location = link;
+  }
 }
 </pre>
