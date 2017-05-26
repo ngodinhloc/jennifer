@@ -15,14 +15,14 @@ The source code using in this example is the actual code of Thedaysoflife projec
     - plugins 
     - caches
 - [Single Point Entry](#single-point-entry)
-    - View single point entry: index.php(#view-single-point-entry)
-    - Controller single poin entry: /controllers/index.php(#controller-single-point-entry)
+    - index.php
     - .htaccess
 - [Models](#models)
     - db\DB.php
-    - html\HTML.php
-    - core\View.php
     - sys\System.php
+    - html\HTML.php
+    - thedaysoflife\User.php
+    - thedaysoflife\Admin.php
 - [Views](#views)
     - about.php
 - [Controllers](#controllers)
@@ -46,14 +46,12 @@ In Ajax MVC Pattern (aMVC): actions are sent from views to controllers via ajax
 - plugins: contains all plugins, such as: bootstrap, ckeditor, jquery
 - caches: contains cache files for mysql queries
 ### Single Point Entry
-#### View single point entry
-index.php
+#### index.php
 <pre>
 /**
  * Single point entry
- * <pre>mod_rewrite in to redirect all request to this index page (except for the listed directories)
+ * mod_rewrite in to redirect all request to this index page (except for the listed directories)
  * process request uri to get view and load view
- * </pre>
  */
 require_once("models/autoload.php");
 use sys\System;
@@ -64,21 +62,6 @@ if ($viewClass) {
   $html = $view->render();
   echo($html);
 }
-</pre>
-#### Controller single point entry
-/controllers/index.php
-<pre>
-  /**
-   * Single entry point for controllers: all ajax actions point to this page with a pair of {action, controller}
-   */
-  require_once("../models/autoload.php");
-  use sys\System;
-
-  list($controller, $action) = System::loadController();
-  if ($controller) {
-    $con = new $controller() or die("Controller not found: " . $controller);
-    $con->$action();
-  }
 </pre>
 #### .htaccess
 <pre>
@@ -94,27 +77,7 @@ RewriteRule ^(.*)$ index.php?q=$1 [L,QSA]
 /**
  * Database class : this is the only model that has access to database by using mysqli
  */
-namespace db;
-class DB {
-private $mysqli;
-private $tableName;
-private $sql;
-private $selectCols;
-private $insertCols;
-private $insertVals;
-private $updateVals;
-private $whereCond;
-private $orderBy;
-private $groupBy;
-private $innerjoin;
-private $leftJoin;
-private $rightJoin;
-private $offset;
-private $limit;
-private $result;
-private $foundRows;
-private $devMode = false;
-
+ 
   /**
    * Get results:
    * $db->table('tbl_day')->select([col1,col2])->where([col1 => val1, col2 => val2])
@@ -122,163 +85,241 @@ private $devMode = false;
    *                 ->get()->toArray();
    * @param bool $foundRows : get found row or not
    * @param bool|string $cache :'mem' => Memchached, 'file' => FileCache;
-   * @return $this|array
+   * @return $this|boolean
    */
-  public function get($foundRows = false, $cache = false) {}
-</pre>
+  public function get($foundRows = false, $cache = false) {
+    if (!$this->checkTable()) {
+      return false;
+    }
+    $table   = $this->tableName;
+    $select  = ($foundRows) ? "SELECT SQL_CALC_FOUND_ROWS" : "SELECT";
+    $columns = ($this->selectCols) ? $this->selectCols : "*";
+    $where   = ($this->whereCond) ? $this->whereCond : "";
+    $groupBy = ($this->groupBy) ? $this->groupBy : "";
+    $orderBy = ($this->orderBy) ? $this->orderBy : "";
+    $limit   = "";
+    if (is_numeric($this->limit)) {
+      $offset = is_numeric($this->offset) ? $this->offset : 0;
+      $limit  = " LIMIT {$offset}, {$this->limit}";
+    }
+    $sql = "{$select} {$columns} FROM {$table}{$where}{$groupBy}{$orderBy}{$limit}";
 
+    switch($cache) {
+      case "file":
+        $data = FileCache::getCache($sql);
+        if ($data) {
+          $this->result = $data["data"];
+          if ($foundRows) {
+            $this->foundRows = $data["found"];
+          }
+
+          return $this;
+        }
+        else {
+          $result = $this->query($sql);
+          if ($foundRows) {
+            $this->setFoundRows();
+          }
+          $this->result = $this->resultToArray($result);
+
+          $data = ["found" => $this->foundRows, "data" => $this->result];
+          FileCache::writeCache($sql, $data);
+
+          return $this;
+        }
+        break;
+      case "mem":
+        break;
+      default:
+        $result = $this->query($sql);
+        if ($foundRows) {
+          $this->setFoundRows();
+        }
+        $this->result = $this->resultToArray($result);
+
+        return $this;
+        break;
+    }
+  }
+</pre>
+#### sys\Sysmte.php
+<pre>
+namespace sys;
+class System {
+    /**
+     * System utility static class, this is the only model that deals with system variables
+     * such as: session, cookie, $_POST, $_GET, $_REQUEST, $_SERVER, define
+     */
+     
+     /**
+       * @return string
+       */
+      public static function loadView() {
+        $uri = $_SERVER['REQUEST_URI'];
+        list($domain, $module, $view) = explode("/", $uri);
+        // there is no view => get default view
+        if (!$view) {
+          $view = DEFAULT_VIEW;
+        }
+        // module is not in module list => this is default module which does not require module name in uri
+        if (!in_array($module, MODULE_LIST)) {
+          $view   = $module;
+          $module = DEFAULT_MODULE;
+        }
+        $file = VIEW_DIR . $module . "/" . $view . VIEW_EXT;
+        if (file_exists($file)) {
+          $class = $module . "\\" . $view;
+        }
+        else {
+          // no class file exists => get default module and default view
+          $file  = VIEW_DIR . DEFAULT_MODULE . "/" . DEFAULT_VIEW . VIEW_EXT;
+          $class = DEFAULT_MODULE . "\\" . DEFAULT_VIEW;
+        }
+        require_once($file);
+
+        return $class;
+      }
+
+      /**
+       * @return bool|array
+       */
+      public static function loadController() {
+        $action     = self::getPostPara("action");
+        $controller = self::getPostPara("controller");
+        $file       = CONTROLLER_DIR . $controller . CONTROLLER_EXT;
+        if (file_exists($file)) {
+          $class = str_replace("/", "", CONTROLLER_DIR) . "\\" . $controller;
+          require_once($file);
+
+          return [$class, $action];
+        }
+
+        return false;
+      }
+  }
+</pre>
 #### html\HTML.php
 <pre>
 /**
  * This class is used to create HTML element (so that we no longer print HTML code inside models)
  */
 namespace html;
-
 class HTML {
-  private $tag;
-  private $id;
-  private $name;
-  private $class;
-  private $propList = [];
-  private $innerHTML;
-  
   /**
    * Open HTML tag
    * @return string
    */
-  public function open() {}
+  public function open() {
+    $html = "<{$this->tag}{$this->initID()}{$this->initName()}{$this->initClass()}{$this->initProp()}>";
+
+    return $html;
+  }
 
   /**
    * Close HTML element
    * @return string
    */
-  public function close() {}
+  public function close() {
+    $html = "</{$this->tag}>";
+
+    return $html;
+  }
 
   /**
    * Create the element
    * @return string
    */
-  public function create() {}
+  public function create() {
+    $innerHTML = isset($this->innerHTML) ? $this->innerHTML : "";
+    $html      = $this->open() . $innerHTML . $this->close();
+
+    return $html;
+  }
 }
 </pre>
 
-#### core\View.php
+#### thedaysoflife\User.php
 <pre>
-namespace core;
+namespace thedaysoflife;
 use html\HTML;
 use sys\System;
 use com\Com;
 
-class View extends Model {
+class User extends Model {
 
+ /**
+   * Insert new day
+   * @param array $day
+   * @return bool|\mysqli_result
+   */
+  public function addDay($day) {
+    $code   = mt_rand(100000, 999999);
+    $result = $this->db->table("tbl_day")->columns(["day", "month", "year", "title", "slug", "content", "preview",
+                                                    "sanitize", "username", "email", "location", "edit_code", "notify",
+                                                    "photos", "like", "date", "time", "ipaddress", "session_id"])
+                       ->values([$day["day"], $day["month"], $day["year"], $day["title"], $day["slug"], $day["content"],
+                                 $day["preview"], $day["sanitize"], $day["username"], $day["email"],
+                                 $day["location"], $code, $day["notify"], $day["photos"], $day["like"], $day["date"],
+                                 $day["time"], $day["ipaddress"], $day["session_id"]])
+                       ->insert();
+
+    return $result;
+  }
+  
   /**
-   * Get info by tag
-   * @param string $tag
+   * Get one day by id
+   * @param int $id
    * @return array
    */
-  public function getInfoByTag($tag) {
-    $row = $this->db->table("tbl_info")->select(["title", "content"])->where(["tag" => $tag])
-                    ->get(false, "file")->first();
+  public function getDayById($id) {
+    $row = $this->db->table("tbl_day")->where(["id" => $id])->get()->first();
 
     return $row;
   }
   
-  /**
-   * Get the top number of days for the right column
-   * @return string
-   */
-  public function getRightTopDay() {
-    $result = $this->db->table("tbl_day")->select(["id", "day", "year", "month", "slug", "title", "photos"])
-                       ->orderBy(["like" => "DESC"])->limit(NUM_TOP_RIGHT)->get(false, "file")->toArray();
-
-    $html   = new HTML();
-    $output = "";
-    if ($result) {
-      foreach ($result as $row) {
-        if (isset($row['id'])) {
-          $link       = Com::getDayLink($row);
-          $photos     = trim($row['photos']);
-          $firstPhoto = "";
-          if ($photos != "") {
-            $photos     = explode(',', $photos);
-            $photo      = $photos[0];
-            $photoUrl   = Com::getPhotoURL($photo, PHOTO_THUMB_NAME);
-            $firstPhoto = $html->setTag("img")->setProp(["src" => $photoUrl])->create();
-          }
-          $output .= $html->setTag("li")->setClass("right-list")->open() .
-                     $html->setTag("div")->setClass("right-thumb")->open() .
-                     $html->setTag("a")->setProp(["href" => $link])->setInnerHTML($firstPhoto)->create() .
-                     $html->setTag("div")->close() .
-                     $html->setTag("div")->setClass("right-title")->open() .
-                     $html->setTag("a")->setProp(["href" => $link])->setInnerHTML(stripslashes($row['title']))
-                          ->create() .
-                     $html->setTag("div")->close() .
-                     $html->setTag("div")->setClass("clear-both")->create() .
-                     $html->setTag("li")->close();
-        }
-      }
-    }
-
-    return $output;
-  }
 }
 </pre>
-#### sys\System.php
+#### thedaysoflife/Admin.php
 <pre>
-/**
- * System utility static class, this is the only model that deals with system variables
- * such as: session, cookie, $_POST, $_GET, $_REQUEST, $_SERVER, define
- */
-namespace sys;
-
-use jwt\JWT;
-
-class System {
-/**
-   * Get the view from uri (if not view found then get default) , define SYS_VIEW
+namespace thedaysoflife;
+use com\Common;
+use tpl\Template;
+use core\Model;
+class Admin extends Model {
+    /**
+   * @param $page
    * @return string
    */
-  public static function setView() {
-    $uri      = $_SERVER['REQUEST_URI'];
-    $para     = explode("/", $uri);
-    $viewName = $para[1];
+  public function getDayList($page) {
+    $limit   = NUM_PER_PAGE_ADMIN;
+    $from    = $limit * ($page - 1);
+    $result  = $this->db->table("tbl_day")->select(["id", "title", "day", "month", "year", "slug", "username", "count",
+                                                    "like", "fb"])
+                        ->orderBy(["id" => "DESC"])->offset($from)
+                        ->limit($limit)->get(true)->toArray();
+    $total   = $this->db->foundRows();
+    $pageNum = ceil($total / $limit);
+    $tpl     = new Template("back/tpl/list_days", ["days"       => $result,
+                                               "pagination" => Common::getPagination("page-nav", $pageNum, $page, 4)]);
 
-    if (file_exists(VIEW_DIR . $viewName . VIEW_EXT)) {
-      define('SYS_VIEW', $viewName);
-    }
-    else {
-      define('SYS_VIEW', 'index');
-    }
-  }
-
-  /**
-   * Load the view: always call after getView()
-   * @see setView();
-   */
-  public static function loadView() {
-    $viewFile = VIEW_DIR . SYS_VIEW . VIEW_EXT;
-    include_once($viewFile);
+    return $tpl->render();
   }
 }
 </pre>
 ### Controllers
 #### index.php
 <pre>
-/**
- * Single entry point for controllers: all ajax actions point to this page with a pair of {action, controller}
- */
-require_once("../models/autoload.php");
+  /**
+   * Single entry point for controllers: all ajax actions point to this page with a pair of {action, controller}
+   */
+  require_once("../models/autoload.php");
+  use sys\System;
 
-use sys\System;
-
-$para       = System::getPOST();
-$action     = $para["action"];
-$controller = $para["controller"];
-$conClass   = System::loadController($controller);
-if ($conClass) {
-  $con = new $conClass() or die("Class not found: " . $conClass);
-  $con->$action($para);
-}
+  list($controller, $action) = System::loadController();
+  if ($controller) {
+    $con = new $controller() or die("Controller not found: " . $controller);
+    $con->$action();
+  }
 </pre>
 #### ControllerView.php
 <pre>
