@@ -406,7 +406,7 @@ class User extends Model {
   
 }
 </pre>
-#### thedaysoflife/Admin.php
+#### thedaysoflife\Admin.php
 <pre>
 namespace thedaysoflife;
 use com\Common;
@@ -436,27 +436,25 @@ class Admin extends Model {
 ### Controllers
 #### index.php
 <pre>
-  /**
-   * Single entry point for controllers: all ajax actions point to this page with a pair of {action, controller}
-   */
-  require_once("../models/autoload.php");
-  use sys\System;
+/**
+* Single entry point for controllers: all ajax actions point to this page with a pair of {action, controller}
+*/
+require_once("../models/autoload.php");
+use sys\System;
 
-  list($controller, $action) = System::loadController();
-  if ($controller) {
-    $con = new $controller() or die("Controller not found: " . $controller);
-    $con->$action();
-  }
+list($controller, $action) = System::loadController();
+if ($controller) {
+$con = new $controller() or die("Controller not found: " . $controller);
+$con->$action();
+}
 </pre>
-#### ControllerView.php
+#### cons\ControllerFront.php
 <pre>
 namespace cons;
 use com\Common;
 use sys\System;
 use thedaysoflife\User;
-class ControllerFront extends Controller {
-    private $user;
-    
+class ControllerFront extends Controller { 
     /**
      * Show list of days
      */
@@ -500,7 +498,21 @@ class ControllerFront extends Controller {
     }
 }
 </pre>
-
+### Templates
+#### templates/front/index.tpl.php
+<pre>
+    <ul id="slide-show" class="list-unstyled">
+      <?= $this->data["days"] ?>
+    </ul>
+    <div id="show-more" class="show-more" order-tag="<?= $this->data["order"] ?>" data="<?= NUM_PER_PAGE * 2 ?>">
+      + Load More Days
+    </div>
+    <script type="text/javascript">
+      $(function () {
+        wookmarkHandle();
+      });
+    </script>
+</pre>
 ### Ajax
 #### ajax.thedaysoflife.js
 <pre>
