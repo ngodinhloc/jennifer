@@ -77,7 +77,10 @@ RewriteRule ^(.*)$ index.php?q=$1 [L,QSA]
 /**
  * Database class : this is the only model that has access to database by using mysqli
  */
- 
+namespace db;
+use cache\FileCache;
+use mysqli;
+class DB implements DBInterface {
   /**
    * Get results:
    * $db->table('tbl_day')->select([col1,col2])->where([col1 => val1, col2 => val2])
@@ -141,16 +144,16 @@ RewriteRule ^(.*)$ index.php?q=$1 [L,QSA]
         break;
     }
   }
+}
 </pre>
 #### sys\Sysmte.php
 <pre>
+/**
+ * System utility static class, this is the only model that deals with system variables
+ * such as: session, cookie, $_POST, $_GET, $_REQUEST, $_SERVER, define
+ */
 namespace sys;
 class System {
-    /**
-     * System utility static class, this is the only model that deals with system variables
-     * such as: session, cookie, $_POST, $_GET, $_REQUEST, $_SERVER, define
-     */
-     
      /**
        * @return string
        */
@@ -197,6 +200,7 @@ class System {
         return false;
       }
   }
+}
 </pre>
 #### html\HTML.php
 <pre>
