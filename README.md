@@ -6,7 +6,7 @@ The source code using in this example is the actual code of Thedaysoflife projec
 
 ### Jennifer Framework
 - [Ajax MVC Pattern](#ajax-mvc-pattern)
-- [The Framework Structure](#the-framework-tructure)
+- [The Framework Structure](#the-framework-structure)
     - models
     - views 
     - controllers 
