@@ -158,7 +158,7 @@ use db\driver\MySQL;
 
     /**
      * Insert new record
-     * <pre> $db->table('tbl_day')->columns([col1,col2])->values()->insert() </pre>
+     * $db->table('tbl_day')->columns([col1,col2])->values()->insert()
      * @return mixed
      */
     public function insert() {
@@ -172,10 +172,9 @@ use db\driver\MySQL;
 
     /**
      * Get results:
-     * <pre> $db->table('tbl_day')->select([col1,col2])->where([col1 => val1, col2 => val2])
+     * $db->table('tbl_day')->select([col1,col2])->where([col1 => val1, col2 => val2])
      *                 ->groupBy([col1,col2])->orderBy([col1=>ASC,col2=>DESC])->offset(0)->limit(20)
      *                 ->get()->toArray();
-     * </pre>
      * @param bool $foundRows : get found row or not
      * @param bool|string $cache :'mem' => Memchached, 'file' => FileCache;
      * @return $this|boolean
