@@ -18,7 +18,8 @@ The source code using in this example is the actual code of Thedaysoflife projec
     - index.php
     - .htaccess
 - [Models](#models)
-    - db\DB.php
+    - db\driver\MySQL.php
+    - db\Database.php
     - view\Base.php
     - tpl\Template.php
     - cons\Controller.php
@@ -79,129 +80,192 @@ RewriteRule ^(.*)$ index.php?q=$1 [L,QSA]
 </pre>
 
 ### Models
-#### db\DB.php
+#### db\driver\MySQL.php
 <pre>
-/**
- * Database class : this is the only model that has access to database by using mysqli
- */
+  namespace db\driver;
+  use mysqli;
+  class MySQL implements DriverInterface {
+    /** @var \mysqli **/
+    protected $mysqli;
+    protected $devMode = true;
+    public function __construct($mode) {
+      $this->devMode = $mode;
+      $this->mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME) or die($this->messages["SERVER_ERROR"]);
+    }
+    /**
+     * Private function query
+     * @param string $sql
+     * @return \mysqli_result
+     */
+    public function query($sql = "") {
+      $this->isDevMode($sql);
+      $result = $this->mysqli->query($sql) or die($this->getErrorMessage($sql));
+
+      return $result;
+    }
+    ...
+  }
+</pre>
+#### db\Database.php
+<pre>
 namespace db;
 use cache\FileCache;
-use mysqli;
-class DB implements DBInterface {
-  /**
-   * Get results:
-   * $db->table('tbl_day')->select([col1,col2])->where([col1 => val1, col2 => val2])
-   *                 ->groupBy([col1,col2])->orderBy([col1=>ASC,col2=>DESC])->offset(0)->limit(20)
-   *                 ->get()->toArray();
-   * @param bool $foundRows : get found row or not
-   * @param bool|string $cache :'mem' => Memchached, 'file' => FileCache;
-   * @return $this|boolean
-   */
-  public function get($foundRows = false, $cache = false) {
-    if (!$this->checkTable()) {
-      return false;
+use db\driver\MySQL;
+  abstract class Database implements DatabaseInterface {
+    private $devMode = false;
+    private $driverName = "MySQL";
+    /** @var \db\driver\DriverInterface * */
+    private $driver;
+    protected $tableName;
+    protected $selectCols;
+    protected $insertCols;
+    protected $insertVals;
+    protected $updateVals;
+    protected $whereCond;
+    protected $orderBy;
+    protected $groupBy;
+    protected $innerJoin;
+    protected $leftJoin;
+    protected $rightJoin;
+    protected $offset;
+    protected $limit;
+    protected $result;
+    protected $foundRows;
+    
+    /**
+     * Load sqlDriver for this database
+     */
+    private function loadDriver() {
+      switch ($this->driverName) {
+        case "MySQL":
+        default:
+          $this->driver = new MySQL($this->devMode);
+          break;
+      }
     }
-    $table   = $this->tableName;
-    $select  = ($foundRows) ? "SELECT SQL_CALC_FOUND_ROWS" : "SELECT";
-    $columns = ($this->selectCols) ? $this->selectCols : "*";
-    $where   = ($this->whereCond) ? $this->whereCond : "";
-    $groupBy = ($this->groupBy) ? $this->groupBy : "";
-    $orderBy = ($this->orderBy) ? $this->orderBy : "";
-    $limit   = "";
-    if (is_numeric($this->limit)) {
-      $offset = is_numeric($this->offset) ? $this->offset : 0;
-      $limit  = " LIMIT {$offset}, {$this->limit}";
-    }
-    $sql = "{$select} {$columns} FROM {$table}{$where}{$groupBy}{$orderBy}{$limit}";
 
-    switch($cache) {
-      case "file":
-        $data = FileCache::getCache($sql);
-        if ($data) {
-          $this->result = $data["data"];
-          if ($foundRows) {
-            $this->foundRows = $data["found"];
+    /**
+     * Private function query
+     * @param string $sql
+     * @return mixed $result
+     * @see \db\driver\DriverInterface::query()
+     */
+    private function query($sql = "") {
+      $result = $this->driver->query($sql);
+
+      return $result;
+    }
+
+    /**
+     * Insert new record
+     * $db->table('tbl_day')->columns([col1,col2])->values()->insert()
+     * @return mixed
+     */
+    public function insert() {
+      if (!$this->checkTable() || !$this->checkColumns() || !$this->checkValues()) {
+        return false;
+      }
+      $sql = $this->buildQuery(self::QUERY_INSERT);
+
+      return $this->query($sql);
+    }
+
+    /**
+     * Get results:
+     * $db->table('tbl_day')->select([col1,col2])->where([col1 => val1, col2 => val2])
+     *                 ->groupBy([col1,col2])->orderBy([col1=>ASC,col2=>DESC])->offset(0)->limit(20)
+     *                 ->get()->toArray();
+     * @param bool $foundRows : get found row or not
+     * @param bool|string $cache :'mem' => Memchached, 'file' => FileCache;
+     * @return $this|boolean
+     */
+    public function get($foundRows = false, $cache = false) {
+      if (!$this->checkTable()) {
+        return false;
+      }
+      $sql = $this->buildQuery(self::QUERY_SELECT, $foundRows);
+
+      switch ($cache) {
+        case "file":
+          $data = FileCache::getCache($sql);
+          if ($data) {
+            $this->result = $data["data"];
+            if ($foundRows) {
+              $this->foundRows = $data["found"];
+            }
+
+            return $this;
+          } else {
+            $result = $this->query($sql);
+            if ($foundRows) {
+              $this->setFoundRows();
+            }
+            $this->result = $this->resultToArray($result);
+            $data = ["found" => $this->foundRows, "data" => $this->result];
+            FileCache::writeCache($sql, $data);
+
+            return $this;
           }
-
-          return $this;
-        }
-        else {
+          break;
+        case "mem":
+          break;
+        default:
           $result = $this->query($sql);
           if ($foundRows) {
             $this->setFoundRows();
           }
           $this->result = $this->resultToArray($result);
 
-          $data = ["found" => $this->foundRows, "data" => $this->result];
-          FileCache::writeCache($sql, $data);
-
           return $this;
-        }
-        break;
-      case "mem":
-        break;
-      default:
-        $result = $this->query($sql);
-        if ($foundRows) {
-          $this->setFoundRows();
-        }
-        $this->result = $this->resultToArray($result);
-
-        return $this;
-        break;
+          break;
+      }
     }
-  }
-}
-</pre>
-#### view\Base.php
-<pre>
-/**
-* Base view class: all view classes will extend this base class
-*/
-namespace view;
-use com\Common;
-use html\JObject;
-use sys\System;
-class Base implements ViewInterface {
-    protected $module;
-    protected $view;
-    protected $headerTemplate;
-    protected $footerTemplate;
-    protected $contentTemplate;
-    protected $title = SITE_TITLE;
-    protected $description = SITE_DESCRIPTION;
-    protected $keyword = SITE_KEYWORDS;
-    protected $metaFiles = ["header" => [], "footer" => []];
-    protected $metaTags = ["header" => "", "footer" => ""];
-    protected $post = [];
-    protected $para = [];
-    protected $data;
-    protected $userData = false;
-    protected $requiredPermission = false;
-    protected $messages = [
-      "NO_PERMISSION"          => ["message" => "You do not have permission to access this view."],
-      "NO_AUTHENTICATION"      => ["message" => "The view you tried to access requires authentication."],
-      "INVALID_AUTHENTICATION" => ["message" => "Incorrect username or password."],
-      "DISABLE_USER"           => ["message" => "This user is disabled."],
-    ];
-    
+
     /**
-     * Render this view
-     * @param $tidy bool
+     * @param string $type
+     * @param boolean $foundRows
      * @return string
      */
-    public function render($tidy = true) {
-      $this->renderMeta();
-      ob_start("ob_gzhandler");
-      include_once(TEMPLATE_DIR . $this->module . "/" . $this->headerTemplate . TEMPLATE_EXT);
-      include_once(TEMPLATE_DIR . $this->module . "/" . $this->contentTemplate . TEMPLATE_EXT);
-      include_once(TEMPLATE_DIR . $this->module . "/" . $this->footerTemplate . TEMPLATE_EXT);
-      $html = ob_get_clean();
-      if ($tidy) {
-        $html = $this->tidyHTML($html);
+    private function buildQuery($type, $foundRows = false) {
+      switch ($type) {
+        case self::QUERY_UPDATE:
+          $table = $this->tableName;
+          $set = $this->updateVals;
+          $where = ($this->whereCond) ? $this->whereCond : "";
+          $sql = "UPDATE {$table}{$set} WHERE TRUE {$where}";
+          break;
+        case self::QUERY_DELETE:
+          $table = $this->tableName;
+          $where = ($this->whereCond) ? $this->whereCond : "";
+          $sql = "DELETE FROM {$table} WHERE TRUE {$where}";
+          break;
+        case self::QUERY_INSERT:
+          $table = $this->tableName;
+          $columns = $this->insertCols;
+          $values = $this->insertVals;
+          $sql = "INSERT INTO {$table}({$columns}) VALUES {$values}";
+          break;
+        case self::QUERY_SELECT:
+          $table = $this->tableName;
+          $select = ($foundRows) ? "SELECT SQL_CALC_FOUND_ROWS" : "SELECT";
+          $columns = ($this->selectCols) ? $this->selectCols : "*";
+          $innerJoin = ($this->innerJoin) ? $this->innerJoin : "";
+          $leftJoin = ($this->leftJoin) ? $this->leftJoin : "";
+          $rightJoin = ($this->rightJoin) ? $this->rightJoin : "";
+          $joins = $innerJoin . $leftJoin . $rightJoin;
+          $where = ($this->whereCond) ? "WHERE TRUE " . $this->whereCond : "";
+          $groupBy = ($this->groupBy) ? "GROUP BY " . $this->groupBy : "";
+          $orderBy = ($this->orderBy) ? "ORDER BY " . $this->orderBy : "";
+          $limit = "";
+          if (is_numeric($this->limit)) {
+            $offset = is_numeric($this->offset) ? $this->offset : 0;
+            $limit = " LIMIT {$offset}, {$this->limit}";
+          }
+          $sql = "{$select} {$columns} FROM {$table} {$joins} {$where} {$groupBy} {$orderBy} {$limit}";
+          break;
       }
 
-      return $html;
+      return $sql;
     }
 }
 </pre>
