@@ -1,6 +1,6 @@
 # Jennifer - A Simple PHP Framework
 
-Jennifer is a simple PHP framework that implements the Ajax MVC pattern. I created Jennifer framework when I was doing my master at University of Sydney in 2009, there has been a few changes since the first version.
+Jennifer is a simple PHP framework that implements the Ajax MVC (aMVC) pattern. The idea of  aMVC and first pieces of code was written in 2009 when I doing my Master at University of Sydney and taking on job to develope the CMS for Allimport. But only recently I manage to put the code into the framework, and name it Jennifer.
 
 The source code using in this example is the actual code of Thedaysoflife project https://github.com/ngodinhloc/thedaysoflife.com
 
