@@ -1,7 +1,7 @@
 <?php
 namespace cons;
 require_once(DOC_ROOT . '/plugins/facebook/autoload.php');
-use com\Com;
+use com\Common;
 use thedaysoflife\Admin;
 use sys\System;
 use Facebook;
@@ -72,7 +72,7 @@ class ControllerFacebook extends Controller {
             if (isset($album["id"])) {
               foreach ($photos as $i => $name) {
                 $photoName = html_entity_decode($title . " - " . ($i + 1), ENT_COMPAT, "UTF-8");
-                $photoURL  = Com::getPhotoURL($name, PHOTO_FULL_NAME);
+                $photoURL  = Common::getPhotoURL($name, PHOTO_FULL_NAME);
                 $photoData = ['message' => $photoName, 'url' => $photoURL];
                 $newPhoto  = $this->fb->post('/' . $album["id"] . '/photos', $photoData, $appAccessToken);
                 $photo     = $newPhoto->getDecodedBody();
@@ -131,10 +131,10 @@ class ControllerFacebook extends Controller {
     $content     = str_replace("<li>", " - ", $content);
     $content     = str_replace("<br>", "\n", $content);
     $content     = str_replace("&nbsp;", " ", $content);
-    $content     = Com::subString(strip_tags($content), 300, 3);
+    $content     = Common::subString(strip_tags($content), 300, 3);
     $desc        = html_entity_decode($content, ENT_COMPAT, "UTF-8");
     $photos      = explode(',', $day['photos']);
-    $pic         = Com::getPhotoURL($photos[0], PHOTO_TITLE_NAME);
+    $pic         = Common::getPhotoURL($photos[0], PHOTO_TITLE_NAME);
     $action_name = 'View on Thedaysoflife.com';
     $action_link = LIST_URL . $day['id'] . '/' . $day['day'] . $day['month'] . $day['year'] . '-' .
                    $day['slug'] . URL_EXT;

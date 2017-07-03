@@ -1,7 +1,7 @@
 <?php
   namespace cons;
 
-  use com\Com;
+  use com\Common;
   use thedaysoflife\Admin;
 
   class ControllerBack extends Controller {
@@ -46,18 +46,18 @@
       $check = checkdate($day["month"], $day["day"], $day["year"]);
       if ($check) {
         $day["title"] = $this->admin->escapeString($this->post['title']);
-        $day["slug"] = Com::sanitizeString(($day["title"]));
+        $day["slug"] = Common::sanitizeString(($day["title"]));
         $day["content"] = $this->admin->escapeString($this->post['content'], true);
         $day["username"] = $this->admin->escapeString($this->post['username']);
         $day["email"] = $this->admin->escapeString($this->post['email']);
         $day["location"] = $this->admin->escapeString($this->post['loc']);
         $day["photos"] = $this->admin->escapeString($this->post['photos']);
         $day["like"] = (int)$this->post['like'];
-        $day["preview"] = Com::subString($day["content"], SUMMARY_LENGTH, 3);
-        $day["sanitize"] = str_replace('-', ' ', Com::sanitizeString($day["title"]))
-                           . ' ' . str_replace('-', ' ', Com::sanitizeString($day["username"]))
-                           . ' ' . str_replace('-', ' ', Com::sanitizeString($day["location"]))
-                           . ' ' . str_replace('-', ' ', Com::sanitizeString($day["preview"]));
+        $day["preview"] = Common::subString($day["content"], SUMMARY_LENGTH, 3);
+        $day["sanitize"] = str_replace('-', ' ', Common::sanitizeString($day["title"]))
+                           . ' ' . str_replace('-', ' ', Common::sanitizeString($day["username"]))
+                           . ' ' . str_replace('-', ' ', Common::sanitizeString($day["location"]))
+                           . ' ' . str_replace('-', ' ', Common::sanitizeString($day["preview"]));
         $re = $this->admin->updateDay($day);
         if ($re) {
           $array = ["status" => "success",
@@ -102,9 +102,7 @@
      */
     public function ajaxCheckDatabase() {
       $act = $this->post['act'];
-      if ($act != "") {
-        $result = $this->admin->checkDatabaseTables($act);
-        $this->response($result);
-      }
+      $result = $this->admin->checkDatabaseTables($act);
+      $this->response($result);
     }
   }
