@@ -1,7 +1,7 @@
 <?php
 namespace front;
 use view\Front;
-use thedaysoflife\View;
+use thedaysoflife\User;
 
 class calendar extends Front {
   protected $title = "Calendar Of Life";
@@ -10,8 +10,8 @@ class calendar extends Front {
   public function __construct() {
     parent::__construct();
 
-    $view       = new View();
-    $calendar   = $view->getCalendar(0);
+    $user       = new User();
+    $calendar   = $user->getCalendar(0);
     $this->data = ["calendar" => $calendar];
   }
 }

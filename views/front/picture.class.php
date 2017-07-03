@@ -1,7 +1,7 @@
 <?php
 namespace front;
 use view\Front;
-use thedaysoflife\View;
+use thedaysoflife\User;
 
 class picture extends Front {
   protected $title = "The Picture Of Life";
@@ -10,8 +10,8 @@ class picture extends Front {
   public function __construct() {
     parent::__construct();
 
-    $view       = new View();
-    $picture    = $view->getPicture(0);
+    $user       = new User();
+    $picture    = $user->getPicture(0);
     $this->data = ["picture" => $picture];
   }
 }

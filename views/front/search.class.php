@@ -1,7 +1,7 @@
 <?php
 namespace front;
 use view\Front;
-use thedaysoflife\View;
+use thedaysoflife\User;
 
 class search extends Front {
   protected $title = "Search";
@@ -12,8 +12,8 @@ class search extends Front {
 
     $search = $this->hasPara("search");
     if ($search) {
-      $view         = new View();
-      $searchResult = $view->getSearch($search);
+      $user         = new User();
+      $searchResult = $user->getSearch($search);
       $this->data   = ["searchTerm" => $search, "searchResult" => $searchResult];
     }
   }

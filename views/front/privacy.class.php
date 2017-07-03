@@ -1,7 +1,7 @@
 <?php
 namespace front;
 use view\Front;
-use thedaysoflife\View;
+use thedaysoflife\User;
 
 class privacy extends Front {
   protected $title = "Privacy";
@@ -10,8 +10,8 @@ class privacy extends Front {
   public function __construct() {
     parent::__construct();
 
-    $view       = new View();
-    $info       = $view->getInfoByTag("privacy");
+    $user       = new User();
+    $info       = $user->getInfoByTag("privacy");
     $this->data = ["info" => $info];
   }
 }

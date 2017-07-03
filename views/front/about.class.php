@@ -1,7 +1,7 @@
 <?php
 namespace front;
 use view\Front;
-use thedaysoflife\View;
+use thedaysoflife\User;
 
 class about extends Front {
   protected $title = "About";
@@ -9,8 +9,8 @@ class about extends Front {
 
   public function __construct() {
     parent::__construct();
-    $view       = new View();
-    $info       = $view->getInfoByTag("about");
+    $user       = new User();
+    $info       = $user->getInfoByTag("about");
     $this->data = ["info" => $info];
   }
 }

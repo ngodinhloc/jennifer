@@ -1,10 +1,10 @@
 <?php
   namespace front;
   use view\Front;
-  use com\Com;
+  use com\Common;
   use html\jobject\FlexSlider;
   use sys\System;
-  use thedaysoflife\View;
+  use thedaysoflife\User;
 
   class day extends Front {
     protected $contentTemplate = "day";
@@ -12,39 +12,39 @@
     public function __construct() {
       parent::__construct();
 
-      $view = new View();
-      $topDays = $view->getRightTopDayHTML();
+      $user = new User();
+      $topDays = $user->getRightTopDayHTML();
       $this->data = ["pageTitle" => $this->title, "pageDesc" => $this->description, "topDays" => $topDays,];
       $id = $this->hasPara("day");
       if ($id) {
-        $days = $view->getDayById($id);
+        $days = $user->getDayById($id);
         if ($days) {
           $likeIP = explode('|', $days['like_ip']);
-          $time = Com::getTimeDiff($days['time']);
+          $time = Common::getTimeDiff($days['time']);
           $ipaddress = System::getTodayIPaddress();
           $day = (int)$days['day'];
           $month = (int)$days['month'];
           $year = (int)$days['year'];
           $location = $days['location'];
-          $uri = Com::getDayLink($days);
+          $uri = Common::getDayLink($days);
           $photos = trim($days['photos']);
           $imgURL = "";
           $slider = "";
           if ($photos != "") {
             $photoArray = explode(',', $photos);
-            $imgURL = Com::getPhotoURL($photoArray[0], PHOTO_FULL_NAME);
-            $fullPhotos = Com::getPhotoArray($photoArray, PHOTO_FULL_NAME);
-            $thumbPhotos = Com::getPhotoArray($photoArray, PHOTO_THUMB_NAME);
+            $imgURL = Common::getPhotoURL($photoArray[0], PHOTO_FULL_NAME);
+            $fullPhotos = Common::getPhotoArray($photoArray, PHOTO_FULL_NAME);
+            $thumbPhotos = Common::getPhotoArray($photoArray, PHOTO_THUMB_NAME);
             $flexSlider = new FlexSlider([], ["fullPhotos"  => $fullPhotos,
                                               "thumbPhotos" => $thumbPhotos]);
             $slider = $flexSlider->render();
             $this->registerMetaFiles($flexSlider);
           }
-          $this->title = Com::getDayTitle($days);
-          $this->description = Com::getDayDescription($days);
+          $this->title = Common::getDayTitle($days);
+          $this->description = Common::getDayDescription($days);
           $this->keyword = $days['title'];
-          $comments = $view->getComments($id);
-          $relatedDays = $view->getRightRelatedDayHTML($day, $month, $year, $location);
+          $comments = $user->getComments($id);
+          $relatedDays = $user->getRightRelatedDayHTML($day, $month, $year, $location);
           $this->data = ["uri"         => $uri,
                          "days"        => $days,
                          "slider"      => $slider,

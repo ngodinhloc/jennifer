@@ -2,7 +2,7 @@
   namespace back;
 
   use view\Back;
-  use com\Com;
+  use com\Common;
   use html\jobject\PhotoUploader;
   use thedaysoflife\Admin;
 
@@ -17,7 +17,7 @@
       if ($id) {
         $admin = new Admin();
         $row = $admin->getDayById($id);
-        $photoUploader = new PhotoUploader([], ["text"=>"Current photos","currentPhotos" => Com::getPhotoPreviewArray($row["photos"])]);
+        $photoUploader = new PhotoUploader([], ["text"=>"Current photos","currentPhotos" => Common::getPhotoPreviewArray($row["photos"])]);
         $this->data = ["row" => $row, "photoUploader" => $photoUploader->render()];
         $this->addMetaFile(SITE_URL . "/plugins/ckeditor/ckeditor.js");
       }

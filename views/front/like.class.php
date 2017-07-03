@@ -1,7 +1,7 @@
 <?php
 namespace front;
 use view\Front;
-use thedaysoflife\View;
+use thedaysoflife\User;
 
 class like extends Front {
   protected $contentTemplate = "like";
@@ -10,8 +10,8 @@ class like extends Front {
   public function __construct() {
     parent::__construct();
 
-    $view       = new View();
-    $days       = $view->getBestDays(0, ORDER_BY_LIKE);
+    $user       = new User();
+    $days       = $user->getDays(0, ORDER_BY_LIKE);
     $this->data = ["days" => $days, "order" => ORDER_BY_LIKE];
   }
 }

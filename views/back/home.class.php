@@ -1,5 +1,6 @@
 <?php
   namespace back;
+  use thedaysoflife\Admin;
   use view\Back;
   use html\jobject\ClockPicker;
   use html\jobject\ColorPicker;
@@ -14,6 +15,10 @@
 
     public function __construct() {
       parent::__construct();
+
+      $admin = new Admin();
+      $admin->testJoin();
+      $admin->testTable();
 
       $datePicker = new DatePicker(["id" => "date-picker"],
                                    ["value"     => "22/04/2017",
