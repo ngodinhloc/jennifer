@@ -1,7 +1,7 @@
 <?php
 namespace cache;
 
-use exception\IOException;
+use exc\IOException;
 
 class FileCache implements FileCacheInterface {
   /**

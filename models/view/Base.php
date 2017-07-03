@@ -1,7 +1,10 @@
 <?php
+  /**
+   * Base view class: all view classes will extend this base class
+   */
   namespace view;
 
-  use com\Com;
+  use com\Common;
   use html\JObject;
   use sys\System;
 
@@ -127,7 +130,7 @@
      * @param array $paras
      */
     public function redirect($url, $paras = []) {
-      $str = Com::arrayToParas($paras);
+      $str = Common::arrayToParas($paras);
       System::redirectTo($url . $str);
     }
 

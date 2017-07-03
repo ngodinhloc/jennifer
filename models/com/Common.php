@@ -6,7 +6,7 @@
 
   use html\HTML;
 
-  class Com {
+  class Common {
 
     /**
      * @param array $day
@@ -87,6 +87,35 @@
 
     /**
      * @param array $arr
+     * @param string $name
+     * @param null $selected
+     * @param null $class
+     * @param string $separate
+     * @return string
+     */
+    public static function arrayToRadios($arr = [], $name = "", $selected = null, $class = null, $separate = "") {
+      $html = new HTML();
+      $output = "";
+      foreach ($arr as $value => $text) {
+        if ($selected == $value) {
+          $output .= $html->setTag("input")->setClass("{$class}")->setProp(["type"    => "radio",
+                                                                            "name"    => $name,
+                                                                            "value"   => $value,
+                                                                            "checked" => "checked"])
+                          ->create() ." ". $text . $separate;
+        } else {
+          $output .= $html->setTag("input")->setClass("{$class}")->setProp(["type"  => "radio",
+                                                                            "name"  => $name,
+                                                                            "value" => $value])
+                          ->create() ." ". $text . $separate;
+        }
+      }
+
+      return $output;
+    }
+
+    /**
+     * @param array $arr
      * @param null $selected
      * @param null $class
      * @return string
@@ -94,7 +123,7 @@
     public static function arrayToOptions($arr = [], $selected = null, $class = null) {
       $html = new HTML();
       $output = "";
-      foreach ($arr as $text => $value) {
+      foreach ($arr as $value => $text) {
         if ($selected == $value) {
           $output .= $html->setTag("option")->setClass("{$class}")->setProp(["value"    => $value,
                                                                              "selected" => "selected"])
@@ -454,5 +483,31 @@
       $str = preg_replace("/\s/", "-", $str);
 
       return $str;
+    }
+
+    /**
+     * Convert  array to array with index
+     * @param array $arr
+     * @param string $index use column as index of the return array[index]
+     * @param array $keys keys to get
+     * @return array
+     */
+    public static function indexArray($arr = [], $index = null, $keys = null) {
+      $newArr = [];
+      if (isset($index)) {
+        if (!empty($keys)) {
+          $newArr[$arr[$index]] = array_intersect_key($arr, array_flip($keys));
+        } else {
+          $newArr[$arr[$index]] = $arr;
+        }
+      } else {
+        if (!empty($keys)) {
+          $newArr = array_intersect_key($arr, array_flip($keys));
+        } else {
+          $newArr = $arr;
+        }
+      }
+
+      return $newArr;
     }
   }

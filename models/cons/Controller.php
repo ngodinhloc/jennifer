@@ -1,5 +1,6 @@
 <?php
 /**
+ * The base controller class: all controller will extend this class
  * Each public function of controller class is an action
  */
 namespace cons;

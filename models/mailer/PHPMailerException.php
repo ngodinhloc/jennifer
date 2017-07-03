@@ -1,6 +1,6 @@
 <?php
   /**
-   * PHPMailer exception handler
+   * PHPMailer exc handler
    * @package PHPMailer
    */
   namespace mailer;
