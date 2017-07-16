@@ -2,11 +2,11 @@
   namespace db;
 
   use cache\FileCache;
-  use db\driver\MySQL;
+  use db\driver\DriverFactory;
 
   abstract class Database implements DatabaseInterface {
+    private $defaultDriver = "MySQL";
     private $devMode = false;
-    private $driverName = "MySQL";
     /** @var \db\driver\DriverInterface * */
     private $driver;
     protected $tableName;
@@ -30,24 +30,21 @@
     const  QUERY_UPDATE = "UPDATE";
     const  QUERY_DELETE = "DELETE";
 
-    public function __construct() {
-      $this->loadDriver();
+    /**
+     * Database constructor.
+     * @param \db\driver\DriverInterface
+     */
+    public function __construct($driver = null) {
+      if ($driver) {
+        $this->driver = $driver;
+      } else {
+        $factory = new DriverFactory();
+        $this->driver = $factory->createDriver($this->defaultDriver, $this->devMode);
+      }
     }
 
     public function __destruct() {
       unset($this->driver);
-    }
-
-    /**
-     * Load sqlDriver for this database
-     */
-    private function loadDriver() {
-      switch ($this->driverName) {
-        case "MySQL":
-        default:
-          $this->driver = new MySQL($this->devMode);
-          break;
-      }
     }
 
     /**
