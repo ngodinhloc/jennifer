@@ -1,9 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head> <?php include_once('include/_meta.inc.php'); ?>
+<head> <?php include_once('include/meta.inc.php'); ?>
 </head>
 <body class="html front not-logged-in no-sidebars page-node">
-<? include_once('include/_ga.inc.php'); ?>
+<? include_once('include/ga.inc.php'); ?>
 <div id="page-wrapper">
   <div id="page">
     <div class="col-xs-12 container-fluid region">
@@ -11,7 +11,7 @@
         <div class="col-md-12 header">
           <div class="container">
             <header class="navbar navbar-static-top bs-docs-nav menu-top" id="top" role="banner">
-              <? include('include/_menu.inc.php'); ?>
+              <? include('include/menu.inc.php'); ?>
             </header>
             <div class="col-xs-6 wrapper clearfix">
               <a class="logo navbar-btn pull-left" title="Home" href="<?= SITE_URL ?>">
@@ -44,6 +44,6 @@
     </div>
     <div class="main_container region">
       <header class="navbar navbar-static-top bs-docs-nav" id="top" role="banner">
-        <? include('include/_menu.inc.php'); ?>
+        <? include('include/menu.inc.php'); ?>
       </header>
       <div id="show-content" class="row row-offcanvas row-offcanvas-right">

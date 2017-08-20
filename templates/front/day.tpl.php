@@ -1,4 +1,4 @@
-<? include_once('include/_facebook.inc.php'); ?>
+<? include_once('include/facebook.inc.php'); ?>
 <div class="row">
   <div class="col-md-12 col-md-8 no-front">
     <?php if (isset($this->data["days"]['id'])) { ?>
@@ -93,7 +93,7 @@
     <?php } ?>
   </div>
   <div class="col-xs-12 col-md-4">
-    <?php include_once('include/_right.inc.php'); ?>
+    <?php include_once('include/right.inc.php'); ?>
   </div>
 </div>
 <script type="text/javascript">

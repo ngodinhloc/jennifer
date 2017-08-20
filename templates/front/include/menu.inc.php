@@ -1,4 +1,4 @@
-<?php use com\Com; ?>
+<?php use com\Common; ?>
 <div class="menu">
   <div class="navbar-header">
     <button class="navbar-toggle" type="button">
@@ -10,7 +10,7 @@
   </div>
   <nav class="nav-content collapse navbar-collapse bs-navbar-collapse">
     <ul class="nav navbar-nav">
-      <?= Com::getMenu($this->view) ?>
+      <?= Common::getMenu($this->view) ?>
     </ul>
   </nav>
 </div>

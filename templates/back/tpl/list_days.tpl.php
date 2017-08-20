@@ -1,4 +1,4 @@
-<?php use com\Com; ?>
+<?php use com\Common; ?>
 <table>
   <thead>
   <tr>
@@ -14,8 +14,8 @@
   <tbody>
   <?php
   foreach ($this->data["days"] as $day) {
-    $link    = Com::getDayLink($day);
-    $options = Com::getFBAct($day["fb"]);
+    $link    = Common::getDayLink($day);
+    $options = Common::getFBAct($day["fb"]);
     ?>
     <tr id="row-<?= $day["id"] ?>">
       <td><?= $day["id"] ?></td>

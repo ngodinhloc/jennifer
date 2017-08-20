@@ -1,4 +1,4 @@
-<?php use com\Com; ?>
+<?php use com\Common; ?>
 <div class="admin-content" id="edit-day">
   <div class="row no-front">
     <div class="form-group col-md-9">
@@ -6,15 +6,15 @@
       <div>
         <select class=" form-control days" id="day" name="day">
           <option class="select" value="0">Day</option>
-          <?= Com::getDayDrop($this->data["row"]['day']) ?>
+          <?= Common::getDayDrop($this->data["row"]['day']) ?>
         </select>
         <select class="form-control days" id="month" name="month">
           <option class="select" value="0">Month*</option>
-          <?= Com::getMonthDrop($this->data["row"]['month']) ?>
+          <?= Common::getMonthDrop($this->data["row"]['month']) ?>
         </select>
         <select class="form-control days" id="year" name="year">
           <option class="select" value="0">Year*</option>
-          <?= Com::getYearDrop($this->data["row"]['year']) ?>
+          <?= Common::getYearDrop($this->data["row"]['year']) ?>
         </select>
         <span id="check" class="error"></span>
       </div>

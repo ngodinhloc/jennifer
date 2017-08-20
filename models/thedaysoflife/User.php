@@ -4,7 +4,7 @@
   use com\Common;
   use core\Model;
   use html\HTML;
-  use sys\System;
+  use sys\Globals;
 
   class User extends Model {
 
@@ -32,7 +32,7 @@
         $time = Common::getTimeDiff($row['time']);
         $like_ip = explode('|', $row['like_ip']);
         $dislike_ip = explode('|', $row['dislike_ip']);
-        $ipaddress = System::getTodayIPaddress();
+        $ipaddress = Globals::todayIPAddress();
 
         $html = new HTML();
         $output = $html->setTag("div")->setClass("media comment {$rep_class}")->setID("comment-{$row['id']}")->open() .
@@ -618,7 +618,7 @@
         $preview = $preview . $moreLink;
       }
       $like_ip = explode('|', $row['like_ip']);
-      $ipaddress = System::getTodayIPaddress();
+      $ipaddress = Globals::todayIPAddress();
       $search_author = SITE_URL . "/search/" . urlencode($row['username']);
       $search_loc = SITE_URL . "/search/" . urlencode($row['location']);
       $authorLink = $html->setTag("a")->setProp(["href" => $search_author])

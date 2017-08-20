@@ -1,20 +1,20 @@
 <?php
-namespace view;
+  namespace view;
 
-interface ViewInterface {
-  public function posted();
+  interface ViewInterface {
+    public function setData($data);
 
-  public function hasPost($name);
+    public function getData();
 
-  public function hasPara($name);
+    public function posted();
 
-  public function addMetaTag($tag);
+    public function hasPost($name);
 
-  public function addMetaFile($file);
+    public function hasPara($name);
 
-  public function redirect($url, $paras = []);
+    public function addMetaTag($tag);
 
-  public function render();
-}
+    public function addMetaFile($file);
 
-?>
+    public function render();
+  }

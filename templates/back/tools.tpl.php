@@ -10,22 +10,16 @@
     </thead>
     <tbody>
     <tr>
-      <td>Remove unused photos</td>
-      <td>
-      </td>
+      <td>Photos</td>
+      <td><?= $this->data["photoTools"] ?></td>
       <td>
         <button type="button" id="remove-photo">Remove</button>
       </td>
       <td id="remove-photo-result"></td>
     </tr>
     <tr>
-      <td>Check Database tables</td>
-      <td>
-        <input type="radio" name="checkdb" value="<?= ANALYZE_DB; ?>"> Analyze
-        <input type="radio" name="checkdb" value="<?= OPTIMIZE_DB; ?>"> Optimize
-        <input type="radio" name="checkdb" value="<?= CHECK_DB; ?>"> Check
-        <input type="radio" name="checkdb" value="<?= REPAIR_DB; ?>"> Repair
-      </td>
+      <td>Database</td>
+      <td><?= $this->data["databaseTools"] ?></td>
       <td>
         <button type="button" id="check-database">Action</button>
       </td>

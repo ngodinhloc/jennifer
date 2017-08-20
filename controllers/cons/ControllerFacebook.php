@@ -3,8 +3,9 @@ namespace cons;
 require_once(DOC_ROOT . '/plugins/facebook/autoload.php');
 use com\Common;
 use thedaysoflife\Admin;
-use sys\System;
+use sys\Globals;
 use Facebook;
+use controller\Controller;
 
 class ControllerFacebook extends Controller {
   protected $requiredPermission = ["admin"];
@@ -24,7 +25,7 @@ class ControllerFacebook extends Controller {
    * Post days to facebook
    */
   public function ajaxPostToFacebook() {
-    $appAccessToken = System::getSession("FB_appAccessToken");
+    $appAccessToken = Globals::session("FB_appAccessToken");
     $id             = (int)$this->post['id'];
     $type           = $this->post['type'];
     if ($appAccessToken) {

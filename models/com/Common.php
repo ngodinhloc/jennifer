@@ -102,12 +102,12 @@
                                                                             "name"    => $name,
                                                                             "value"   => $value,
                                                                             "checked" => "checked"])
-                          ->create() ." ". $text . $separate;
+                          ->create() . " " . $text . $separate;
         } else {
           $output .= $html->setTag("input")->setClass("{$class}")->setProp(["type"  => "radio",
                                                                             "name"  => $name,
                                                                             "value" => $value])
-                          ->create() ." ". $text . $separate;
+                          ->create() . " " . $text . $separate;
         }
       }
 
@@ -123,7 +123,7 @@
     public static function arrayToOptions($arr = [], $selected = null, $class = null) {
       $html = new HTML();
       $output = "";
-      foreach ($arr as $value => $text) {
+      foreach ($arr as $text => $value) {
         if ($selected == $value) {
           $output .= $html->setTag("option")->setClass("{$class}")->setProp(["value"    => $value,
                                                                              "selected" => "selected"])

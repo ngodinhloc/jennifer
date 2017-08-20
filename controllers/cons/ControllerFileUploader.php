@@ -6,6 +6,7 @@
 namespace cons;
 require_once(DOC_ROOT . '/plugins/jquery/fileuploader/FileUploader.php');
 use FileUploader;
+use controller\Controller;
 
 class ControllerFileUploader extends Controller {
 

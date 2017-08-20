@@ -1,7 +1,8 @@
 <?php
-  namespace api;
+namespace api;
 
-  interface APIInterface {
-    public function response($data, $json = false, $jsonOpt = JSON_UNESCAPED_SLASHES);
-  }
-  ?>
+interface APIInterface {
+  public function process($req);
+
+  public function run();
+}

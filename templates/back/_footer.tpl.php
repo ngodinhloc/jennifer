@@ -39,6 +39,6 @@
   <a class="back-to-top glyphicon glyphicon-circle-arrow-up"></a>
 </div>
 </div>
-<? include_once('include/_script.inc.php'); ?>
+<? include_once('include/script.inc.php'); ?>
 </body>
 </html>

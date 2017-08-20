@@ -1,41 +1,44 @@
 <?php
-namespace back;
-use view\Back;
-use thedaysoflife\Admin;
-use sys\System;
+  namespace back;
 
-class index extends Back {
-  protected $title = "Dashboard Login";
-  protected $contentTemplate = "index";
-  protected $requiredPermission = false;
+  use auth\Authentication;
+  use thedaysoflife\Admin;
+  use view\Back;
 
-  public function __construct() {
-    parent::__construct();
+  class index extends Back {
+    protected $title = "Dashboard Login";
+    protected $contentTemplate = "index";
+    protected $requiredPermission = false;
 
-    if ($this->posted()) {
-      if ($this->hasPost("email")) {
-        $admin    = new Admin();
-        $email    = $this->post["email"];
-        $password = System::encryptPassword($this->post["password"]);
-        $row      = $admin->checkLogin($email, $password);
-        $message  = "";
-        if (isset($row['id'])) {
-          $status = $row['status'];
-          // if user is disable
-          if ($status == ADMIN_DISABLE) {
-            $message = $this->messages["DISABLE_USER"]["message"];
-          } // valid and active user
-          else if ($status == ADMIN_ACTIVE) {
-            System::setJWT($row["id"], $row["f_name"] . " " . $row["l_name"], $row['permission']);
-            $this->redirect("/back/home/");
+    public function __construct() {
+      parent::__construct();
+
+      if ($this->posted()) {
+        if ($this->hasPost("email")) {
+          $admin = new Admin();
+          $email = $this->post["email"];
+          $password = $this->authentication->encryptPassword($this->post["password"]);
+          $row = $admin->checkLogin($email, $password);
+          $message = "";
+          if (isset($row['id'])) {
+            $status = $row['status'];
+            // if user is disable
+            if ($status == Authentication::USER_STATUS_DISABLE) {
+              $message = $this->authentication->messages["USER_STATUS_DISABLE"]["message"];
+            } // valid and active user
+            else if ($status == Authentication::USER_STATUS_ACTIVE) {
+              $jwtData = ["id"         => $row["id"],
+                          "name"       => $row["f_name"] . " " . $row["l_name"],
+                          "permission" => $row['permission']];
+              $this->authentication->setJWT($jwtData);
+              $this->authentication->redirect("/back/home/");
+            }
+          } else {
+            //if invalid email and password
+            $message = $this->authentication->messages["INVALID_AUTHENTICATION"]["message"];
           }
+          $this->para["message"] = $message;
         }
-        else {
-          //if invalid email and password
-          $message = $this->messages["INVALID_AUTHENTICATION"]["message"];
-        }
-        $this->para["message"] = $message;
       }
     }
   }
-}

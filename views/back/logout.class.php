@@ -1,7 +1,6 @@
 <?php
 namespace back;
 use view\Back;
-use sys\System;
 
 class logout extends Back {
   protected $requiredPermission = false;
@@ -9,6 +8,6 @@ class logout extends Back {
   public function __construct() {
     parent::__construct();
 
-    System::userLogout();
+    $this->authentication->userLogout();
   }
 }

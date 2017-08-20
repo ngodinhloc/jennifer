@@ -3,7 +3,7 @@
   use view\Front;
   use com\Common;
   use html\jobject\FlexSlider;
-  use sys\System;
+  use sys\Globals;
   use thedaysoflife\User;
 
   class day extends Front {
@@ -21,7 +21,7 @@
         if ($days) {
           $likeIP = explode('|', $days['like_ip']);
           $time = Common::getTimeDiff($days['time']);
-          $ipaddress = System::getTodayIPaddress();
+          $ipaddress = Globals::todayIPAddress();
           $day = (int)$days['day'];
           $month = (int)$days['month'];
           $year = (int)$days['year'];
