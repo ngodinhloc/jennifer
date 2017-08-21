@@ -3,9 +3,9 @@
     <fieldset>
       <legend>Adminitration Login:</legend>
       <div class="col-md-12 form-contact form-group">
-        <?php if (isset($this->para["message"])) { ?>
+        <?php if (isset($this->data["message"])) { ?>
           <div class="form-group col-xs-12">
-            <b class="error"><?= $this->para["message"] ?></b>
+            <b class="error"><?= $this->data["message"] ?></b>
           </div>
         <?php } ?>
         <div class="form-group col-xs-12">

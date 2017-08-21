@@ -10,7 +10,9 @@ use io\Output;
 use jwt\JWT;
 
 class API {
+  /** @var ServiceMap */
   protected $mapper;
+  /** @var Output */
   protected $output;
   protected $hash;
   protected $service;

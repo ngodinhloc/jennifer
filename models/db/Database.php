@@ -439,12 +439,12 @@
      * <pre> column prefixes: default => AND, '|' => OR, '#' => raw
      * value prefixes: default => 'val' , '~' => LIKE, '!' => != , '@' => IN, '#' => raw
      * </pre>
-     * @param array $cond
+     * @param array $conds
      * @return $this
      */
-    public function where($cond = []) {
+    public function where($conds = []) {
       $where = " ";
-      foreach ($cond as $col => $val) {
+      foreach ($conds as $col => $val) {
         $c = $this->getOp($col);
         $v = $this->getOp($val);
 

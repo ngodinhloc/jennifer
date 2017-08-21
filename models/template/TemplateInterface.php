@@ -1,8 +1,6 @@
 <?php
-namespace tpl;
+namespace template;
 
 interface TemplateInterface {
   public function render();
 }
-
-?>

@@ -1,4 +1,4 @@
-<div id="<?= $this->id ?>"></div>
+<div id="<?= $this->meta["id"] ?>"></div>
 <script>
   $(function () {
     var options = {
@@ -23,6 +23,6 @@
       fontcolor:  '#000',
       image:      null
     }
-    $("#<?= $this->id ?>").qrcode(options);
+    $("#<?= $this->meta["id"] ?>").qrcode(options);
   });
 </script>

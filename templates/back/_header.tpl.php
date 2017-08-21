@@ -13,7 +13,7 @@
           <div class="container">
             <header class="navbar navbar-static-top bs-docs-nav menu-top" id="top" role="banner">
               <?php
-              if ($this->view != DEFAULT_VIEW) {
+              if ($this->meta["view"] != DEFAULT_VIEW) {
                 include('include/menu.inc.php');
               }
               ?>
@@ -42,7 +42,7 @@
     <div class="main_container region">
       <header class="navbar navbar-static-top bs-docs-nav" id="top" role="banner">
         <?php
-        if ($this->view != DEFAULT_VIEW) {
+        if ($this->meta["view"] != DEFAULT_VIEW) {
           include('include/menu.inc.php');
         }
         ?>

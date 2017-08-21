@@ -10,11 +10,16 @@ use io\Output;
 use sys\Globals;
 
 class Controller implements ControllerInterface {
+  /** @var Authentication */
   protected $authentication;
+  /** @var Output */
   protected $output;
-  protected $requiredPermission = false;
+  /** @var array|bool usr data */
   protected $userData = false;
+  /** @var array|bool|string _POST */
   protected $post = [];
+  /** @var bool|array required permission */
+  protected $requiredPermission = false;
 
   public function __construct() {
     $this->authentication = new Authentication();

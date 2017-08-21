@@ -26,4 +26,4 @@ $json  = json_encode($const, JSON_UNESCAPED_SLASHES);
   <script type="text/javascript" src="<?php echo SITE_URL ?>/js/ajax.js"></script>
   <script type="text/javascript" src="<?php echo SITE_URL ?>/js/thedaysoflife.front.js"></script>
   <script type="text/javascript" src="<?php echo SITE_URL ?>/js/thedaysoflife.back.js"></script>
-<?= $this->metaTags["footer"] ?>
+<?= $this->meta["metaTags"]["footer"] ?>

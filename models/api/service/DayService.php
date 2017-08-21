@@ -5,8 +5,9 @@ use api\ServiceInterface;
 use thedaysoflife\User;
 
 class DayService extends Service implements ServiceInterface {
-  protected $requiredPermission = ["day"];
+  /** @var User */
   protected $user;
+  protected $requiredPermission = ["day"];
 
   /**
    * DayService constructor.
@@ -24,8 +25,8 @@ class DayService extends Service implements ServiceInterface {
    */
   public static function map() {
     $map = ["service" => "service_day",
-            "class"    => __CLASS__,
-            "actions"  => ["get_day" => "getDay"],
+            "class"   => __CLASS__,
+            "actions" => ["get_day" => "getDay"],
     ];
 
     return $map;

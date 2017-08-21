@@ -8,7 +8,7 @@ class Signature extends JObject {
                        SITE_URL . "/plugins/jquery/signature/jquery.signature.css",
                        SITE_URL . "/plugins/jquery/signature/jquery.signature.min.js",
                        SITE_URL . "/plugins/jquery/signature/jquery.ui.touch-punch.min.js"];
-  protected $template = "jobject/signature";
+  protected $templates = "jobject/signature";
   protected $data = ["height" => 150, "jsonValue" => false];
   /*
    check if signature is empty

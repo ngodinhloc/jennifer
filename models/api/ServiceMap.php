@@ -1,18 +1,18 @@
 <?php
 namespace api;
+
 use api\service\DayService;
 
 class ServiceMap {
   protected $maps = [];
 
   public function __construct() {
-    /**
-     *  All model in api\service need to be registered in ServiceMap so that API could find them
-     */
+    /** All model in api\service need to be registered in ServiceMap so that API could find them */
     $this->register(DayService::map());
   }
 
   /**
+   * Map request service and action to service class and method
    * @param $service
    * @param $action
    * @return array
@@ -33,9 +33,11 @@ class ServiceMap {
    * @param array $map
    */
   protected function register($map = []) {
-    $service = $map["service"];
-    if (!isset($this->maps[$service])) {
-      $this->maps[$service] = $map;
+    if (isset($map["service"])) {
+      $service = $map["service"];
+      if (!isset($this->maps[$service])) {
+        $this->maps[$service] = $map;
+      }
     }
   }
 }

@@ -1,4 +1,4 @@
-<input type="file" name="files" id="<?= $this->id ?>"/>
+<input type="file" name="files" id="<?= $this->meta["id"] ?>"/>
 <script>
   $(function () {
     $('input[name="files"]').fileuploader({

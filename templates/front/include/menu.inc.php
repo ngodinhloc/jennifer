@@ -10,7 +10,7 @@
   </div>
   <nav class="nav-content collapse navbar-collapse bs-navbar-collapse">
     <ul class="nav navbar-nav">
-      <?= Common::getMenu($this->view) ?>
+      <?= Common::getMenu($this->meta["view"]) ?>
     </ul>
   </nav>
 </div>

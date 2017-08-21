@@ -4,7 +4,7 @@
   use com\Common;
   use core\Model;
   use db\table\Day;
-  use tpl\Template;
+  use template\Template;
 
   class Admin extends Model {
     public function testJoin() {
@@ -61,7 +61,6 @@
     public function removeUnusedPhotos() {
       $result = $this->db->table("#tbl_day d")->select(["#DISTINCT YEAR(d.date) AS dyear", "#MONTH(d.date) AS dmonth"])
                          ->get()->toArray();
-
       $count = 0;
       $size = 0;
       foreach ($result as $row) {
@@ -103,8 +102,6 @@
      * @return bool
      */
     public function updateInfo($tag, $title, $content) {
-      $title = $this->escapeString($title);
-      $content = $this->escapeString($content, true);
       $result = $this->db->table("tbl_info")->where(["tag" => $tag])->set(["title"   => $title,
                                                                            "content" => $content])->update();
 

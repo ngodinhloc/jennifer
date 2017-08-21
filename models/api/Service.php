@@ -3,10 +3,14 @@ namespace api;
 use auth\Authentication;
 
 class Service {
-  protected $requiredPermission = false;
+  /** @var Authentication */
   protected $authentication;
+  /** @var array user data */
   protected $userData = [];
+  /** @var array service parameters */
   protected $para = [];
+  /** @var bool|array required permission */
+  protected $requiredPermission = false;
 
   /**
    * Service constructor.

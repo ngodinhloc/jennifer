@@ -8,7 +8,7 @@
   use html\JObject;
 
   class PhotoUploader extends JObject {
-    protected $template = "jobject/photouploader";
+    protected $templates = "jobject/photouploader";
     protected $data = ["action"        => "uploadPhotos",
                        "controller"    => "ControllerUpload",
                        "maxSize"       => PHOTO_MAX_SIZE,

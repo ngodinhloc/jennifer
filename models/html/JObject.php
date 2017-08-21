@@ -1,46 +1,72 @@
 <?php
+/**
+ * Jquery and Bootstrap Object class
+ */
+namespace html;
+use template\Template;
+
+class JObject {
+  /** @var  \template\Template */
+  protected $tpl;
+  /** @var array list of templates */
+  protected $templates = [];
+  /** @var array data that will be used in templates */
+  protected $data = [];
+  /** @var array meta data : id, class, properties, innerHTML ... */
+  protected $meta = [];
+  /** @var array required meta files: css, javascript */
+  public $metaFiles = [];
+
+  public function __construct($attr = [], $data = []) {
+    $this->initMeta($attr);
+    $this->processData($data);
+  }
+
   /**
-   * Jquery and Bootstrap Object class
+   * Render html of object
+   * @param bool $compress
+   * @return string
    */
-  namespace html;
+  public function render($compress = true) {
+    $this->tpl = new Template($this->templates, $this->data, $this->meta);
+    $html      = $this->tpl->render($compress);
 
-  use tpl\Template;
+    return $html;
+  }
 
-  class JObject extends Template {
-    protected $id;
-    protected $class;
-    protected $properties = [];
-    protected $prop;
-    protected $html;
-    public $metaFiles = [];
-
-    public function __construct($attr = [], $data = []) {
-      $this->initAttributes($attr);
-      $this->processData($data);
-      parent::__construct($this->template, $this->data);
+  /**
+   * Init object meta data
+   * @param $attr
+   */
+  protected function initMeta($attr) {
+    if (isset($attr["id"])) {
+      $this->meta["id"] = $attr["id"];
     }
 
-    /**
-     * Init object template data
-     * @param $attr
-     */
-    protected function initAttributes($attr) {
-      $this->id = $attr['id'];
-      $this->class = $attr["class"];
-      $this->properties = $attr["properties"];
-      $this->html = $attr["html"];
-      if (is_array($this->properties)) {
-        foreach ($this->properties as $att => $val) {
-          $this->prop .= " {$att} = '{$val}'";
+    if (isset($attr["class"])) {
+      $this->meta["class"] = $attr["class"];
+    }
+
+    if (isset($attr["html"])) {
+      $this->meta["html"] = $attr["html"];
+    }
+
+    if (isset($attr["properties"])) {
+      $this->meta["properties"] = $attr["properties"];
+      if (is_array($this->meta["properties"])) {
+        foreach ($this->meta["properties"] as $att => $val) {
+          $this->meta["prop"] .= " {$att} = '{$val}'";
         }
       }
     }
 
-    /**
-     * Process input data and object data
-     * @param $data
-     */
-    protected function processData($data) {
-      $this->data = array_replace_recursive($this->data, $data);
-    }
   }
+
+  /**
+   * Process input data and object data
+   * @param $data
+   */
+  protected function processData($data) {
+    $this->data = array_replace_recursive($this->data, $data);
+  }
+}

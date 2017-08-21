@@ -8,7 +8,7 @@ use html\JObject;
 class FileUploader extends JObject {
   public $metaFiles = [SITE_URL . "/plugins/jquery/fileuploader/jquery.fileuploader.min.js",
                        SITE_URL . "/plugins/jquery/fileuploader/jquery.fileuploader.css",];
-  protected $template = "jobject/fileuploader";
+  protected $templates = "jobject/fileuploader";
   protected $data = ["dragText"       => "Drag & Drop or",
                      "buttonText"     => "Browse Files",
                      "limit"          => 10,

@@ -9,8 +9,31 @@ use html\JObject;
 use io\Output;
 use sys\Globals;
 use sys\System;
+use template\Template;
 
 class Base implements ViewInterface {
+  /** @var Authentication */
+  protected $authentication;
+  /** @var  Template */
+  protected $tpl;
+  /** @var Output */
+  protected $output;
+  /** @var array list of templates used in the view */
+  protected $templates = [];
+  /** @var array view data */
+  protected $data = [];
+  /** @var array meta data : module, view, title, description, keyword, metaTags, userData
+   * Only $data and $meta are accessible in templates */
+  protected $meta = [];
+  /** @var array store _POST */
+  protected $post = [];
+  /** @var array store _GET and uri  para */
+  protected $para = [];
+  /** @var array|bool user data */
+  protected $userData = false;
+  /** @var bool|array required permission of the view */
+  protected $requiredPermission = false;
+
   protected $module;
   protected $view;
   protected $headerTemplate;
@@ -21,13 +44,6 @@ class Base implements ViewInterface {
   protected $keyword = SITE_KEYWORDS;
   protected $metaFiles = ["header" => [], "footer" => []];
   protected $metaTags = ["header" => "", "footer" => ""];
-  protected $post = [];
-  protected $para = [];
-  protected $data;
-  protected $userData = false;
-  protected $authentication;
-  protected $output;
-  protected $requiredPermission = false;
 
   public function __construct() {
     list($this->module, $this->view) = explode("\\", static::class);
@@ -92,6 +108,32 @@ class Base implements ViewInterface {
   }
 
   /**
+   * Process URI and GET para
+   */
+  protected function processPara() {
+    $uri   = Globals::server("REQUEST_URI");
+    $paras = explode("/", $uri);
+    $index = ($this->module == DEFAULT_MODULE) ? 1 : 2;
+    if (isset($paras[$index])) {
+      switch($paras[$index]) {
+        case "day":
+          $this->para["day"] = $paras[$index + 1];
+          break;
+        case "search":
+          $this->para["search"] = urldecode(trim(str_replace("/search/", "", $uri)));
+          break;
+      }
+    }
+
+    $get = Globals::get();
+    if (!empty($get)) {
+      foreach ($get as $name => $value) {
+        $this->para[$name] = $value;
+      }
+    }
+  }
+
+  /**
    * Check if post para exists then return value, else return false
    * @param $name
    * @return bool|mixed
@@ -145,43 +187,18 @@ class Base implements ViewInterface {
   }
 
   /**
-   * Render this view
-   * @param $compress bool
+   * Initialise view meta data
    */
-  public function render($compress = true) {
+  protected function initMeta() {
     $this->initMetaTags();
-    ob_start("ob_gzhandler");
-    include_once(TEMPLATE_DIR . $this->module . "/" . $this->headerTemplate . TEMPLATE_EXT);
-    include_once(TEMPLATE_DIR . $this->module . "/" . $this->contentTemplate . TEMPLATE_EXT);
-    include_once(TEMPLATE_DIR . $this->module . "/" . $this->footerTemplate . TEMPLATE_EXT);
-    $html = ob_get_clean();
-    $this->output->html($html, $compress);
-  }
-
-  /**
-   * Process URI and GET para
-   */
-  protected function processPara() {
-    $uri   = Globals::server("REQUEST_URI");
-    $paras = explode("/", $uri);
-    $index = ($this->module == DEFAULT_MODULE) ? 1 : 2;
-    if (isset($paras[$index])) {
-      switch($paras[$index]) {
-        case "day":
-          $this->para["day"] = $paras[$index + 1];
-          break;
-        case "search":
-          $this->para["search"] = urldecode(trim(str_replace("/search/", "", $uri)));
-          break;
-      }
-    }
-
-    $get = Globals::get();
-    if (!empty($get)) {
-      foreach ($get as $name => $value) {
-        $this->para[$name] = $value;
-      }
-    }
+    $this->meta = ["module"      => $this->module,
+                   "view"        => $this->view,
+                   "title"       => $this->title,
+                   "description" => $this->description,
+                   "keyword"     => $this->keyword,
+                   "metaTags"    => $this->metaTags,
+                   "userData"    => (array)$this->userData,
+    ];
   }
 
   /**
@@ -193,6 +210,7 @@ class Base implements ViewInterface {
         array_unique($files);
         $tags = "";
         foreach ($files as $file) {
+          $tag = "";
           switch($file["type"]) {
             case "css":
               $tag = "<link rel='stylesheet' href='{$file["src"]}' type='text/css'/>";
@@ -206,5 +224,20 @@ class Base implements ViewInterface {
         $this->metaTags[$pos] = $tags . $this->metaTags[$pos];
       }
     }
+  }
+
+  /**
+   * Render this view
+   * @param $compress bool
+   */
+  public function render($compress = true) {
+    $this->initMeta();
+    $this->templates = [$this->module . "/" . $this->headerTemplate,
+                        $this->module . "/" . $this->contentTemplate,
+                        $this->module . "/" . $this->footerTemplate,
+    ];
+    $this->tpl       = new Template($this->templates, $this->data, $this->meta);
+    $html            = $this->tpl->render($compress);
+    $this->output->html($html);
   }
 }
