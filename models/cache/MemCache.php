@@ -1,13 +1,13 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ndloc`
- * Date: 27/12/2016
- * Time: 3:08 PM
- */
-
 namespace cache;
+/**
+ * Class Memcache: to do implement memcache
+ * @package cache
+ */
+class MemCache extends Cache implements FileCacheInterface {
+  public static function writeCache($sql, $data) {
+  }
 
-class Memcache {
-
+  public static function getCache($sql) {
+  }
 }
