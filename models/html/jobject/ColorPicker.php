@@ -2,6 +2,10 @@
 namespace html\jobject;
 use html\JObject;
 
+/**
+ * Class ColorPicker: render JQuery colour picker
+ * @package html\jobject
+ */
 class ColorPicker extends JObject {
   public $metaFiles = [SITE_URL . "/plugins/jquery/colorpicker/jquery.colorpicker.min.css",
                        SITE_URL . "/plugins/jquery/colorpicker/jquery.colorpicker.min.js"];

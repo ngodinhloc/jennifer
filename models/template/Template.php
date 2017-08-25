@@ -3,6 +3,10 @@ namespace template;
 
 use com\Compressor;
 
+/**
+ * Class Template
+ * @package template
+ */
 class Template implements TemplateInterface {
   /** @var array list of templates */
   protected $templates = [];

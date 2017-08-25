@@ -1,12 +1,13 @@
 <?php
-/**
- * Base model class, all business classes should extend this core class
- * @see thedaysoflife
- */
 namespace core;
 
 use db\Capsule;
 
+/**
+ * Base model class, all business classes should extend this core class
+ * @see \thedaysoflife\model\
+ * @package core
+ */
 class Model {
   /** @var Capsule */
   protected $db;

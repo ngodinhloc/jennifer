@@ -1,7 +1,4 @@
 <?php
-/**
- * Base view class: all view classes will extend this base class
- */
 namespace view;
 
 use auth\Authentication;
@@ -11,7 +8,11 @@ use sys\Globals;
 use sys\System;
 use template\Template;
 
-class Base implements ViewInterface {
+/**
+ * Class Base: Base view class: all view classes will extend this base class
+ * @package view
+ */
+class Base {
   /** @var Authentication */
   protected $authentication;
   /** @var  Template */
@@ -33,23 +34,22 @@ class Base implements ViewInterface {
   protected $userData = false;
   /** @var bool|array required permission of the view */
   protected $requiredPermission = false;
-
+  /** @var  string module */
   protected $module;
+  /** @var  string view class name */
   protected $view;
+
   protected $headerTemplate;
   protected $footerTemplate;
   protected $contentTemplate;
-  protected $title = SITE_TITLE;
-  protected $description = SITE_DESCRIPTION;
-  protected $keyword = SITE_KEYWORDS;
   protected $metaFiles = ["header" => [], "footer" => []];
   protected $metaTags = ["header" => "", "footer" => ""];
 
   public function __construct() {
     list($this->module, $this->view) = explode("\\", static::class);
     $this->authentication = new Authentication();
-    $this->userData       = $this->authentication->getUserData();
     $this->authentication->checkUserPermission($this->requiredPermission, "view");
+    $this->userData = $this->authentication->getUserData();
     $this->processPara();
     $this->output = new Output();
   }

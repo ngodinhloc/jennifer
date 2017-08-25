@@ -2,6 +2,10 @@
 namespace file;
 use file\Downloadable;
 
+/**
+ * Class CSV
+ * @package file
+ */
 class CSV extends Downloadable {
   /**
    * Output the csv file for download

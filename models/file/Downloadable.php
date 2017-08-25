@@ -1,7 +1,10 @@
 <?php
 
 namespace file;
-
+/**
+ * Class Downloadable
+ * @package file
+ */
 class Downloadable {
   /**
    * Send headers to browser

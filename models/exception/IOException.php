@@ -4,6 +4,6 @@ namespace exception;
 
 use Exception;
 
-class IOException extends Exception{
+class IOException extends Exception {
 
 }

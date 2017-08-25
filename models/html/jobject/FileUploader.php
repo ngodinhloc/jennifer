@@ -1,10 +1,13 @@
 <?php
-/**
- * Only one instance of JFileUploader per view
- */
 namespace html\jobject;
+
 use html\JObject;
 
+/**
+ * Class FileUploader: render Jquery file uploader
+ * Only one instance of JFileUploader per view
+ * @package html\jobject
+ */
 class FileUploader extends JObject {
   public $metaFiles = [SITE_URL . "/plugins/jquery/fileuploader/jquery.fileuploader.min.js",
                        SITE_URL . "/plugins/jquery/fileuploader/jquery.fileuploader.css",];

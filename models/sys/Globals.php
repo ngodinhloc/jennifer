@@ -1,10 +1,10 @@
 <?php
-/**
- * Global Variable utility static class, this is the only model that deals with system variables
- * such as: session, cookie, $_POST, $_GET, $_REQUEST, $_SERVER
- */
 namespace sys;
-
+/**
+ * Class Globals: utility static class, this is the only model that deals with system variables
+ * such as: session, cookie, $_POST, $_GET, $_REQUEST, $_SERVER
+ * @package sys
+ */
 class Globals {
   /**
    * Start session

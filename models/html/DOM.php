@@ -3,6 +3,10 @@ namespace html;
 
 use html\HTML;
 
+/**
+ * Class DOM
+ * @package html
+ */
 class DOM {
   private $html;
 

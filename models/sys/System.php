@@ -1,9 +1,9 @@
 <?php
-/**
- * System utility static class: load views, controllers, do redirect
- */
 namespace sys;
-
+/**
+ * Class System: System utility static class: load views, controllers, do redirect
+ * @package sys
+ */
 class System {
   /**
    * Start ob compression

@@ -1,8 +1,12 @@
 <?php
-  namespace html\jobject;
+namespace html\jobject;
 
 use html\JObject;
 
+/**
+ * Class Signature: render Jquery signature
+ * @package html\jobject
+ */
 class Signature extends JObject {
   public $metaFiles = ["http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.0/themes/south-street/jquery-ui.css",
                        SITE_URL . "/plugins/jquery/signature/jquery.signature.css",

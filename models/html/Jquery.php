@@ -6,6 +6,10 @@ use html\jobject\ColorPicker;
 use html\jobject\DatePicker;
 use html\jobject\FileUploader;
 
+/**
+ * Class Jquery
+ * @package html
+ */
 class Jquery {
   public static function colorPicker($attr, $data) {
     $colorPicker = new ColorPicker($attr, $data);

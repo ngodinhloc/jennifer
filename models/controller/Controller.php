@@ -1,14 +1,15 @@
 <?php
-/**
- * The base controller class: all controllers will extend this class
- * Each public function of controller class is an action
- */
 namespace controller;
 
 use auth\Authentication;
 use io\Output;
 use sys\Globals;
 
+/**
+ * The base controller class: all controllers will extend this class
+ * Each public function of controller class is an action
+ * @package controller
+ */
 class Controller implements ControllerInterface {
   /** @var Authentication */
   protected $authentication;
@@ -23,10 +24,10 @@ class Controller implements ControllerInterface {
 
   public function __construct() {
     $this->authentication = new Authentication();
-    $this->userData       = $this->authentication->getUserData();
     $this->authentication->checkUserPermission($this->requiredPermission, "controller");
-    $this->post   = Globals::post();
-    $this->output = new Output();
+    $this->userData = $this->authentication->getUserData();
+    $this->post     = Globals::post();
+    $this->output   = new Output();
   }
 
   /**

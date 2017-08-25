@@ -1,10 +1,12 @@
 <?php
-/**
- * Jquery and Bootstrap Object class
- */
 namespace html;
+
 use template\Template;
 
+/**
+ * Class JObject: Jquery and Bootstrap Object class
+ * @package html
+ */
 class JObject {
   /** @var  \template\Template */
   protected $tpl;

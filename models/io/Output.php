@@ -4,6 +4,10 @@ namespace io;
 use com\Compressor;
 use file\CSV;
 
+/**
+ * Class Output: output class
+ * @package io
+ */
 class Output implements OutputInterface {
   /**
    * Output html
