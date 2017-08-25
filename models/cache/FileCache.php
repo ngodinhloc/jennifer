@@ -3,7 +3,11 @@ namespace cache;
 
 use exception\IOException;
 
-class FileCache implements FileCacheInterface {
+/**
+ * Class FileCache: store and retrieve cache in text file
+ * @package cache
+ */
+class FileCache extends Cache implements FileCacheInterface {
   /**
    * Create key from sql string
    * @param string $sql
@@ -53,7 +57,7 @@ class FileCache implements FileCacheInterface {
           $arr  = json_decode($content, true);
           $time = $arr['time'];
           $data = $arr['data'];
-          if (CACHE_EXPIRE >= time() - $time) {
+          if (self::CACHE_EXPIRE >= time() - $time) {
             return $data;
           }
         }
