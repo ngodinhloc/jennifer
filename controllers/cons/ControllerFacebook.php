@@ -1,24 +1,23 @@
 <?php
 namespace cons;
-require_once(DOC_ROOT . '/plugins/facebook/autoload.php');
-use com\Common;
+
 use controller\Controller;
-use Facebook;
+use fb\FacebookHelper;
 use sys\Globals;
-use thedaysoflife\Admin;
+use thedaysoflife\com\Com;
+use thedaysoflife\model\Admin;
 
 class ControllerFacebook extends Controller {
-  protected $requiredPermission = ["admin"];
+  /** @var Admin */
   private $admin;
-  private $fb;
+  /** @var  FacebookHelper */
+  private $helper;
+  protected $requiredPermission = ["admin"];
 
   public function __construct() {
     parent::__construct();
-
-    $this->admin = new Admin();
-    $this->fb    = new Facebook\Facebook(['app_id'                => FB_APPID,
-                                          'app_secret'            => FB_SECRET,
-                                          'default_graph_version' => 'v2.8',]);
+    $this->admin  = new Admin();
+    $this->helper = new FacebookHelper();
   }
 
   /**
@@ -31,9 +30,9 @@ class ControllerFacebook extends Controller {
     if ($appAccessToken) {
       $day = $this->admin->getDayById($id);
       switch($type) {
-        case FB_TEXT:
+        case FacebookHelper::FB_TEXT:
           $attachment = $this->fbText($day);
-          $response   = $this->fb->post('/' . FB_PAGEID . '/feed', $attachment, $appAccessToken);
+          $response   = $this->helper->fb->post('/' . FB_PAGEID . '/feed', $attachment, $appAccessToken);
           $postID     = $response->getGraphNode();
           if ($postID) {
             $this->admin->updateFB($id, $type);
@@ -41,9 +40,9 @@ class ControllerFacebook extends Controller {
           }
           break;
 
-        case FB_FEED:
+        case FacebookHelper::FB_FEED:
           $attachment = $this->fbFeed($day);
-          $response   = $this->fb->post('/' . FB_PAGEID . '/feed', $attachment, $appAccessToken);
+          $response   = $this->helper->fb->post('/' . FB_PAGEID . '/feed', $attachment, $appAccessToken);
           $postID     = $response->getGraphNode();
           if ($postID) {
             $this->admin->updateFB($id, $type);
@@ -51,9 +50,9 @@ class ControllerFacebook extends Controller {
           }
           break;
 
-        case FB_LINK:
+        case FacebookHelper::FB_LINK:
           $attachment = $this->fbLink($day);
-          $response   = $this->fb->post('/' . FB_PAGEID . '/feed', $attachment, $appAccessToken);
+          $response   = $this->helper->fb->post('/' . FB_PAGEID . '/feed', $attachment, $appAccessToken);
           $postID     = $response->getGraphNode();
           if ($postID) {
             $this->admin->updateFB($id, $type);
@@ -61,21 +60,20 @@ class ControllerFacebook extends Controller {
           }
           break;
 
-        case FB_ALBUM:
+        case FacebookHelper::FB_ALBUM:
+          $title  = Com::getDayTitle($day) . " (by {$day["username"]})";
           $photos = explode(',', $day['photos']);
-          $title  = $day['day'] . '/' . $day['month'] . '/' . $day['year'] . ': ' . $day["title"] . " (by " .
-                    $day["username"] . ")";
           $status = "NO";
           if (sizeof($photos) > 0) {
             $albumData = $this->fbAlbum($day);
-            $newAlbum  = $this->fb->post("/" . FB_PAGEID . "/albums", $albumData, $appAccessToken);
+            $newAlbum  = $this->helper->fb->post("/" . FB_PAGEID . "/albums", $albumData, $appAccessToken);
             $album     = $newAlbum->getDecodedBody();
             if (isset($album["id"])) {
               foreach ($photos as $i => $name) {
                 $photoName = html_entity_decode($title . " - " . ($i + 1), ENT_COMPAT, "UTF-8");
-                $photoURL  = Common::getPhotoURL($name, PHOTO_FULL_NAME);
+                $photoURL  = Com::getPhotoURL($name, PHOTO_FULL_NAME);
                 $photoData = ['message' => $photoName, 'url' => $photoURL];
-                $newPhoto  = $this->fb->post('/' . $album["id"] . '/photos', $photoData, $appAccessToken);
+                $newPhoto  = $this->helper->fb->post('/' . $album["id"] . '/photos', $photoData, $appAccessToken);
                 $photo     = $newPhoto->getDecodedBody();
                 if (isset($photo["id"])) {
                   $this->admin->updateFB($id, $type);
@@ -90,7 +88,7 @@ class ControllerFacebook extends Controller {
     }
     else {
       $permissions = ['manage_pages', 'publish_actions'];
-      $helper      = $this->fb->getRedirectLoginHelper();
+      $helper      = $this->helper->fb->getRedirectLoginHelper();
       $loginUrl    = $helper->getLoginUrl(SITE_URL . '/back/days/', $permissions);
       $this->response(["status" => "login",
                        "id"     => $id,
@@ -103,9 +101,10 @@ class ControllerFacebook extends Controller {
    * @return array
    */
   private function fbText($day) {
-    $content    = $this->fbEscape($day["content"], "text");
-    $content    = $day['day'] . '/' . $day['month'] . '/' . $day['year'] . ': ' . $day["title"] . " (by " .
-                  $day["username"] . "): \n" . $content;
+    $title   = Com::getDayTitle($day);
+    $content = $this->fbEscape($day["content"], "text");
+    $content = $title . " (by {$day["username"]}) \n\n" . $content;
+
     $message    = html_entity_decode($content, ENT_COMPAT, "UTF-8");
     $attachment = [
       'message' => $message,
@@ -119,27 +118,24 @@ class ControllerFacebook extends Controller {
    * @return array
    */
   private function fbFeed($day) {
-    $uri        = LIST_URL . $day['id'] . '/' . $day['day'] . $day['month'] . $day['year'] . '-' . $day['slug'] .
-                  URL_EXT;
-    $message    = html_entity_decode($day['day'] . '/' . $day['month'] . '/' . $day['year'] . ': ' . $day['title'] .
-                                     ' (by ' . $day['username'] . ')', ENT_COMPAT, "UTF-8");
-    $title      = html_entity_decode($day['day'] . '/' . $day['month'] . '/' . $day['year'] . ': ' .
-                                     $day['title'], ENT_COMPAT, "UTF-8");
-    $content    = $this->fbEscape($day["content"], "feed");
-    $content    = Common::subString($content, 300, 3);
-    $desc       = html_entity_decode($content, ENT_COMPAT, "UTF-8");
-    $photos     = explode(',', $day['photos']);
-    $pic        = Common::getPhotoURL($photos[0], PHOTO_TITLE_NAME);
     $actionName = 'View on Thedaysoflife.com';
-    $actionLink = LIST_URL . $day['id'] . '/' . $day['day'] . $day['month'] . $day['year'] . '-' . $day['slug'] .
-                  URL_EXT;
+    $link       = Com::getDayLink($day);
+    $title      = Com::getDayTitle($day);
+    $content    = $this->fbEscape($day["content"], "feed");
+    $content    = Com::subString($content, 300, 3);
+    $photos     = explode(',', $day['photos']);
+    $photoURL   = Com::getPhotoURL($photos[0], PHOTO_TITLE_NAME);
+
+    $message    = html_entity_decode($title . " (by {$day["username"]})", ENT_COMPAT, "UTF-8");
+    $name       = html_entity_decode($title, ENT_COMPAT, "UTF-8");
+    $desc       = html_entity_decode($content, ENT_COMPAT, "UTF-8");
     $attachment = [
       'message'     => $message,
-      'name'        => $title,
-      'link'        => $uri,
+      'name'        => $name,
+      'link'        => $link,
       'description' => $desc,
-      'picture'     => $pic,
-      'actions'     => json_encode(['name' => $actionName, 'link' => $actionLink]),
+      'picture'     => $photoURL,
+      'actions'     => json_encode(['name' => $actionName, 'link' => $link]),
     ];
 
     return $attachment;
@@ -150,16 +146,16 @@ class ControllerFacebook extends Controller {
    * @return array
    */
   private function fbLink($day) {
-    $uri        = LIST_URL . $day['id'] . '/' . $day['day'] . $day['month'] . $day['year'] . '-' . $day['slug'] .
-                  URL_EXT;
-    $content    = $this->fbEscape($day["content"], "link");
-    $content    = $day['day'] . '/' . $day['month'] . '/' . $day['year'] . ': ' . $day["title"] . " (by " .
-                  $day["username"] . "): \n\n" . $content;
+    $link    = Com::getDayLink($day);
+    $title   = Com::getDayTitle($day);
+    $content = $this->fbEscape($day["content"], "link");
+    $content = $title . " (by {$day["username"]}) \n\n" . $content;
+
     $message    = html_entity_decode($content, ENT_COMPAT, "UTF-8");
     $attachment = [
       'type'    => 'photo',
       'message' => $message,
-      'link'    => $uri,
+      'link'    => $link,
     ];
 
     return $attachment;
@@ -170,9 +166,9 @@ class ControllerFacebook extends Controller {
    * @return array
    */
   private function fbAlbum($day) {
-    $title   = $day['day'] . '/' . $day['month'] . '/' . $day['year'] . ': ' . $day["title"] . " (by " .
-               $day["username"] . ")";
+    $title   = Com::getDayTitle($day) . " (by {$day["username"] })";
     $content = $this->fbEscape($day["content"], "album");
+
     $name    = html_entity_decode($title, ENT_COMPAT, "UTF-8");
     $message = html_entity_decode($content, ENT_COMPAT, "UTF-8");
     $album   = [

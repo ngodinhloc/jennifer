@@ -1,10 +1,10 @@
 <?php
 namespace cons;
 
-use com\Common;
+use controller\Controller;
 use file\SimpleImage;
 use sys\Globals;
-use controller\Controller;
+use thedaysoflife\com\Com;
 
 class ControllerUpload extends Controller {
 
@@ -29,9 +29,9 @@ class ControllerUpload extends Controller {
 
         if (in_array($fileType, $allowed) && $fileSize <= PHOTO_MAX_SIZE * 1000000) {
           list($photoDir, $name) = $this->initPhotoInfo();
-          $fullName  = Common::getPhotoName($name, PHOTO_FULL_NAME);
-          $titleName = Common::getPhotoName($name, PHOTO_TITLE_NAME);
-          $thumbName = Common::getPhotoName($name, PHOTO_THUMB_NAME);
+          $fullName  = Com::getPhotoName($name, PHOTO_FULL_NAME);
+          $titleName = Com::getPhotoName($name, PHOTO_TITLE_NAME);
+          $thumbName = Com::getPhotoName($name, PHOTO_THUMB_NAME);
 
           $image->load($tempFile);
           $image->fit_to_width(PHOTO_FULL_WIDTH);
@@ -41,7 +41,7 @@ class ControllerUpload extends Controller {
           $image->thumbnail(PHOTO_THUMB_WIDTH, PHOTO_THUMB_HEIGHT);
           $image->save($photoDir . $thumbName);
 
-          $thumbURL = Common::getPhotoURL($name, PHOTO_THUMB_NAME);
+          $thumbURL = Com::getPhotoURL($name, PHOTO_THUMB_NAME);
           $response .= $this->createPhotoHTML($name, $thumbURL);
         }
         else {

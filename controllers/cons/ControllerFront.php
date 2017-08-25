@@ -2,16 +2,16 @@
 namespace cons;
 
 use com\Common;
-use sys\Globals;
-use thedaysoflife\User;
 use controller\Controller;
+use sys\Globals;
+use thedaysoflife\model\User;
 
 class ControllerFront extends Controller {
+  /** @var User */
   private $user;
 
   public function __construct() {
     parent::__construct();
-
     $this->user = new User();
   }
 
