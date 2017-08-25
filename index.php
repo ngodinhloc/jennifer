@@ -10,7 +10,8 @@ use sys\System;
 
 $viewClass = System::loadView();
 if ($viewClass) {
+  /** @var \view\ViewInterface */
   $view = new $viewClass() or die("View not found: " . $viewClass);
-  $html = $view->render();
-  echo($html);
+  $view->prepare();
+  $view->render();
 }
