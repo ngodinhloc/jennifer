@@ -20,25 +20,25 @@
   <script type="text/javascript">
     $(window).load(function () {
       $('#carousel').flexslider({
-                                  animation:     "slide",
-                                  controlNav:    false,
-                                  animationLoop: false,
-                                  slideshow:     false,
-                                  itemWidth:     75,
-                                  itemMargin:    5,
-                                  asNavFor:      '#slider'
-                                });
+        animation:     "slide",
+        controlNav:    false,
+        animationLoop: false,
+        slideshow:     false,
+        itemWidth:     75,
+        itemMargin:    5,
+        asNavFor:      '#slider'
+      });
       $('#slider').flexslider({
-                                animation:     "slide",
-                                smoothHeight:  true,
-                                controlNav:    false,
-                                animationLoop: false,
-                                slideshow:     false,
-                                sync:          "#carousel",
-                                start:         function (slider) {
-                                  $('body').removeClass('loading');
-                                }
-                              });
+        animation:     "slide",
+        smoothHeight:  true,
+        controlNav:    false,
+        animationLoop: false,
+        slideshow:     false,
+        sync:          "#carousel",
+        start:         function (slider) {
+          $('body').removeClass('loading');
+        }
+      });
     });
   </script>
 <?php } ?>

@@ -1,4 +1,4 @@
-<?php use com\Common; ?>
+<?php use thedaysoflife\com\Com; ?>
 <div class="menu">
   <div class="navbar-header">
     <button class="navbar-toggle" type="button">
@@ -10,7 +10,7 @@
   </div>
   <nav class="nav-content collapse navbar-collapse bs-navbar-collapse">
     <ul class="nav navbar-nav">
-      <?= Common::getDashboardMenu($this->meta["view"]) ?>
+      <?= Com::getDashboardMenu($this->meta["view"]) ?>
     </ul>
   </nav>
   <div class="pull-right">

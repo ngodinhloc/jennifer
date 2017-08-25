@@ -36,7 +36,7 @@
     <div class="slideshow container-fluid region" style="padding: 0;">
       <div class="main-search col-sm-5 input-group">
         <input type="text" id="main-search-text" class="input-medium search-query form-control" placeholder=""
-               value="<?=  $this->data["searchTerm"] ?>"/>
+               value="<?= $this->data["searchTerm"] ?>"/>
         <span class="input-group-btn">
           <button type="button" id="main-search-button" class="btn btn-primary">Search</button>
         </span>

@@ -11,9 +11,9 @@
         <div class="author post">
           <i class="icon"></i>
           <?php
-            $searchAuthor = SITE_URL . "/search/" . urlencode($this->data["days"]['username']);
-            $searchLoc = SITE_URL . "/search/" . urlencode($this->data["days"]['location']);
-            $searchDate = SITE_URL . "/search/" . $this->data["days"]['month'] . '/' . $this->data["days"]['year'];
+          $searchAuthor = SITE_URL . "/search/" . urlencode($this->data["days"]['username']);
+          $searchLoc    = SITE_URL . "/search/" . urlencode($this->data["days"]['location']);
+          $searchDate   = SITE_URL . "/search/" . $this->data["days"]['month'] . '/' . $this->data["days"]['year'];
           ?>
           <span><a href="<?= $searchAuthor ?>"><?= $this->data["days"]['username'] ?></a></span>
           <?php if ($this->data["days"]['location'] != '') {
@@ -43,7 +43,8 @@
             <span class="like liked" title="Liked">
               <i class="icon"></i><?= number_format($this->data["days"]['like']) ?>
             </span>
-          <?php } else { ?>
+          <?php }
+          else { ?>
             <span class="like" title="Like">
                   <a href="javascript:void(0)" class="like-day" data-id="<?= $this->data["days"]["id"] ?>" data-like="<?= $this->data["days"]["like"] ?>">
                     <i class="icon"></i><?= number_format($this->data["days"]['like']) ?>
@@ -88,7 +89,8 @@
         </div>
       </div>
       <div class="clear-both"></div>
-    <?php } else { ?>
+    <?php }
+    else { ?>
       <h4>Day not found</h4>
     <?php } ?>
   </div>

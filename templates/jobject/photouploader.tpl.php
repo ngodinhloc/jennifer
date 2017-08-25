@@ -10,16 +10,16 @@
   <div class="row col-sm-12 list-image ">
     <ul id="sortable" class="list list-inline">
       <?php
-        if (sizeof($this->data["currentPhotos"] > 0)) {
-          foreach ($this->data["currentPhotos"] as $photo) {
-            print('<li id="' . $photo["id"] . '">
+      if (sizeof($this->data["currentPhotos"] > 0)) {
+        foreach ($this->data["currentPhotos"] as $photo) {
+          print('<li id="' . $photo["id"] . '">
                       <div class="img-wrapper">
                       <img src="' . $photo["thumb"] . '" class="photo-thumb"/>
                       <span class="glyphicon glyphicon-remove"></span>
                       </div>
                     </li>');
-          }
         }
+      }
       ?>
     </ul>
   </div>
@@ -43,20 +43,20 @@
         formData.append("action", "<?= $this->data["action"] ?>");
         formData.append("controller", "<?= $this->data["controller"] ?>");
         $.ajax({
-                 url:         upload,
-                 type:        'POST',
-                 data:        formData,
-                 mimeType:    "multipart/form-data",
-                 contentType: false,
-                 cache:       false,
-                 processData: false,
-                 success:     function (data, textStatus, jqXHR) {
-                   $("#photo-loader").html('<?= $this->data["drag"] ?>');
-                   $("#sortable").append(data);
-                 },
-                 error:       function (jqXHR, textStatus, errorThrown) {
-                 }
-               });
+          url:         upload,
+          type:        'POST',
+          data:        formData,
+          mimeType:    "multipart/form-data",
+          contentType: false,
+          cache:       false,
+          processData: false,
+          success:     function (data, textStatus, jqXHR) {
+            $("#photo-loader").html('<?= $this->data["drag"] ?>');
+            $("#sortable").append(data);
+          },
+          error:       function (jqXHR, textStatus, errorThrown) {
+          }
+        });
         e.preventDefault();
         // e.unbind();
       }
