@@ -1,17 +1,21 @@
 <?php
 namespace front;
-use view\Front;
-use thedaysoflife\User;
 
-class about extends Front {
+use thedaysoflife\model\User;
+use thedaysoflife\view\ViewFront;
+use view\ViewInterface;
+
+class about extends ViewFront implements ViewInterface {
   protected $title = "About";
   protected $contentTemplate = "about";
 
   public function __construct() {
     parent::__construct();
+    $this->user = new User();
+  }
 
-    $user       = new User();
-    $info       = $user->getInfoByTag("about");
+  public function prepare() {
+    $info       = $this->user->getInfoByTag("about");
     $this->data = ["info" => $info];
   }
 }

@@ -2,23 +2,26 @@
 namespace back;
 
 use auth\Authentication;
-use thedaysoflife\Admin;
-use view\Back;
+use thedaysoflife\model\Admin;
+use thedaysoflife\view\ViewBack;
+use view\ViewInterface;
 
-class index extends Back {
+class index extends ViewBack implements ViewInterface {
   protected $title = "Dashboard Login";
   protected $contentTemplate = "index";
   protected $requiredPermission = false;
 
   public function __construct() {
     parent::__construct();
+    $this->admin = new Admin();
+  }
 
+  public function prepare() {
     if ($this->posted()) {
       if ($this->hasPost("email")) {
-        $admin    = new Admin();
         $email    = $this->post["email"];
         $password = $this->authentication->encryptPassword($this->post["password"]);
-        $row      = $admin->checkLogin($email, $password);
+        $row      = $this->admin->checkLogin($email, $password);
         $message  = "";
         if (isset($row['id'])) {
           $status = $row['status'];

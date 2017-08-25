@@ -1,25 +1,29 @@
 <?php
-  namespace back;
+namespace back;
 
-  use view\Back;
-  use com\Common;
-  use html\jobject\PhotoUploader;
-  use thedaysoflife\Admin;
+use html\jobject\PhotoUploader;
+use thedaysoflife\com\Com;
+use thedaysoflife\model\Admin;
+use thedaysoflife\view\ViewBack;
+use view\ViewInterface;
 
-  class day extends Back {
-    protected $title = "Dashboard :: Edit";
-    protected $contentTemplate = "day";
+class day extends ViewBack implements ViewInterface {
+  protected $title = "Dashboard :: Edit";
+  protected $contentTemplate = "day";
 
-    public function __construct() {
-      parent::__construct();
+  public function __construct() {
+    parent::__construct();
+    $this->admin = new Admin();
+  }
 
-      $id = $this->hasPara("day");
-      if ($id) {
-        $admin = new Admin();
-        $row = $admin->getDayById($id);
-        $photoUploader = new PhotoUploader([], ["text"=>"Current photos","currentPhotos" => Common::getPhotoPreviewArray($row["photos"])]);
-        $this->data = ["row" => $row, "photoUploader" => $photoUploader->render()];
-        $this->addMetaFile(SITE_URL . "/plugins/ckeditor/ckeditor.js");
-      }
+  public function prepare() {
+    $id = $this->hasPara("day");
+    if ($id) {
+      $row           = $this->admin->getDayById($id);
+      $photoUploader = new PhotoUploader([], ["text"          => "Current photos",
+                                              "currentPhotos" => Com::getPhotoPreviewArray($row["photos"])]);
+      $this->data    = ["row" => $row, "photoUploader" => $photoUploader->render()];
+      $this->addMetaFile(SITE_URL . "/plugins/ckeditor/ckeditor.js");
     }
   }
+}

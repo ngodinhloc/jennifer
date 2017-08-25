@@ -1,17 +1,21 @@
 <?php
 namespace front;
-use view\Front;
-use thedaysoflife\User;
 
-class like extends Front {
+use thedaysoflife\model\User;
+use thedaysoflife\view\ViewFront;
+use view\ViewInterface;
+
+class like extends ViewFront implements ViewInterface {
   protected $contentTemplate = "like";
   protected $title = "Most Liked Days";
 
   public function __construct() {
     parent::__construct();
+    $this->user = new User();
+  }
 
-    $user       = new User();
-    $days       = $user->getDays(0, ORDER_BY_LIKE);
-    $this->data = ["days" => $days, "order" => ORDER_BY_LIKE];
+  public function prepare() {
+    $days       = $this->user->getDays(0, User::ORDER_BY_LIKE);
+    $this->data = ["days" => $days, "order" => User::ORDER_BY_LIKE];
   }
 }

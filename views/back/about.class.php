@@ -1,18 +1,22 @@
 <?php
 namespace back;
-use view\Back;
-use thedaysoflife\Admin;
 
-class about extends Back {
+use thedaysoflife\model\Admin;
+use thedaysoflife\view\ViewBack;
+use view\ViewInterface;
+
+class about extends ViewBack implements ViewInterface {
   protected $title = "Dashboard :: About";
   protected $contentTemplate = "about";
 
   public function __construct() {
     parent::__construct();
+    $this->admin = new Admin();
+  }
 
-    $admin      = new Admin();
+  public function prepare() {
     $tag        = "about";
-    $info       = $admin->getInfoByTag($tag);
+    $info       = $this->admin->getInfoByTag($tag);
     $this->data = ["tag" => $tag, "info" => $info];
     $this->addMetaFile(SITE_URL . "/plugins/ckeditor/ckeditor.js");
   }

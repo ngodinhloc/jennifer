@@ -1,16 +1,20 @@
 <?php
 namespace front;
-use view\Front;
-use thedaysoflife\User;
 
-class index extends Front {
+use thedaysoflife\model\User;
+use thedaysoflife\view\ViewFront;
+use view\ViewInterface;
+
+class index extends ViewFront implements ViewInterface {
   protected $contentTemplate = "index";
 
   public function __construct() {
     parent::__construct();
+    $this->user = new User();
+  }
 
-    $user       = new User();
-    $days       = $user->getDays(0, ORDER_BY_ID);
-    $this->data = ["days" => $days, "order" => ORDER_BY_ID];
+  public function prepare() {
+    $days       = $this->user->getDays(0, User::ORDER_BY_ID);
+    $this->data = ["days" => $days, "order" => User::ORDER_BY_ID];
   }
 }

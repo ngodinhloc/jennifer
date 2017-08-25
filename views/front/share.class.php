@@ -1,17 +1,21 @@
 <?php
-  namespace front;
-  use view\Front;
-  use html\jobject\PhotoUploader;
+namespace front;
 
-  class share extends Front {
-    protected $title = "Share Your Day";
-    protected $contentTemplate = "share";
+use html\jobject\PhotoUploader;
+use thedaysoflife\view\ViewFront;
+use view\ViewInterface;
 
-    public function __construct() {
-      parent::__construct();
+class share extends ViewFront implements ViewInterface {
+  protected $title = "Share Your Day";
+  protected $contentTemplate = "share";
 
-      $photoUploader = new PhotoUploader([], ["text" => "Have some photos to upload?"]);
-      $this->data = ["photoUploader" => $photoUploader->render()];
-      $this->addMetaFile(SITE_URL . "/plugins/jquery/jquery.autosize.min.js");
-    }
+  public function __construct() {
+    parent::__construct();
   }
+
+  public function prepare() {
+    $photoUploader = new PhotoUploader([], ["text" => "Have some photos to upload?"]);
+    $this->data    = ["photoUploader" => $photoUploader->render()];
+    $this->addMetaFile(SITE_URL . "/plugins/jquery/jquery.autosize.min.js");
+  }
+}
