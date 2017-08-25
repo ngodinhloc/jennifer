@@ -1,7 +1,12 @@
 <?php
 namespace api;
+
 use auth\Authentication;
 
+/**
+ * Class Service: all services must extend this class
+ * @package api
+ */
 class Service {
   /** @var Authentication */
   protected $authentication;
@@ -11,6 +16,8 @@ class Service {
   protected $para = [];
   /** @var bool|array required permission */
   protected $requiredPermission = false;
+  /** @var  string public name of the service */
+  protected static $serviceName;
 
   /**
    * Service constructor.

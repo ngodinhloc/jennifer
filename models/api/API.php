@@ -1,27 +1,33 @@
 <?php
-/**
- * API gateway which will call requested service to perform action
- * then response output and log api request
- */
 namespace api;
 
-use auth\Authentication;
 use io\Output;
 use jwt\JWT;
 
+/**
+ * API gateway which will call requested service to perform action
+ * then response output and log api request
+ * @package api
+ */
 class API {
-  /** @var ServiceMap */
+  /** @var ServiceMap mapper to map from requested service to api service */
   protected $mapper;
-  /** @var Output */
+  /** @var Output output object */
   protected $output;
-  protected $hash;
+  /** @var  string authentication token */
+  protected $token;
+  /** @var  string requested service */
   protected $service;
+  /** @var  string requested action */
   protected $action;
+  /** @var array user data */
   protected $userData = [];
+  /** @var array parameters */
   protected $para = [];
+  /** @var array output message */
   public $messages = [
     "INVALID_API_REQUEST" => ["message" => "Invalid API request"],
-    "INVALID_API_HASH"    => ["message" => "Invalid API authenticating hash"],
+    "INVALID_API_TOKEN"   => ["message" => "Invalid API authenticating token"],
     "NO_SERVICE"          => ["message" => "Service not found"],
     "NO_SERVICE_MODEL"    => ["message" => "Service model not found"],
   ];
@@ -51,14 +57,14 @@ class API {
    */
   public function process($req) {
     $json = json_decode($req, true);
-    if (!isset($json["hash"]) || !isset($json["service"]) || !isset($json["action"])) {
+    if (!isset($json["token"]) || !isset($json["service"]) || !isset($json["action"])) {
       die($this->messages["INVALID_API_REQUEST"]["message"]);
     }
 
-    $this->hash     = $json["hash"];
-    $this->userData = (array)JWT::decode($this->hash, Authentication::JWT_KEY_API, ['HS256']);
+    $this->token    = $json["token"];
+    $this->userData = (array)JWT::decode($this->token, JWT_KEY_API, ['HS256']);
     if (!isset($this->userData["userID"]) || !isset($this->userData["permission"])) {
-      die($this->messages["INVALID_API_HASH"]["message"]);
+      die($this->messages["INVALID_API_TOKEN"]["message"]);
     }
 
     list($this->service, $this->action) = $this->mapper->map($json["service"], $json["action"]);
@@ -86,7 +92,7 @@ class API {
    * @param array $result
    */
   protected function log($result = []) {
-    $this->hash;
+    $this->token;
     $this->userData;
     $this->service;
     $this->action;

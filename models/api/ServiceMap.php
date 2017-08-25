@@ -1,13 +1,18 @@
 <?php
 namespace api;
 
-use api\service\DayService;
+use thedaysoflife\service\DayService;
 
+/**
+ * Class ServiceMap
+ * @package api
+ */
 class ServiceMap {
+  /** @var array list of all registered service maps */
   protected $maps = [];
 
   public function __construct() {
-    /** All model in api\service need to be registered in ServiceMap so that API could find them */
+    /** All api services need to be registered in ServiceMap so that API could find them */
     $this->register(DayService::map());
   }
 
