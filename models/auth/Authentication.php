@@ -6,8 +6,14 @@ use jwt\JWT;
 use sys\Globals;
 use sys\System;
 
+/**
+ * Class Authentication: responsible for checking user permission, api permission
+ * @package auth
+ */
 class Authentication implements AuthenticationInterface {
+  /** @var bool|object */
   protected $userData = false;
+  /** @var array output message */
   public $messages = [
     "NO_PERMISSION_VIEW"       => ["message" => "You do not have permission to access this view."],
     "NO_PERMISSION_CONTROLLER" => ["message" => "You do not have permission to access this controller."],
@@ -19,11 +25,6 @@ class Authentication implements AuthenticationInterface {
 
   const USER_STATUS_ACTIVE  = 'active';
   const USER_STATUS_DISABLE = 'disable';
-  const SALT_MD5            = '*****';
-  const SALT_SHA256         = '*****';
-  const SALT_SHA512         = '*****';
-  const JWT_KEY_USER        = '*****';
-  const JWT_KEY_API         = '*****';
   const AUTH_TYPE_USER      = 1;
   const AUTH_TYPE_API       = 2;
 
@@ -128,7 +129,7 @@ class Authentication implements AuthenticationInterface {
    * @return string
    */
   public function encryptPassword($password) {
-    $password = crypt($password, self::SALT_MD5);
+    $password = crypt($password, SALT_MD5);
     $password = md5($password);
 
     return $password;
@@ -141,7 +142,7 @@ class Authentication implements AuthenticationInterface {
   public function getJWT() {
     $jwt = Globals::session("jwt");
     if ($jwt) {
-      $decoded = JWT::decode($jwt, self::JWT_KEY_USER, ['HS256']);
+      $decoded = JWT::decode($jwt, JWT_KEY_USER, ['HS256']);
       if (isset($decoded->id) && isset($decoded->name) && isset($decoded->permission)) {
         return $decoded;
       }
@@ -156,7 +157,7 @@ class Authentication implements AuthenticationInterface {
    * @return string
    */
   public function setJWT($data) {
-    $jwt = JWT::encode($data, self::JWT_KEY_USER);
+    $jwt = JWT::encode($data, JWT_KEY_USER);
     Globals::setSession("jwt", $jwt);
 
     return $jwt;
