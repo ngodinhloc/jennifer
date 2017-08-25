@@ -4,9 +4,11 @@
  */
 require_once("../models/autoload.php");
 use sys\System;
+use controller\ControllerFactory;
 
-list($controller, $action) = System::loadController();
-if ($controller) {
-  $con = new $controller() or die("Controller not found: " . $controller);
-  $con->$action();
+list($controllerClass, $action) = System::loadController();
+if ($controllerClass) {
+  $factory    = new ControllerFactory();
+  $controller = $factory->createController($controllerClass);
+  $controller->action($action);
 }

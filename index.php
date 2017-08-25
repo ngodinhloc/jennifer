@@ -7,11 +7,12 @@
  */
 require_once("models/autoload.php");
 use sys\System;
+use view\ViewFactory;
 
 $viewClass = System::loadView();
 if ($viewClass) {
-  /** @var \view\ViewInterface */
-  $view = new $viewClass() or die("View not found: " . $viewClass);
+  $factory = new ViewFactory();
+  $view    = $factory->createView($viewClass);
   $view->prepare();
   $view->render();
 }

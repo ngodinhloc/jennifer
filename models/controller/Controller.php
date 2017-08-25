@@ -31,12 +31,20 @@ class Controller implements ControllerInterface {
   }
 
   /**
+   * Run the action
+   * @param $action
+   */
+  public function action($action) {
+    $this->$action();
+  }
+
+  /**
    * Controller response
    * @param array|string $data
    * @param bool $json
    * @param int $jsonOpt
    */
-  public function response($data, $json = false, $jsonOpt = JSON_UNESCAPED_SLASHES) {
+  protected function response($data, $json = false, $jsonOpt = JSON_UNESCAPED_SLASHES) {
     $this->output->ajax($data, $json, $jsonOpt);
   }
 
