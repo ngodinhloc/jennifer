@@ -10,6 +10,8 @@ use jwt\JWT;
  * @package api
  */
 class API {
+  /** @var  \api\ServiceFactory */
+  protected $factory;
   /** @var ServiceMap mapper to map from requested service to api service */
   protected $mapper;
   /** @var Output output object */
@@ -33,8 +35,9 @@ class API {
   ];
 
   public function __construct() {
-    $this->mapper = new ServiceMap();
-    $this->output = new Output();
+    $this->mapper  = new ServiceMap();
+    $this->output  = new Output();
+    $this->factory = new ServiceFactory();
   }
 
   /**
@@ -42,10 +45,8 @@ class API {
    * Call request service to perform action then log and response
    */
   public function run() {
-    /** @var  \api\ServiceInterface */
-    $service = new $this->service($this->userData, $this->para) or die($this->messages["NO_SERVICE_MODEL"]["message"]);
-    $action = $this->action;
-    $result = $service->$action();
+    $service = $this->factory->createService($this->service, $this->userData, $this->para);
+    $result  = $service->run($this->action);
     $this->log($result);
     $this->response($result, $this->para["json"]);
   }

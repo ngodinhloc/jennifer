@@ -7,4 +7,6 @@ interface ServiceInterface {
    * @return array
    */
   public static function map();
+
+  public function run($action);
 }

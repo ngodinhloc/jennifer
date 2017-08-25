@@ -35,7 +35,7 @@ class Controller implements ControllerInterface {
    * @param $action
    */
   public function action($action) {
-    $this->$action();
+    return $this->$action();
   }
 
   /**

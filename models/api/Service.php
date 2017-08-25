@@ -32,6 +32,15 @@ class Service {
   }
 
   /**
+   * Run the service
+   * @param $action
+   * @return mixed
+   */
+  public function run($action) {
+    return $this->$action();
+  }
+
+  /**
    * Check if get para exists then return value, else return false
    * @param $name
    * @return bool|mixed
