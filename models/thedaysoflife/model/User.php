@@ -467,7 +467,6 @@ class User extends Model {
    * @return string
    */
   public function getSearch($search) {
-    $search       = $this->escapeString($search);
     $matchedDay   = preg_match("/^\s*\d{1,2}\/\d{1,2}\/\d{2}(\d{2})?\s*$/", $search);
     $matchedMonth = preg_match("/^\s*\d{1,2}\/\d{2}(\d{2})?\s*$/", $search);
     $matchedYear  = is_numeric($search);

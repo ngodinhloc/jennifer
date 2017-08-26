@@ -1,12 +1,13 @@
 /**
  * @param actionPara object {"action":action, "controller":controller}
- * @param para object $.para({"name":value})
- * @param loader string
- * @param containerPara array {"container" : container_id, "act": "replace|append"]
+ * @param para string $.para({"name":value})
+ * @param json true|false
+ * @param loader string id of the loader
+ * @param containerPara object {"container" : container_id, "act": "replace|append"]
  * @param callback function
  */
-function ajaxAction(actionPara, para, loader, containerPara, callback) {
-  para = para + "&" + $.param(actionPara);
+function ajaxAction(actionPara, para, json, loader, containerPara, callback) {
+  var data = para + "&" + $.param(actionPara) + "&" + $.param({"json": json});
   if (loader) {
     $(loader).html(AJAX_LOADER);
   }
@@ -14,7 +15,7 @@ function ajaxAction(actionPara, para, loader, containerPara, callback) {
     url:     CONST.CONTROLLER_URL,
     type:    "POST",
     cache:   false,
-    data:    para,
+    data:    data,
     success: function (data, textStatus, jqXHR) {
       if (loader) {
         $(loader).html('');

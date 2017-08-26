@@ -17,26 +17,32 @@ class ControllerBack extends Controller {
 
   /**
    * Remove a day
+   * @return array
    */
   public function ajaxRemoveADay() {
     $id = (int)$this->post['id'];
     $re = $this->admin->removeDay($id);
     if ($re) {
-      $array = ["status" => "success", "id" => $id];
-      $this->response($array);
+      $this->result = ["status" => "success", "id" => $id];
     }
+
+    return $this->result;
   }
 
   /**
    * Print day list
+   * @return string
    */
   public function ajaxPrintDay() {
-    $page = (int)$this->post['page'] == 0 ? 1 : (int)$this->post['page'];
-    $this->response($this->admin->getDayList($page));
+    $page         = (int)$this->post['page'] == 0 ? 1 : (int)$this->post['page'];
+    $this->result = $this->admin->getDayList($page);
+
+    return $this->result;
   }
 
   /**
    * Update a day
+   * @return array
    */
   public function ajaxUpdateADay() {
     $day          = [];
@@ -61,23 +67,24 @@ class ControllerBack extends Controller {
                          . ' ' . str_replace('-', ' ', Common::sanitizeString($day["preview"]));
       $re              = $this->admin->updateDay($day);
       if ($re) {
-        $array = ["status" => "success",
-                  "id"     => $day["id"],
-                  "slug"   => $day["slug"],
-                  "day"    => $day["day"],
-                  "month"  => $day["month"],
-                  "year"   => $day["year"]];
-        $this->response($array);
+        $this->result = ["status" => "success",
+                         "id"     => $day["id"],
+                         "slug"   => $day["slug"],
+                         "day"    => $day["day"],
+                         "month"  => $day["month"],
+                         "year"   => $day["year"]];
       }
     }
     else {
-      $array = ["status" => "failed", "id" => $day["id"]];
-      $this->response($array);
+      $this->result = ["status" => "failed", "id" => $day["id"]];
     }
+
+    return $this->result;
   }
 
   /**
    * Update site info: about, privacy
+   * @return string
    */
   public function ajaxUpdateInfo() {
     $tag     = $this->admin->escapeString($this->post['tag']);
@@ -86,25 +93,31 @@ class ControllerBack extends Controller {
     if ($tag != "") {
       $result = $this->admin->updateInfo($tag, $title, $content);
       if ($result) {
-        $this->response("Info updated.");
+        $this->result = "Info updated.";
       }
     }
+
+    return $this->result;
   }
 
   /**
    * Remove unused photos
+   * @return string
    */
   public function ajaxRemoveUnusedPhoto() {
-    $result = $this->admin->removeUnusedPhotos();
-    $this->response($result);
+    $this->result = $this->admin->removeUnusedPhotos();
+
+    return $this->result;
   }
 
   /**
    * Check, analyse, repair database
+   * @return string
    */
   public function ajaxCheckDatabase() {
-    $act    = $this->admin->escapeString($this->post['act']);
-    $result = $this->admin->checkDatabaseTables($act);
-    $this->response($result);
+    $act          = $this->admin->escapeString($this->post['act']);
+    $this->result = $this->admin->checkDatabaseTables($act);
+
+    return $this->result;
   }
 }

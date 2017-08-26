@@ -177,7 +177,7 @@ function ajaxMakeADay() {
   photos = getIDs();
   data = content + "&" + info + "&" + $.param({"photos": photos});
   callback = processMakeADay;
-  ajaxAction({"action": "ajaxMakeADay", "controller": "ControllerFront"}, data, "#ajax-loader", false, callback);
+  ajaxAction({"action": "ajaxMakeADay", "controller": "ControllerFront"}, data, false, "#ajax-loader", false, callback);
 }
 
 /**
@@ -188,7 +188,10 @@ function ajaxMakeAComment() {
   content = $("#div-comment-content").find("select[name], textarea[name], input[name]").serialize();
   data = content + '&' + $.param({"day_id": day_id});
   callback = processMakeAComment;
-  ajaxAction({"action": "ajaxMakeAComment", "controller": "ControllerFront"}, data, "#ajax-loader", false, callback);
+  ajaxAction({
+    "action":     "ajaxMakeAComment",
+    "controller": "ControllerFront"
+  }, data, false, "#ajax-loader", false, callback);
 }
 
 /**
@@ -205,7 +208,7 @@ function ajaxMakeAReply(rep_id, com_id) {
   data = content + "&" + $.param({"day_id": day_id, "com_id": com_id, "rep_id": rep_id, "rep_name": rep_name});
   loader = "#ajax-loader-" + com_id;
   callback = processMakeAReply;
-  ajaxAction({"action": "ajaxMakeAReply", "controller": "ControllerFront"}, data, loader, false, callback);
+  ajaxAction({"action": "ajaxMakeAReply", "controller": "ControllerFront"}, data, false, loader, false, callback);
 }
 
 /**
@@ -213,7 +216,10 @@ function ajaxMakeAReply(rep_id, com_id) {
  * @param id
  */
 function ajaxLikeADay(id) {
-  ajaxAction({"action": "ajaxLikeADay", "controller": "ControllerFront"}, $.param({"id": id}), false, false, false);
+  ajaxAction({
+    "action":     "ajaxLikeADay",
+    "controller": "ControllerFront"
+  }, $.param({"id": id}), false, false, false, false);
 }
 
 /**
@@ -221,7 +227,10 @@ function ajaxLikeADay(id) {
  * @param id
  */
 function ajaxLikeAComment(id) {
-  ajaxAction({"action": "ajaxLikeAComment", "controller": "ControllerFront"}, $.param({"id": id}), false, false, false);
+  ajaxAction({
+    "action":     "ajaxLikeAComment",
+    "controller": "ControllerFront"
+  }, $.param({"id": id}), false, false, false, false);
 }
 
 /**
@@ -232,7 +241,7 @@ function ajaxDislikeAComment(id) {
   ajaxAction({
     "action":     "ajaxDislikeAComment",
     "controller": "ControllerFront"
-  }, $.param({"id": id}), false, false, false);
+  }, $.param({"id": id}), false, false, false, false);
 }
 
 /**
@@ -242,7 +251,7 @@ function ajaxDislikeAComment(id) {
  */
 function ajaxShowDay(from, order) {
   callback = processDays;
-  ajaxAction({"action": "ajaxShowDay", "controller": "ControllerFront"}, $.param({"from": from, "order": order}),
+  ajaxAction({"action": "ajaxShowDay", "controller": "ControllerFront"}, $.param({"from": from, "order": order}), false,
     "#show-more", false, callback);
 }
 
@@ -255,7 +264,7 @@ function ajaxShowCalendar(from) {
   ajaxAction({
     "action":     "ajaxShowCalendar",
     "controller": "ControllerFront"
-  }, $.param({"from": from}), "#show-calendar", false, callback);
+  }, $.param({"from": from}), false, "#show-calendar", false, callback);
 }
 
 /**
@@ -267,7 +276,7 @@ function ajaxShowPicture(from) {
   ajaxAction({
     "action":     "ajaxShowPicture",
     "controller": "ControllerFront"
-  }, $.param({"from": from}), "#show-picture", false, callback);
+  }, $.param({"from": from}), false, "#show-picture", false, callback);
 }
 
 /**
@@ -278,7 +287,7 @@ function ajaxShowPicture(from) {
 function ajaxSearchMore(search, from) {
   callback = processSearchMore;
   ajaxAction({"action": "ajaxSearchMore", "controller": "ControllerFront"},
-    $.param({"from": from, "search": search}), "#search-more", false, callback);
+    $.param({"from": from, "search": search}), false, "#search-more", false, callback);
 }
 
 /**

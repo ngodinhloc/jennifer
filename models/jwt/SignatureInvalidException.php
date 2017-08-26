@@ -1,6 +1,7 @@
 <?php
 namespace jwt;
 
-class SignatureInvalidException extends \UnexpectedValueException {
+class SignatureInvalidException extends \UnexpectedValueException
+{
 
 }

@@ -1,6 +1,5 @@
 <?php
-namespace thedaysoflife\view;
-;
+namespace thedaysoflife\view;;
 use view\Base;
 
 class ViewBack extends Base {

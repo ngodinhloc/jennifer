@@ -21,6 +21,8 @@ class Controller implements ControllerInterface {
   protected $post = [];
   /** @var bool|array required permission */
   protected $requiredPermission = false;
+  /** @var mixed result of the action */
+  protected $result;
 
   public function __construct() {
     $this->authentication = new Authentication();
@@ -35,7 +37,8 @@ class Controller implements ControllerInterface {
    * @param $action
    */
   public function action($action) {
-    return $this->$action();
+    $result = $this->$action();
+    $this->response($result, $this->post["json"]);
   }
 
   /**

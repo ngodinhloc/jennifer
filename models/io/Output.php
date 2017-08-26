@@ -1,7 +1,6 @@
 <?php
 namespace io;
 
-use com\Compressor;
 use file\CSV;
 
 /**
@@ -15,6 +14,7 @@ class Output implements OutputInterface {
    */
   public function html($html = "") {
     echo($html);
+    exit();
   }
 
   /**
@@ -24,12 +24,12 @@ class Output implements OutputInterface {
    * @param int $jsonOpt
    */
   public function ajax($data, $json = false, $jsonOpt = JSON_UNESCAPED_SLASHES) {
+    if ($json == true) {
+      header('Content-Type: application/json');
+      echo(json_encode($data, $jsonOpt));
+      exit();
+    }
     if (is_array($data)) {
-      if ($json) {
-        header('Content-Type: application/json');
-        echo(json_encode($data, $jsonOpt));
-        exit();
-      }
       echo(json_encode($data, $jsonOpt));
       exit();
     }

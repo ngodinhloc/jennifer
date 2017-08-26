@@ -22,6 +22,7 @@ class ControllerFacebook extends Controller {
 
   /**
    * Post days to facebook
+   * @return array
    */
   public function ajaxPostToFacebook() {
     $appAccessToken = Globals::session("FB_appAccessToken");
@@ -36,7 +37,7 @@ class ControllerFacebook extends Controller {
           $postID     = $response->getGraphNode();
           if ($postID) {
             $this->admin->updateFB($id, $type);
-            $this->response(["status" => "OK", "id" => $id]);
+            $this->result = ["status" => "OK", "id" => $id];
           }
           break;
 
@@ -46,7 +47,7 @@ class ControllerFacebook extends Controller {
           $postID     = $response->getGraphNode();
           if ($postID) {
             $this->admin->updateFB($id, $type);
-            $this->response(["status" => "OK", "id" => $id, "data" => "OK"]);
+            $this->result = ["status" => "OK", "id" => $id, "data" => "OK"];
           }
           break;
 
@@ -56,7 +57,7 @@ class ControllerFacebook extends Controller {
           $postID     = $response->getGraphNode();
           if ($postID) {
             $this->admin->updateFB($id, $type);
-            $this->response(["status" => "OK", "id" => $id, "data" => "OK"]);
+            $this->result = ["status" => "OK", "id" => $id, "data" => "OK"];
           }
           break;
 
@@ -82,18 +83,20 @@ class ControllerFacebook extends Controller {
               }
             }
           }
-          $this->response(["status" => $status, "id" => $id, "data" => $status]);
+          $this->result = ["status" => $status, "id" => $id, "data" => $status];
           break;
       }
     }
     else {
-      $permissions = ['manage_pages', 'publish_actions'];
-      $helper      = $this->helper->fb->getRedirectLoginHelper();
-      $loginUrl    = $helper->getLoginUrl(SITE_URL . '/back/days/', $permissions);
-      $this->response(["status" => "login",
+      $permissions  = ['manage_pages', 'publish_actions'];
+      $helper       = $this->helper->fb->getRedirectLoginHelper();
+      $loginUrl     = $helper->getLoginUrl(SITE_URL . '/back/days/', $permissions);
+      $this->result = ["status" => "login",
                        "id"     => $id,
-                       "data"   => '<a href="' . $loginUrl . '">FBLogin</a>']);
+                       "data"   => '<a href="' . $loginUrl . '">FBLogin</a>'];
     }
+
+    return $this->result;
   }
 
   /**

@@ -1,74 +1,74 @@
 <?php
-namespace html;
+  namespace html;
 
-use template\Template;
-
-/**
- * Class JObject: Jquery and Bootstrap Object class
- * @package html
- */
-class JObject {
-  /** @var  \template\Template */
-  protected $tpl;
-  /** @var array list of templates */
-  protected $templates = [];
-  /** @var array data that will be used in templates */
-  protected $data = [];
-  /** @var array meta data : id, class, properties, innerHTML ... */
-  protected $meta = [];
-  /** @var array required meta files: css, javascript */
-  public $metaFiles = [];
-
-  public function __construct($attr = [], $data = []) {
-    $this->initMeta($attr);
-    $this->processData($data);
-  }
+  use template\Template;
 
   /**
-   * Render html of object
-   * @param bool $compress
-   * @return string
+   * Class JObject: Jquery and Bootstrap Object class
+   * @package html
    */
-  public function render($compress = true) {
-    $this->tpl = new Template($this->templates, $this->data, $this->meta);
-    $html      = $this->tpl->render($compress);
+  class JObject {
+    /** @var  \template\Template */
+    protected $tpl;
+    /** @var array list of templates */
+    protected $templates = [];
+    /** @var array data that will be used in templates */
+    protected $data = [];
+    /** @var array meta data : id, class, properties, innerHTML ... */
+    protected $meta = [];
+    /** @var array required meta files: css, javascript */
+    public $metaFiles = [];
 
-    return $html;
-  }
-
-  /**
-   * Init object meta data
-   * @param $attr
-   */
-  protected function initMeta($attr) {
-    if (isset($attr["id"])) {
-      $this->meta["id"] = $attr["id"];
+    public function __construct($attr = [], $data = []) {
+      $this->initMeta($attr);
+      $this->processData($data);
     }
 
-    if (isset($attr["class"])) {
-      $this->meta["class"] = $attr["class"];
+    /**
+     * Render html of object
+     * @param bool $compress
+     * @return string
+     */
+    public function render($compress = true) {
+      $this->tpl = new Template($this->templates, $this->data, $this->meta);
+      $html = $this->tpl->render($compress);
+
+      return $html;
     }
 
-    if (isset($attr["html"])) {
-      $this->meta["html"] = $attr["html"];
-    }
+    /**
+     * Init object meta data
+     * @param $attr
+     */
+    protected function initMeta($attr) {
+      if (isset($attr["id"])) {
+        $this->meta["id"] = $attr["id"];
+      }
 
-    if (isset($attr["properties"])) {
-      $this->meta["properties"] = $attr["properties"];
-      if (is_array($this->meta["properties"])) {
-        foreach ($this->meta["properties"] as $att => $val) {
-          $this->meta["prop"] .= " {$att} = '{$val}'";
+      if (isset($attr["class"])) {
+        $this->meta["class"] = $attr["class"];
+      }
+
+      if (isset($attr["html"])) {
+        $this->meta["html"] = $attr["html"];
+      }
+
+      if (isset($attr["properties"])) {
+        $this->meta["properties"] = $attr["properties"];
+        if (is_array($this->meta["properties"])) {
+          foreach ($this->meta["properties"] as $att => $val) {
+            $this->meta["prop"] .= " {$att} = '{$val}'";
+          }
         }
       }
+
     }
 
+    /**
+     * Process input data and object data
+     * @param $data
+     */
+    protected function processData($data) {
+      $this->data = array_replace_recursive($this->data, $data);
+    }
   }
-
-  /**
-   * Process input data and object data
-   * @param $data
-   */
-  protected function processData($data) {
-    $this->data = array_replace_recursive($this->data, $data);
-  }
-}

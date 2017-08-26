@@ -1,10 +1,10 @@
 <?php
-namespace cache;
+  namespace cache;
 
-/**
- * Class Cache
- * @package cache
- */
-class Cache {
-  const CACHE_EXPIRE = 36000;
-}
+  /**
+   * Class Cache
+   * @package cache
+   */
+  class Cache {
+    const CACHE_EXPIRE = 36000;
+  }
