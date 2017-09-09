@@ -8,6 +8,7 @@ use view\ViewInterface;
 class share extends ViewFront implements ViewInterface {
   protected $title = "Share Your Day";
   protected $contentTemplate = "share";
+  protected $cache = true;
 
   public function __construct() {
     parent::__construct();

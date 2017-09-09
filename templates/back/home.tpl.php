@@ -23,4 +23,8 @@
     <label>QRCode</label>
     <?= $this->data["qrcode"] ?>
   </div>
+  <div class="form-group col-md-6">
+    <label>QRCode1</label>
+    <?= $this->data["qrcode1"] ?>
+  </div>
 </div>

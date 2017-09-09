@@ -1,12 +1,12 @@
 <?php
-  namespace auth;
+namespace auth;
 
-  interface AuthenticationInterface {
-    public function setJWT($data);
+interface AuthenticationInterface {
+  public function setJWT($data);
 
-    public function getJWT();
+  public function getJWT();
 
-    public function encryptPassword($password);
+  public function encryptPassword($password);
 
-    public function checkUserPermission($requiredPermission = false, $type = "view");
-  }
+  public function checkUserPermission($requiredPermission = false, $type = "view");
+}

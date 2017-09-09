@@ -30,9 +30,9 @@ class Template implements TemplateInterface {
    * @return string
    */
   public function render($compress = true) {
-    ob_start("ob_gzhandler");
+    ob_start();
     foreach ($this->templates as $template) {
-      include_once(TEMPLATE_DIR . $template . TEMPLATE_EXT);
+      include(TEMPLATE_DIR . $template . TEMPLATE_EXT);
     }
     $html = ob_get_clean();
     if ($compress) {

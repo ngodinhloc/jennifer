@@ -1,10 +1,19 @@
 <?php
-  namespace cache;
+namespace cache;
+
+/**
+ * Class Cache
+ * @package cache
+ */
+class Cache {
+  const CACHE_EXPIRE = 36000;
 
   /**
-   * Class Cache
-   * @package cache
+   * Create cache key
+   * @param string $key
+   * @return string
    */
-  class Cache {
-    const CACHE_EXPIRE = 36000;
+  protected function createKey($key) {
+    return md5($key);
   }
+}

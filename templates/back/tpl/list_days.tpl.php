@@ -1,24 +1,24 @@
 <?php
-  use fb\FacebookHelper;
-  use thedaysoflife\com\Com;
+use fb\FacebookHelper;
+use thedaysoflife\com\Com;
 
 ?>
-<table>
-  <thead>
-  <tr>
-    <th>ID</th>
-    <th>Title</th>
-    <th>Author</th>
-    <th>Com</th>
-    <th>Like</th>
-    <th colspan='2'>To Facebook</th>
-    <th colspan='2'>Action</th>
-  </tr>
-  </thead>
-  <tbody>
-  <?php
+  <table>
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Title</th>
+      <th>Author</th>
+      <th>Com</th>
+      <th>Like</th>
+      <th colspan='2'>To Facebook</th>
+      <th colspan='2'>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php
     foreach ($this->data["days"] as $day) {
-      $link = Com::getDayLink($day);
+      $link    = Com::getDayLink($day);
       $options = FacebookHelper::getActOptions($day["fb"]);
       ?>
       <tr id="row-<?= $day["id"] ?>">
@@ -51,6 +51,6 @@
         </td>
       </tr>
     <?php } ?>
-  </tbody>
-</table>
+    </tbody>
+  </table>
 <?= $this->data["pagination"] ?>

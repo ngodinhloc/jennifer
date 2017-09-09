@@ -12,7 +12,6 @@ class picture extends ViewFront implements ViewInterface {
   public function __construct() {
     parent::__construct();
     $this->user = new User();
-
   }
 
   public function prepare() {

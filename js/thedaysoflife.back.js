@@ -62,10 +62,9 @@ function ajaxPostToFacebook(id, type) {
 }
 
 function processPostToFacebook(data) {
-  getData = $.parseJSON(data);
-  $("#fb-post-" + getData.id).html(getData.data);
-  if (getData.status == "OK") {
-    $("#fb-type-" + getData.id).addClass("fb-posted");
+  $("#fb-post-" + data.id).html(data.data);
+  if (data.status == "OK") {
+    $("#fb-type-" + data.id).addClass("fb-posted");
   }
 }
 /**
@@ -117,9 +116,8 @@ function ajaxUpdateADay() {
  * @param data
  */
 function processUpdateADay(data) {
-  getData = $.parseJSON(data);
-  if (getData.status = "success") {
-    link = CONST.LIST_URL + getData.id + "/" + getData.day + getData.month + getData.year + "-" + getData.slug + CONST.LIST_EXT;
+  if (data.status = "success") {
+    link = CONST.LIST_URL + data.id + "/" + data.day + data.month + data.year + "-" + data.slug + CONST.LIST_EXT;
     $("#ajax-loader").html('Update successed. Clik <a target="_blank" href="' + link + '">here to view</a>');
     //window.location = link;
   }
@@ -138,8 +136,7 @@ function ajaxRemoveADay(id) {
  * @param data
  */
 function processRemoveADay(data) {
-  getData = $.parseJSON(data);
-  if (getData.status = "success") {
-    $('#row-' + getData.id).remove();
+  if (data.status = "success") {
+    $('#row-' + data.id).remove();
   }
 }

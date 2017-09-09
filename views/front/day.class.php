@@ -18,7 +18,7 @@ class day extends ViewFront implements ViewInterface {
 
   public function prepare() {
     $user       = new User();
-    $topDays    = $user->getRightTopDayHTML();
+    $topDays    = $user->getRightTopDays();
     $this->data = ["pageTitle" => $this->title, "pageDesc" => $this->description, "topDays" => $topDays,];
     $id         = $this->hasPara("day");
     if ($id) {
@@ -49,7 +49,10 @@ class day extends ViewFront implements ViewInterface {
         $this->description = Com::getDayDescription($days);
         $this->keyword     = $days['title'];
         $comments          = $user->getComments($id);
-        $relatedDays       = $user->getRightRelatedDayHTML($day, $month, $year, $location);
+        $relatedDays       = $user->getRightRelatedDays(["day"      => $day,
+                                                         "month"    => $month,
+                                                         "year"     => $year,
+                                                         "location" => $location]);
         $this->data        = ["uri"         => $uri,
                               "days"        => $days,
                               "slider"      => $slider,

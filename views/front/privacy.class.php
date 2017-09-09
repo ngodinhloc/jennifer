@@ -8,6 +8,7 @@ use view\ViewInterface;
 class privacy extends ViewFront implements ViewInterface {
   protected $title = "Privacy";
   protected $contentTemplate = "privacy";
+  protected $cache = true;
 
   public function __construct() {
     parent::__construct();

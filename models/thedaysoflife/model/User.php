@@ -4,6 +4,7 @@ namespace thedaysoflife\model;
 use core\Model;
 use html\HTML;
 use sys\Globals;
+use template\Template;
 use thedaysoflife\com\Com;
 
 class User extends Model {
@@ -18,83 +19,33 @@ class User extends Model {
   public function getOneCommentHTML($row) {
     $output = "";
     if (isset($row['id'])) {
-      $rep_id   = (int)$row['reply_id'];
-      $com_id   = (int)$row['id'];
-      $rep_name = trim($row['reply_name']);
-      if ($rep_name != "") {
-        $rep_name = "@<b>" . $rep_name . '</b>: ';
-      }
-      if ($rep_id == 0) {
-        $rep_id    = $com_id;
-        $rep_class = "";
+      $replyID = (int)$row['reply_id'];
+      $repName = trim($row['reply_name']) == "" ? "" : "@<b>" . trim($row['reply_name']) . "</b>: ";
+      if ($replyID == 0) {
+        $replyID  = $row['id'];
+        $repClass = "";
       }
       else {
-        $rep_class = "comment-reply";
+        $repClass = "comment-reply";
       }
-      $href_id    = $rep_id . "-" . $com_id;
-      $time       = Com::getTimeDiff($row['time']);
-      $like_ip    = explode('|', $row['like_ip']);
-      $dislike_ip = explode('|', $row['dislike_ip']);
-      $ipaddress  = Globals::todayIPAddress();
+      $time      = Com::getTimeDiff($row['time']);
+      $likeIP    = explode('|', $row['like_ip']);
+      $dislikeIP = explode('|', $row['dislike_ip']);
+      $ipaddress = Globals::todayIPAddress();
 
-      $html   = new HTML();
-      $output = $html->setTag("div")->setClass("media comment {$rep_class}")->setID("comment-{$row['id']}")->open() .
-                $html->setTag("div")->setClass("media-body")->open() .
-                $html->setTag("div")->setClass("author")->open() .
-                $html->setTag("i")->setClass("icon")->create() .
-                $html->setTag("span")->setID("name-{$row['id']}")->setInnerHTML($row['username'])->create() .
-                $html->setTag("div")->close() .
-                $html->setClass("date")->open() .
-                $html->setTag("i")->setClass("icon")->create() .
-                $html->setTag("span")->setInnerHTML($time)->create() .
-                $html->setTag("div")->close() .
-                $html->setTag("p")->setInnerHTML($rep_name . stripslashes($row['content']))->create() .
-                $html->setTag("div")->setClass("stat pull-right")->open();
-      if (in_array($ipaddress, $like_ip)) {
-        $output .= $html->setTag("span")->setClass("like liked")->setProp(["title" => "Liked"])->open() .
-                   $html->setTag("i")->setClass("icon")->create() .
-                   number_format($row['like']) .
-                   $html->setTag("span")->close();
-      }
-      else {
-        $output .= $html->setTag("span")->setClass("like")->setProp(["title" => "Like"])->open() .
-                   $html->setTag("a")->setProp(["href"      => "javascript:void(0)",
-                                                "data-id"   => $row["id"],
-                                                "data-like" => $row["like"]])->setClass("like-com")
-                        ->setID("like-com-{$row['id']}-{$row['like']}")->open() .
-                   $html->setTag("i")->setClass("icon")->create() .
-                   number_format($row['like']) .
-                   $html->setTag("a")->close() .
-                   $html->setTag("span")->close();
-      }
-      if (in_array($ipaddress, $dislike_ip)) {
-        $output .= $html->setTag("span")->setClass("underlike disliked")->setProp(["title" => "Disliked"])->open() .
-                   $html->setTag("i")->setClass("icon")->create() .
-                   number_format($row['dislike']) .
-                   $html->setTag("span")->close();
-      }
-      else {
-        $output .= $html->setTag("span")->setClass("underlike")->setProp(["title" => "Dislike"])->open() .
-                   $html->setTag("a")->setProp(["href"         => "javascript:void(0)",
-                                                "data-id"      => $row["id"],
-                                                "data-dislike" => $row["dislike"]])->setClass("dislike-com")->open() .
-                   $html->setTag("i")->setClass("icon")->create() .
-                   number_format($row['dislike']) .
-                   $html->setTag("a")->close() .
-                   $html->setTag("span")->close();
-
-      }
-      $output .= $html->setTag("span")->setClass("reply")->open() .
-                 $html->setTag("a")->setClass("reply-display")->setID($href_id)
-                      ->setProp(["href"        => "javascript:void(0)",
-                                 "data-com-id" => $com_id,
-                                 "data-rep-id" => $rep_id])->open() .
-                 $html->setTag("i")->setClass("icon")->create() . "Reply" .
-                 $html->setTag("a")->close() .
-                 $html->setTag("span")->close() .
-                 $html->setTag("div")->close() .
-                 $html->setTag("div")->close() .
-                 $html->setTag("div")->close();
+      $comment  = ["id"       => $row["id"],
+                   "username" => $row["username"],
+                   "content"  => $row["content"],
+                   "like"     => $row["like"],
+                   "dislike"  => $row["dislike"],
+                   "repID"    => $replyID,
+                   "repName"  => $repName,
+                   "repClass" => $repClass,
+                   "time"     => $time,
+                   "liked"    => in_array($ipaddress, $likeIP),
+                   "disliked" => in_array($ipaddress, $dislikeIP),];
+      $template = new Template("front/tpl/one_comment", ["comment" => $comment]);
+      $output   = $template->render();
     }
 
     return $output;
@@ -156,20 +107,20 @@ class User extends Model {
     if ($result && !empty($result)) {
       foreach ($result as $row) {
         if (isset($row['id'])) {
-          $com_id = (int)$row['id'];
-          $rep_id = (int)$row['reply_id'];
-          if ($rep_id > 0) {
-            $replys[$rep_id][$com_id] = $row;
+          $comID = (int)$row['id'];
+          $repID = (int)$row['reply_id'];
+          if ($repID > 0) {
+            $replys[$repID][$comID] = $row;
           }
           else {
-            $coms[$com_id] = $row;
+            $coms[$comID] = $row;
           }
         }
       }
 
-      foreach ($coms as $com_id => $com) {
+      foreach ($coms as $comID => $com) {
         $output .= $this->getOneCommentHTML($com);
-        $reps = $replys[$com_id];
+        $reps = $replys[$comID];
         if (sizeof($reps) > 0) {
           foreach ($reps as $reply_id => $rep) {
             $output .= $this->getOneCommentHTML($rep);
@@ -230,84 +181,62 @@ class User extends Model {
 
   /**
    * Get html output of the related days on right column
-   * @param int $day
-   * @param int $month
-   * @param int $year
-   * @param string $location
-   * @return string
+   * @param array $options ["day" =>, "month" =>, "year" =>]
+   * @param bool $htmlReturn
+   * @return array|bool|string
    */
-  public function getRightRelatedDayHTML($day, $month, $year, $location) {
+  public function getRightRelatedDays($options = [], $htmlReturn = true) {
     $result = $this->db->table("tbl_day")->select(["id", "day", "year", "month", "slug", "title", "photos"])
-                       ->where(["year" => $year, "month" => $month, "|location" => "~{$location}"])
+                       ->where(["year"      => $options["year"],
+                                "month"     => $options["month"],
+                                "|location" => "~{$options["location"]}"])
                        ->orderBy(["day" => "ASC"])
                        ->limit(NUM_TOP_RIGHT)
                        ->get(false, "file")->toArray();
+    if ($htmlReturn) {
+      $output = $this->getRightListHTML($result);
 
-    $html   = new HTML();
-    $output = "";
-    if ($result) {
-      foreach ($result as $row) {
-        if (isset($row['id'])) {
-          $link       = Com::getDayLink($row);
-          $photos     = trim($row['photos']);
-          $firstPhoto = "";
-          if ($photos != "") {
-            $photos     = explode(',', $photos);
-            $photo      = $photos[0];
-            $photoUrl   = Com::getPhotoURL($photo, PHOTO_THUMB_NAME);
-            $firstPhoto = $html->setTag("img")->setProp(["src" => $photoUrl])->create();
-          }
-          $output .= $html->setTag("li")->setClass("right-list")->open() .
-                     $html->setTag("div")->setClass("right-thumb")->open() .
-                     $html->setTag("a")->setProp(["href" => $link])->setInnerHTML($firstPhoto)->create() .
-                     $html->setTag("div")->close() .
-                     $html->setTag("div")->setClass("right-title")->open() .
-                     $html->setTag("a")->setProp(["href" => $link])->setInnerHTML(stripslashes($row['title']))
-                          ->create() .
-                     $html->setTag("div")->close() .
-                     $html->setTag("div")->setClass("clear-both")->create() .
-                     $html->setTag("li")->close();
-        }
-      }
+      return $output;
     }
 
-    return $output;
+    return $result;
   }
 
   /**
    * Get the top number of days for the right column
-   * @return string
+   * @param bool $htmlReturn
+   * @return array|bool|string
    */
-  public function getRightTopDayHTML() {
+  public function getRightTopDays($htmlReturn = true) {
     $result = $this->db->table("tbl_day")->select(["id", "day", "year", "month", "slug", "title", "photos"])
                        ->orderBy(["like" => "DESC"])->limit(NUM_TOP_RIGHT)->get(false, "file")->toArray();
+    if ($htmlReturn) {
+      $output = $this->getRightListHTML($result);
 
-    $html   = new HTML();
+      return $output;
+    }
+
+    return $result;
+  }
+
+  /**
+   * @param array $days
+   * @return string
+   */
+  protected function getRightListHTML($days = []) {
     $output = "";
-    if ($result) {
-      foreach ($result as $row) {
+    if ($days) {
+      $rightList = [];
+      foreach ($days as $row) {
         if (isset($row['id'])) {
-          $link       = Com::getDayLink($row);
-          $photos     = trim($row['photos']);
-          $firstPhoto = "";
-          if ($photos != "") {
-            $photos     = explode(',', $photos);
-            $photo      = $photos[0];
-            $photoUrl   = Com::getPhotoURL($photo, PHOTO_THUMB_NAME);
-            $firstPhoto = $html->setTag("img")->setProp(["src" => $photoUrl])->create();
-          }
-          $output .= $html->setTag("li")->setClass("right-list")->open() .
-                     $html->setTag("div")->setClass("right-thumb")->open() .
-                     $html->setTag("a")->setProp(["href" => $link])->setInnerHTML($firstPhoto)->create() .
-                     $html->setTag("div")->close() .
-                     $html->setTag("div")->setClass("right-title")->open() .
-                     $html->setTag("a")->setProp(["href" => $link])->setInnerHTML(stripslashes($row['title']))
-                          ->create() .
-                     $html->setTag("div")->close() .
-                     $html->setTag("div")->setClass("clear-both")->create() .
-                     $html->setTag("li")->close();
+          $rightList[] = ["link"     => Com::getDayLink($row),
+                          "title"    => $row["title"],
+                          "photoURL" => Com::getFirstPhotoURL($row, PHOTO_THUMB_NAME)];
         }
       }
+
+      $template = new Template("front/tpl/right_list", ["days" => $rightList]);
+      $output   = $template->render();
     }
 
     return $output;
@@ -355,53 +284,11 @@ class User extends Model {
                  'Oct' => '10',
                  'Nov' => '11',
                  'Dec' => '12'];
-      $search = SITE_URL . "/search/";
 
-      $html = new HTML();
-
-      foreach ($years as $year) {
-        $tag  = $year;
-        $link = $search . $tag;
-        $output .= $html->setTag("div")->setClass("calendar-div")->open() .
-                   $html->setTag("h4")->open() .
-                   $html->setTag("a")->setProp(["href" => $link])->setInnerHTML($year)->create() .
-                   $html->setTag("h4")->close();
-
-        foreach ($months as $abr => $month) {
-          $day_num = $days[$year][$month];
-          if (sizeof($day_num) > 0) {
-            $output .= $html->setTag("ul")->setClass("list-unstyled calendar-year")->open();
-            $tag  = $month . '/' . $year;
-            $link = $search . $tag;
-            $output .= $html->setTag("li")->setClass("calendar")->open() .
-                       $html->setTag("a")->setProp(["href"  => $link,
-                                                    "title" => "{$tag}: " . number_format(sizeof($day_num)) .
-                                                               " shares"])
-                            ->open() .
-                       $html->setTag("b")->setInnerHTML($abr)->create() .
-                       $html->setTag("a")->close() .
-                       $html->setTag("li")->close();
-            foreach ($day_num as $day => $num) {
-              if ($day > 0) {
-                $tag  = $day . '/' . $month . '/' . $year;
-                $link = $search . $tag;
-              }
-              else {
-                $tag  = $month . '/' . $year;
-                $link = $search . $tag;
-              }
-              $output .= $html->setTag("li")->setClass("calendar")->open() .
-                         $html->setTag("a")->setProp(["href"  => $link,
-                                                      "title" => "{$tag}: " . number_format($num) . " shares"])
-                              ->setInnerHTML($day)->create() .
-                         $html->setTag("li")->close();
-            }
-            $output .= $html->setTag("ul")->close() .
-                       $html->setTag("br")->close();
-          }
-        }
-        $output .= $html->setTag("div")->close();
-      }
+      $template = new Template("front/tpl/preview_calendar", ["years"  => $years,
+                                                              "days"   => $days,
+                                                              "months" => $months]);
+      $output   = $template->render();
     }
 
     return $output;
@@ -450,15 +337,12 @@ class User extends Model {
                      "|location" => "~{$search}",
                      "|sanitize" => "~{$search}"];
     }
-    $orderCond = ["year" => "ASC", "month" => "ASC", "day" => "ASC", "like" => "DESC"];
-    $result    = $this->db->table("tbl_day")->where($searchCond)->orderBy($orderCond)
-                          ->offset($from)->limit(NUM_PER_PAGE)->get()->toArray();
-    $output    = "";
-    foreach ($result as $row) {
-      $output .= $this->getOneDayHTML($row);
-    }
+    $orderCond   = ["year" => "ASC", "month" => "ASC", "day" => "ASC", "like" => "DESC"];
+    $result      = $this->db->table("tbl_day")->where($searchCond)->orderBy($orderCond)
+                            ->offset($from)->limit(NUM_PER_PAGE)->get()->toArray();
+    $previewDays = $this->getPreviewDays($result);
 
-    return $output;
+    return $previewDays;
   }
 
   /**
@@ -515,9 +399,8 @@ class User extends Model {
                $html->setTag("ul")->setID("slide-show")->setClass("list-unstyled")->open();
 
     if ($result && count($result) > 0) {
-      foreach ($result as $row) {
-        $output .= $this->getOneDayHTML($row);
-      }
+      $previewDays = $this->getPreviewDays($result);
+      $output .= $previewDays;
     }
     $output .= $html->close() .
                $html->setTag("div")->close();
@@ -538,31 +421,19 @@ class User extends Model {
    */
   public function getPicture($from) {
     $result = $this->db->table("tbl_day")->select(["id", "title", "day", "month", "year", "slug", "photos"])
-                       ->where(["photos"  => "#IS NOT NULL",
-                                "#photos" => "!"])->orderBy(["id" => "DESC"])->offset($from)->limit(NUM_PICTURE)
-                       ->get()
-                       ->toArray();
-    $html   = new HTML();
-    $output = "";
+                       ->where(["photos" => "#IS NOT NULL", "#photos" => "!"])
+                       ->orderBy(["id" => "DESC"])->offset($from)->limit(NUM_PICTURE)
+                       ->get()->toArray();
+    $photos = [];
     foreach ($result as $row) {
-      $link      = Com::getDayLink($row);
-      $title     = $row['day'] . '/' . $row['month'] . '/' . $row['year'] . ': ' . $row['title'];
-      $photos    = trim($row['photos']);
-      $fistPhoto = "";
-
-      if ($photos != "") {
-        $photos    = explode(',', $photos);
-        $photo     = $photos[0];
-        $photoURL  = Com::getPhotoURL($photo, PHOTO_THUMB_NAME);
-        $fistPhoto = $html->setTag("a")->setProp(["href" => $link, "title" => $title])->open() .
-                     $html->setTag("img")->setProp(["src" => $photoURL])->setClass("photo-thumb")->create() .
-                     $html->setTag("a")->close();
-      }
-
-      $output .= $html->setTag("li")->setInnerHTML($fistPhoto)->create();
+      $photos[] = ["link"     => Com::getDayLink($row),
+                   "title"    => Com::getDayTitle($row),
+                   "photoURL" => Com::getFirstPhotoURL($row, PHOTO_THUMB_NAME)];
     }
 
-    return $output;
+    $template = new Template("front/tpl/preview_photos", ["photos" => $photos]);
+
+    return $template->render();
   }
 
   /**
@@ -597,93 +468,38 @@ class User extends Model {
                                                  "like",
                                                  "like_ip"])
                      ->orderBy($orderCond)->offset($from)->limit($limit)->get()->toArray();
-    $html = '';
-    foreach ($days as $day) {
-      $html .= $this->getOneDayHTML($day);
-    }
+    $html = $this->getPreviewDays($days);
 
     return $html;
   }
 
   /**
-   * Get html output of one day
-   * @param array $row
+   * @param array $days
    * @return string
    */
-  protected function getOneDayHTML($row) {
-    $link    = Com::getDayLink($row);
-    $photos  = trim($row['photos']);
-    $imgLink = "";
-    $html    = new HTML();
+  protected function getPreviewDays($days = []) {
+    $previewDays = [];
+    foreach ($days as $row) {
+      $ipAddress = Globals::todayIPAddress();
+      $likeIP    = explode('|', $row['like_ip']);
+      $liked     = in_array($ipAddress, $likeIP);
 
-    if ($photos != "") {
-      $photos    = explode(',', $photos);
-      $fistPhoto = $photos[0];
-      $photoUrl  = Com::getPhotoURL($fistPhoto, PHOTO_TITLE_NAME);
-      $image     = $html->setTag("img")->setProp(["src" => $photoUrl])->create();
-      $imgLink   = $html->setTag("a")->setProp(["href" => $link])->setInnerHTML($image)->create();
-    }
-    $preview = trim(str_replace('<br>', ' ', $row['preview']));
-
-    if (strlen($preview) > PREVIEW_LENGTH) {
-      $preview  = Com::subString($preview, PREVIEW_LENGTH, 3);
-      $moreLink = $html->setTag("a")->setProp(["href" => $link])->setInnerHTML("...more &raquo;")->create();
-      $preview  = $preview . $moreLink;
-    }
-    $like_ip       = explode('|', $row['like_ip']);
-    $ipaddress     = Globals::todayIPAddress();
-    $search_author = SITE_URL . "/search/" . urlencode($row['username']);
-    $search_loc    = SITE_URL . "/search/" . urlencode($row['location']);
-    $authorLink    = $html->setTag("a")->setProp(["href" => $search_author])
-                          ->setInnerHTML(stripslashes($row['username']))->create();
-    $meta          = $authorLink;
-    if ($row['location'] != '') {
-      $locLink = $html->setTag("a")->setProp(["href" => $search_loc])
-                      ->setInnerHTML('<i>' . stripslashes($row['location']) . '</i>')->create();
-      $meta .= ' - ' . $locLink;
+      $previewDays [] = ["title"        => $row["title"],
+                         "like"         => $row["like"],
+                         "count"        => $row["count"],
+                         "author"       => $row["username"],
+                         "location"     => $row["location"],
+                         "link"         => Com::getDayLink($row),
+                         "photoURL"     => Com::getFirstPhotoURL($row),
+                         "preview"      => Com::getDayPreviewText($row),
+                         "authorLink"   => Com::getSearchLink($row['username']),
+                         "locationLink" => $row['location'] != '' ? Com::getSearchLink($row['location']) : false,
+                         "liked"        => $liked,];
     }
 
-    $output = $html->setTag("li")->setClass("item")->open() .
-              $html->setTag("div")->setClass("images")->setInnerHTML($imgLink)->create() .
-              $html->setTag("div")->setClass("body")->open() .
-              $html->setTag("p")->open() .
-              $html->setTag("a")->setProp(["href" => $link])
-                   ->setInnerHTML($row['day'] . '/' . $row['month'] . '/' . $row['year'] . ': ' .
-                                  stripslashes($row['title']))
-                   ->create() .
-              $html->setTag("p")->close() .
-              $html->setTag("p")->setInnerHTML($preview)->create() .
-              $html->setTag("p")->setClass("author-location")->open() .
-              $html->setTag("span")->setInnerHTML($meta)->create() .
-              $html->setTag("p")->close() .
-              $html->setTag("div")->close() .
-              $html->setTag("div")->setClass("stat")->open() .
-              $html->setTag("span")->setClass("view")->open() .
-              $html->setTag("a")->setProp(["href" => $link])->open() .
-              $html->setTag("i")->setClass("icon")->create() . $row['count'] .
-              $html->setTag("a")->close() .
-              $html->setTag("span")->close();
+    $template = new Template("front/tpl/preview_days", ["days" => $previewDays]);
 
-    if (in_array($ipaddress, $like_ip)) {
-      $output .= $html->setTag("span")->setClass("like liked")->setProp(["title" => "Liked"])->open() .
-                 $html->setTag("i")->setClass("icon")->create() .
-                 number_format($row['like']) .
-                 $html->setTag("span")->close();
-    }
-    else {
-      $output .= $html->setTag("span")->setClass("like")->setProp(["title" => "Like"])->open() .
-                 $html->setTag("a")->setProp(["href"      => "javascript:void(0)",
-                                              "data-id"   => $row["id"],
-                                              "data-like" => $row["like"]])->setClass("like-day")->open() .
-                 $html->setTag("i")->setClass("icon")->create() .
-                 number_format($row['like']) .
-                 $html->setTag("a")->close() .
-                 $html->setTag("span")->close();
-    }
-    $output .= $html->setTag("div")->close() .
-               $html->setTag("li")->close();
-
-    return $output;
+    return $template->render();
   }
 
   /**

@@ -14,5 +14,4 @@ class logout extends ViewBack implements ViewInterface {
   public function prepare() {
     $this->authentication->userLogout();
   }
-
 }

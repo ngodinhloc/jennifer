@@ -1,11 +1,11 @@
 <?php
-  /**
-   * Table class: one single table specified by $tableName
-   */
-  namespace db\table;
+/**
+ * Table class: one single table specified by $tableName
+ */
+namespace db\table;
 
-  use db\Database;
+use db\Database;
 
-  class Day extends Database {
-    protected $tableName = "tbl_day";
-  }
+class Day extends Database {
+  protected $tableName = "tbl_day";
+}

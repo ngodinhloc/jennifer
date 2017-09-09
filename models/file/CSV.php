@@ -12,7 +12,7 @@ class CSV extends Downloadable {
    * @param array $data 2 dimensional array
    * @param string $fileName
    */
-  public function  file($data = [], $fileName = "") {
+  public function file($data = [], $fileName = "") {
     $this->headers($fileName);
     echo($this->arrayToCSV($data));
     exit();

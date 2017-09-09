@@ -4,10 +4,10 @@ namespace cache;
  * Class Memcache: to do implement memcache
  * @package cache
  */
-class MemCache extends Cache implements FileCacheInterface {
-  public static function writeCache($sql, $data) {
+class MemCache extends Cache implements CacheInterface {
+  public function writeCache($key, $data) {
   }
 
-  public static function getCache($sql) {
+  public function getCache($key) {
   }
 }
