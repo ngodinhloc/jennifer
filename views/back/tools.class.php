@@ -1,8 +1,8 @@
 <?php
 namespace back;
 
-use com\Common;
 use db\driver\MySQL;
+use html\Element;
 use thedaysoflife\view\ViewBack;
 use view\ViewInterface;
 
@@ -16,8 +16,8 @@ class tools extends ViewBack implements ViewInterface {
   }
 
   public function prepare() {
-    $databaseTools = Common::arrayToRadios(MySQL::DB_ACTIONS, "checkdb", null, null, "<br>");
-    $photoTools    = Common::arrayToRadios(["REMOVE_UNUSED" => "Remove unused photos"], "photoTools", "REMOVE_UNUSED", null, "");
+    $databaseTools = Element::radios(MySQL::DB_ACTIONS, "checkdb", null, null, "<br>");
+    $photoTools    = Element::radios(["REMOVE_UNUSED" => "Remove unused photos"], "photoTools", "REMOVE_UNUSED", null, "");
     $this->data    = ["photoTools"    => $photoTools,
                       "databaseTools" => $databaseTools];
   }

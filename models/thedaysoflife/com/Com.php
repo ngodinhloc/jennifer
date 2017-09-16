@@ -59,7 +59,7 @@ class Com extends Common {
    * @param string $menu
    * @return string
    */
-  public function getDashboardMenu($menu) {
+  public static function getDashboardMenu($menu) {
     $array  = ['home'    => '/back/home/',
                'days'    => '/back/days/',
                'about'   => '/back/about/',

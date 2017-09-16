@@ -3,6 +3,7 @@ namespace thedaysoflife\model;
 
 use core\Model;
 use db\table\Day;
+use html\Element;
 use template\Template;
 use thedaysoflife\com\Com;
 
@@ -199,7 +200,7 @@ class Admin extends Model {
     $total   = $this->db->foundRows();
     $pageNum = ceil($total / $limit);
     $tpl     = new Template("back/tpl/list_days", ["days"       => $result,
-                                                   "pagination" => Com::getPagination("page-nav", $pageNum, $page, 4)]);
+                                                   "pagination" => Element::pagination("page-nav", $pageNum, $page, 4)]);
 
     return $tpl->render();
   }

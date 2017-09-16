@@ -6,7 +6,7 @@ namespace cache;
  * @package cache
  */
 class Cache {
-  const CACHE_EXPIRE = 36000;
+  const CACHE_EXPIRE = 36000; // seconds
 
   /**
    * Create cache key

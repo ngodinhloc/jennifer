@@ -1,65 +1,59 @@
 <? include_once('include/facebook.inc.php'); ?>
 <div class="row">
   <div class="col-md-12 col-md-8 no-front">
-    <?php if (isset($this->data["days"]['id'])) { ?>
+    <? if (isset($this->data["day"])) { ?>
       <h4 class="title">
-        <?= $this->data["days"]['day'] . '/' . $this->data["days"]['month'] . '/' . $this->data["days"]['year'] . ': '
-            . $this->data["days"]['title'] ?>
-        <input type="hidden" id="day-id" value="<?= $this->data["days"]['id'] ?>">
+        <?= $this->data["day"]['title'] ?>
+        <input type="hidden" id="day-id" value="<?= $this->data["day"]['id'] ?>">
       </h4>
       <div class="post-meta">
         <div class="author post">
           <i class="icon"></i>
-          <?php
-          $searchAuthor = SITE_URL . "/search/" . urlencode($this->data["days"]['username']);
-          $searchLoc    = SITE_URL . "/search/" . urlencode($this->data["days"]['location']);
-          $searchDate   = SITE_URL . "/search/" . $this->data["days"]['month'] . '/' . $this->data["days"]['year'];
-          ?>
-          <span><a href="<?= $searchAuthor ?>"><?= $this->data["days"]['username'] ?></a></span>
-          <?php if ($this->data["days"]['location'] != '') {
-            echo(' - <a href="' . $searchLoc . '">' . $this->data["days"]['location'] . '</a>');
-          } ?>
+          <span><a href="<?= $this->data["day"]["authorLink"] ?>"><?= $this->data["day"]['username'] ?></a></span>
+          <? if ($this->data["day"]['locationLink']) { ?>
+            - <a href="<?= $this->data["day"]["locationLink"] ?>"><?= $this->data["day"]['location'] ?></a>
+          <? } ?>
         </div>
         <div class="date post">
           <i class="icon"></i>
-          <span><a href="<?= $searchDate ?>"><?= $this->data["time"] ?></a></span>
+          <span><a href="<?= $this->data["day"]["dateLink"] ?>"><?= $this->data["day"]["time"] ?></a></span>
         </div>
         <div class="stat post">
         <span class="view">
-          <a href="javascript:void(0)" class="comment-count" id="count-<?= $this->data["days"]["id"] ?>">
-            <i class="icon"></i><?= number_format($this->data["days"]['count']) ?>
+          <a href="javascript:void(0)" class="comment-count" id="count-<?= $this->data["day"]["id"] ?>">
+            <i class="icon"></i><?= number_format($this->data["day"]['count']) ?>
           </a>
         </span>
         </div>
       </div>
       <hr/>
       <div class="body">
-        <p><?= $this->data["days"]['content'] ?></p>
+        <p><?= $this->data["day"]['content'] ?></p>
       </div>
-      <?= $this->data["slider"] ?>
+      <?= $this->data["day"]["slider"] ?>
       <div class="action-content" id="action-container">
         <div class="stat">
-          <?php if (in_array($this->data["ipaddress"], $this->data["likeIP"])) { ?>
+          <? if ($this->data["day"]["liked"]) { ?>
             <span class="like liked" title="Liked">
-              <i class="icon"></i><?= number_format($this->data["days"]['like']) ?>
+              <i class="icon"></i><?= number_format($this->data["day"]['like']) ?>
             </span>
-          <?php }
+          <? }
           else { ?>
             <span class="like" title="Like">
-                  <a href="javascript:void(0)" class="like-day" data-id="<?= $this->data["days"]["id"] ?>" data-like="<?= $this->data["days"]["like"] ?>">
-                    <i class="icon"></i><?= number_format($this->data["days"]['like']) ?>
+                  <a href="javascript:void(0)" class="like-day" data-id="<?= $this->data["day"]["id"] ?>" data-like="<?= $this->data["day"]["like"] ?>">
+                    <i class="icon"></i><?= number_format($this->data["day"]['like']) ?>
                   </a>
                 </span>
-          <?php } ?>
+          <? } ?>
           <span class="reply">
             <a href="javascript:void(0)" class="reply-focus"><i class="icon"></i>Reply</a></span>
         </div>
         <div class="social-content">
-          <div class="fb-like" data-href="<?= $this->data["uri"] ?>" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
+          <div class="fb-like" data-href="<?= $this->data["day"]["uri"] ?>" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
         </div>
       </div>
       <div class="comment" id="comment-container">
-        <?= $this->data["comments"] ?>
+        <?= $this->data["day"]["comments"] ?>
       </div>
       <div class="form-contact form-group media comment">
         <h4>Share your thought</h4><br/>
@@ -89,10 +83,10 @@
         </div>
       </div>
       <div class="clear-both"></div>
-    <?php }
+    <? }
     else { ?>
       <h4>Day not found</h4>
-    <?php } ?>
+    <? } ?>
   </div>
   <div class="col-xs-12 col-md-4">
     <?php include_once('include/right.inc.php'); ?>

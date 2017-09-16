@@ -1,4 +1,3 @@
-<?php use com\Common; ?>
 <div class="row">
   <div id="div-day-content">
     <div class="form-group col-md-9">
@@ -6,15 +5,15 @@
       <div>
         <select class=" form-control days" id="day" name="day">
           <option class="select" value="0">Day</option>
-          <?= Common::getDayDrop() ?>
+          <?= $this->data["daySelect"] ?>
         </select>
         <select class="form-control days" id="month" name="month">
           <option class="select" value="0">Month*</option>
-          <?= Common::getMonthDrop() ?>
+          <?= $this->data["monthSelect"] ?>
         </select>
         <select class="form-control days" id="year" name="year">
           <option class="select" value="0">Year*</option>
-          <?= Common::getYearDrop() ?>
+          <?= $this->data["yearSelect"] ?>
         </select>
         <span id="check" class="error"></span>
       </div>

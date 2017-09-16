@@ -1,109 +1,13 @@
 <?php
 namespace com;
 
-use html\HTML;
+use html\Element;
 
 /**
  * Class Common: static helper methods
  * @package com
  */
 class Common {
-  /**
-   * @param string $linkClass : class of href
-   * @param int $pageNum
-   * @param int $page
-   * @param int $gap
-   * @return string
-   */
-  public static function getPagination($linkClass, $pageNum, $page, $gap = 4) {
-    if ($pageNum > 0) {
-      $start  = ($page - $gap) > 0 ? ($page - $gap) : 1;
-      $end    = ($page + $gap) < $pageNum ? ($page + $gap) : $pageNum;
-      $html   = new HTML();
-      $output = "";
-      $output .= $html->setTag("div")->setClass("page-list")->open() .
-                 $html->setTag("span")->setID("loader")->create() . " Page " . $page . "/" . $pageNum . " ";
-      if ($page > 1) {
-        $output .= $html->setTag("a")->setClass($linkClass)
-                        ->setProp(["href"      => "javascript:void(0)",
-                                   "data-page" => $page - 1,
-                                   "title"     => "Previous Page"])->setInnerHTML("<")->create();
-      }
-      for ($i = $start; $i <= $end; $i++) {
-        if ($i == $page) {
-          $output .= $html->setTag("span")->setClass("current-page")->setInnerHTML($i)->create();
-        }
-        else {
-          $output .= $html->setTag("a")->setClass($linkClass)
-                          ->setProp(["href" => "javascript:void(0)", "data-page" => $i])->setInnerHTML($i)->create();
-        }
-      }
-      if ($page < $pageNum) {
-        $output .= $html->setTag("a")->setClass($linkClass)
-                        ->setProp(["href"      => "javascript:void(0)",
-                                   "data-page" => $page + 1,
-                                   "title"     => "Next Page"])->setInnerHTML(">")->create();
-      }
-      $output .= $html->setTag("div")->close();
-
-      return $output;
-    }
-  }
-
-  /**
-   * @param array $arr
-   * @param string $name
-   * @param null $selected
-   * @param null $class
-   * @param string $separate
-   * @return string
-   */
-  public static function arrayToRadios($arr = [], $name = "", $selected = null, $class = null, $separate = "") {
-    $html   = new HTML();
-    $output = "";
-    foreach ($arr as $value => $text) {
-      if ($selected == $value) {
-        $output .= $html->setTag("input")->setClass("{$class}")->setProp(["type"    => "radio",
-                                                                          "name"    => $name,
-                                                                          "value"   => $value,
-                                                                          "checked" => "checked"])
-                        ->create() . " " . $text . $separate;
-      }
-      else {
-        $output .= $html->setTag("input")->setClass("{$class}")->setProp(["type"  => "radio",
-                                                                          "name"  => $name,
-                                                                          "value" => $value])
-                        ->create() . " " . $text . $separate;
-      }
-    }
-
-    return $output;
-  }
-
-  /**
-   * @param array $arr
-   * @param null $selected
-   * @param null $class
-   * @return string
-   */
-  public static function arrayToOptions($arr = [], $selected = null, $class = null) {
-    $html   = new HTML();
-    $output = "";
-    foreach ($arr as $text => $value) {
-      if ($selected == $value) {
-        $output .= $html->setTag("option")->setClass("{$class}")->setProp(["value"    => $value,
-                                                                           "selected" => "selected"])
-                        ->setInnerHTML($text)->create();
-      }
-      else {
-        $output .= $html->setTag("option")->setClass("{$class}")->setProp(["value" => $value])
-                        ->setInnerHTML($text)->create();
-      }
-    }
-
-    return $output;
-  }
-
   /**
    * Cast array to para string used in GET
    * @param $array
@@ -126,13 +30,13 @@ class Common {
    * @param $day
    * @return string
    */
-  public static function getDayDrop($day = 0) {
+  public static function getDayOptions($day = 0) {
     $range = range(1, 31);
     $arr   = [];
     foreach ($range as $val) {
       $arr[$val] = $val;
     }
-    $options = self::arrayToOptions($arr, $day, 'select');
+    $options = Element::options($arr, $day, 'select');
 
     return $options;
   }
@@ -141,13 +45,13 @@ class Common {
    * @param $month
    * @return string
    */
-  public static function getMonthDrop($month = 0) {
+  public static function getMonthOptions($month = 0) {
     $range = range(1, 12);
     $arr   = [];
     foreach ($range as $val) {
       $arr[$val] = $val;
     }
-    $options = self::arrayToOptions($arr, $month, 'select');
+    $options = Element::options($arr, $month, 'select');
 
     return $options;
   }
@@ -156,13 +60,13 @@ class Common {
    * @param $year
    * @return string
    */
-  public static function getYearDrop($year = 0) {
+  public static function getYearOptions($year = 0) {
     $range = range(date('Y'), date('Y') - 100);
     $arr   = [];
     foreach ($range as $val) {
       $arr[$val] = $val;
     }
-    $options = self::arrayToOptions($arr, $year, 'select');
+    $options = Element::options($arr, $year, 'select');
 
     return $options;
   }

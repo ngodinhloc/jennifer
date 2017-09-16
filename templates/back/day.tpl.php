@@ -1,4 +1,3 @@
-<?php use com\Common; ?>
 <div class="admin-content" id="edit-day">
   <div class="row no-front">
     <div class="form-group col-md-9">
@@ -6,15 +5,15 @@
       <div>
         <select class=" form-control days" id="day" name="day">
           <option class="select" value="0">Day</option>
-          <?= Common::getDayDrop($this->data["row"]['day']) ?>
+          <?= $this->data["daySelect"] ?>
         </select>
         <select class="form-control days" id="month" name="month">
           <option class="select" value="0">Month*</option>
-          <?= Common::getMonthDrop($this->data["row"]['month']) ?>
+          <?= $this->data["monthSelect"] ?>
         </select>
         <select class="form-control days" id="year" name="year">
           <option class="select" value="0">Year*</option>
-          <?= Common::getYearDrop($this->data["row"]['year']) ?>
+          <?= $this->data["yearSelect"] ?>
         </select>
         <span id="check" class="error"></span>
       </div>
@@ -22,7 +21,7 @@
     <div class="form-group col-md-9">
       <label>What happend on that day ?</label>
       <input type="hidden" id="id" name="id" value="<?= $this->data["row"]["id"] ?>"/>
-      <input type="text" class="form-control" id="title" name="title" value="<?= htmlentities($this->data["row"]['title']) ?>"/>
+      <input type="text" class="form-control" id="title" name="title" value="<?= htmlspecialchars($this->data["row"]['title']) ?>"/>
     </div>
     <div class="form-group col-md-9">
       <label>Like:</label>
@@ -41,20 +40,20 @@
         <div class="icon">
           <label class="full-name sr-only">Full Name</label>
         </div>
-        <input type="text" class="full-name form-control" id="username" name="username" value="<?= htmlentities($this->data["row"]['username']) ?>">
+        <input type="text" class="full-name form-control" id="username" name="username" value="<?= htmlspecialchars($this->data["row"]['username']) ?>">
       </div>
 
       <div class="form-group col-xs-12 col-sm-4">
         <div class="icon">
           <label class="email sr-only">Email address</label>
         </div>
-        <input type="email" class="email form-control" id="email" name="email" value="<?= htmlentities($this->data["row"]['email']) ?>">
+        <input type="email" class="email form-control" id="email" name="email" value="<?= htmlspecialchars($this->data["row"]['email']) ?>">
       </div>
       <div class="form-group registering col-xs-12 col-sm-4">
         <div class="icon">
           <label class="website sr-only">Location</label>
         </div>
-        <input type="text" class="website form-control" id="loc" name="loc" value="<?= htmlentities($this->data["row"]['location']) ?>">
+        <input type="text" class="website form-control" id="loc" name="loc" value="<?= htmlspecialchars($this->data["row"]['location']) ?>">
       </div>
     </div>
     <div class="col-md-10 form-contact form-group">

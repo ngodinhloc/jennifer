@@ -22,7 +22,11 @@ class day extends ViewBack implements ViewInterface {
       $row           = $this->admin->getDayById($id);
       $photoUploader = new PhotoUploader([], ["text"          => "Current photos",
                                               "currentPhotos" => Com::getPhotoPreviewArray($row["photos"])]);
-      $this->data    = ["row" => $row, "photoUploader" => $photoUploader->render()];
+      $this->data    = ["row"           => $row,
+                        "daySelect"     => Com::getDayOptions($row["day"]),
+                        "monthSelect"   => Com::getMonthOptions($row["month"]),
+                        "yearSelect"    => Com::getYearOptions($row["year"]),
+                        "photoUploader" => $photoUploader->render()];
       $this->addMetaFile(SITE_URL . "/plugins/ckeditor/ckeditor.js");
     }
   }

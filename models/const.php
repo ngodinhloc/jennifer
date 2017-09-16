@@ -24,7 +24,7 @@ const DB_HOST     = '*****';
 const DB_USER     = '*****';
 const DB_PASSWORD = '*****';
 const DB_NAME     = '*****';
-// SALT*****
+// SALT
 const SALT_MD5     = '*****';
 const SALT_SHA256  = '*****';
 const SALT_SHA512  = '*****';

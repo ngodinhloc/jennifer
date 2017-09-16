@@ -1,8 +1,8 @@
 <?php
 namespace fb;
 
-use com\Common;
 use Facebook;
+use html\Element;
 use sys\Globals;
 
 /**
@@ -68,7 +68,7 @@ class FacebookHelper {
                 "Link"  => self::FB_LINK,
                 "Feed"  => self::FB_FEED,
                 "Text"  => self::FB_TEXT];
-    $options = Common::arrayToOptions($array, $selected);
+    $options = Element::options($array, $selected);
 
     return $options;
   }
