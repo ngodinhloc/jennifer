@@ -1,12 +1,13 @@
 <?php
 namespace front;
 
-use html\jobject\FlexSlider;
-use sys\Globals;
+use jennifer\fb\FacebookHelper;
+use jennifer\html\jobject\FlexSlider;
+use jennifer\sys\Globals;
+use jennifer\view\ViewInterface;
 use thedaysoflife\com\Com;
 use thedaysoflife\model\User;
 use thedaysoflife\view\ViewFront;
-use view\ViewInterface;
 
 class day extends ViewFront implements ViewInterface {
   protected $contentTemplate = "day";
@@ -63,7 +64,7 @@ class day extends ViewFront implements ViewInterface {
                         "relatedDays" => $relatedDays != "" ? $relatedDays : "No related days found",
                         "topDays"     => $topDays,];
 
-        $this->addMetaTag("<meta property='fb:admins' content='" . FB_PAGEID . "'/>");
+        $this->addMetaTag("<meta property='fb:admins' content='" . FacebookHelper::FB_PAGEID . "'/>");
         $this->addMetaTag("<meta property='og:type' content='article'/>");
         $this->addMetaTag("<meta property='og:url' content='{$this->uri}'/>");
         $this->addMetaTag("<meta property='og:title' content='{$this->title}'/>");

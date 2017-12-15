@@ -1,10 +1,10 @@
 <?php
 namespace back;
 
-use fb\FacebookHelper;
+use jennifer\fb\FacebookHelper;
+use jennifer\view\ViewInterface;
 use thedaysoflife\model\Admin;
 use thedaysoflife\view\ViewBack;
-use view\ViewInterface;
 
 class days extends ViewBack implements ViewInterface {
   protected $title = "Dashboard :: Days";

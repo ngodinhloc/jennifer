@@ -1,8 +1,8 @@
 <?php
 namespace cons;
 
-use com\Common;
-use controller\Controller;
+use jennifer\com\Common;
+use jennifer\controller\Controller;
 use thedaysoflife\model\Admin;
 
 class ControllerBack extends Controller {

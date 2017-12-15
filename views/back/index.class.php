@@ -1,10 +1,10 @@
 <?php
 namespace back;
 
-use auth\Authentication;
+use jennifer\auth\Authentication;
+use jennifer\view\ViewInterface;
 use thedaysoflife\model\Admin;
 use thedaysoflife\view\ViewBack;
-use view\ViewInterface;
 
 class index extends ViewBack implements ViewInterface {
   protected $title = "Dashboard Login";

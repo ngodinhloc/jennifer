@@ -1,8 +1,8 @@
 <?php
 namespace back;
 
+use jennifer\view\ViewInterface;
 use thedaysoflife\view\ViewBack;
-use view\ViewInterface;
 
 class logout extends ViewBack implements ViewInterface {
   protected $requiredPermission = false;

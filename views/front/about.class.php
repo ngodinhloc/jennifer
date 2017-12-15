@@ -1,9 +1,9 @@
 <?php
 namespace front;
 
+use jennifer\view\ViewInterface;
 use thedaysoflife\model\User;
 use thedaysoflife\view\ViewFront;
-use view\ViewInterface;
 
 class about extends ViewFront implements ViewInterface {
   protected $title = "About";

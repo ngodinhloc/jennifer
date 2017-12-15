@@ -1,9 +1,9 @@
 <?php
 namespace front;
 
+use jennifer\view\ViewInterface;
 use thedaysoflife\model\User;
 use thedaysoflife\view\ViewFront;
-use view\ViewInterface;
 
 class search extends ViewFront implements ViewInterface {
   protected $title = "Search";

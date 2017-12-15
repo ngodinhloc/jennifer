@@ -1,10 +1,10 @@
 <?php
 namespace thedaysoflife\model;
 
-use core\Model;
-use html\HTML;
-use sys\Globals;
-use template\Template;
+use jennifer\core\Model;
+use jennifer\html\HTML;
+use jennifer\sys\Globals;
+use jennifer\template\Template;
 use thedaysoflife\com\Com;
 
 class User extends Model {

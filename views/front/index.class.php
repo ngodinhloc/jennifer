@@ -1,9 +1,9 @@
 <?php
 namespace front;
 
+use jennifer\view\ViewInterface;
 use thedaysoflife\model\User;
 use thedaysoflife\view\ViewFront;
-use view\ViewInterface;
 
 class index extends ViewFront implements ViewInterface {
   protected $contentTemplate = "index";

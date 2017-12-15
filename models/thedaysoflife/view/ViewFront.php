@@ -1,6 +1,6 @@
 <?php
 namespace thedaysoflife\view;
-use view\Base;
+use jennifer\view\Base;
 
 class ViewFront extends Base {
   protected $title = SITE_TITLE;

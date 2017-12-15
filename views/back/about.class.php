@@ -1,9 +1,9 @@
 <?php
 namespace back;
 
+use jennifer\view\ViewInterface;
 use thedaysoflife\model\Admin;
 use thedaysoflife\view\ViewBack;
-use view\ViewInterface;
 
 class about extends ViewBack implements ViewInterface {
   protected $title = "Dashboard :: About";

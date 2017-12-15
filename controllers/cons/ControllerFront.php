@@ -1,9 +1,9 @@
 <?php
 namespace cons;
 
-use com\Common;
-use controller\Controller;
-use sys\Globals;
+use jennifer\com\Common;
+use jennifer\controller\Controller;
+use jennifer\sys\Globals;
 use thedaysoflife\model\User;
 
 class ControllerFront extends Controller {

@@ -1,10 +1,10 @@
 <?php
 namespace back;
 
-use db\driver\MySQL;
-use html\Element;
+use jennifer\db\driver\MySQL;
+use jennifer\html\Element;
+use jennifer\view\ViewInterface;
 use thedaysoflife\view\ViewBack;
-use view\ViewInterface;
 
 class tools extends ViewBack implements ViewInterface {
   protected $title = "Dashboard :: Tools";

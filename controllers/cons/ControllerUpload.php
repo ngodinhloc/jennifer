@@ -1,9 +1,9 @@
 <?php
 namespace cons;
 
-use controller\Controller;
-use file\SimpleImage;
-use sys\Globals;
+use jennifer\controller\Controller;
+use jennifer\file\SimpleImage;
+use jennifer\sys\Globals;
 use thedaysoflife\com\Com;
 
 class ControllerUpload extends Controller {

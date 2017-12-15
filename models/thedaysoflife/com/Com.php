@@ -1,8 +1,8 @@
 <?php
 namespace thedaysoflife\com;
 
-use com\Common;
-use html\HTML;
+use jennifer\com\Common;
+use jennifer\html\HTML;
 
 class Com extends Common {
 

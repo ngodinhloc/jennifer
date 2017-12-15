@@ -1,11 +1,11 @@
 <?php
 namespace back;
 
-use html\jobject\PhotoUploader;
+use jennifer\html\jobject\PhotoUploader;
+use jennifer\view\ViewInterface;
 use thedaysoflife\com\Com;
 use thedaysoflife\model\Admin;
 use thedaysoflife\view\ViewBack;
-use view\ViewInterface;
 
 class day extends ViewBack implements ViewInterface {
   protected $title = "Dashboard :: Edit";

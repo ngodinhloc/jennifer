@@ -1,8 +1,8 @@
 <?php
 namespace thedaysoflife\service;
 
-use api\Service;
-use api\ServiceInterface;
+use jennifer\api\Service;
+use jennifer\api\ServiceInterface;
 use thedaysoflife\model\User;
 
 class DayService extends Service implements ServiceInterface {

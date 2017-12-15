@@ -1,10 +1,10 @@
 <?php
 namespace front;
 
-use html\jobject\PhotoUploader;
+use jennifer\html\jobject\PhotoUploader;
+use jennifer\view\ViewInterface;
 use thedaysoflife\com\Com;
 use thedaysoflife\view\ViewFront;
-use view\ViewInterface;
 
 class share extends ViewFront implements ViewInterface {
   protected $title = "Share Your Day";

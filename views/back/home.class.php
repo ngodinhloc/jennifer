@@ -1,15 +1,15 @@
 <?php
 namespace back;
 
-use html\jobject\ClockPicker;
-use html\jobject\ColorPicker;
-use html\jobject\DatePicker;
-use html\jobject\FileUploader;
-use html\jobject\QRCode;
-use html\jobject\Signature;
+use jennifer\html\jobject\ClockPicker;
+use jennifer\html\jobject\ColorPicker;
+use jennifer\html\jobject\DatePicker;
+use jennifer\html\jobject\FileUploader;
+use jennifer\html\jobject\QRCode;
+use jennifer\html\jobject\Signature;
+use jennifer\view\ViewInterface;
 use thedaysoflife\model\Admin;
 use thedaysoflife\view\ViewBack;
-use view\ViewInterface;
 
 class home extends ViewBack implements ViewInterface {
   protected $title = "Dashboard";

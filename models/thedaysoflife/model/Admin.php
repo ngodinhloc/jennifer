@@ -1,10 +1,10 @@
 <?php
 namespace thedaysoflife\model;
 
-use core\Model;
-use db\table\Day;
-use html\Element;
-use template\Template;
+use jennifer\core\Model;
+use jennifer\db\table\Day;
+use jennifer\html\Element;
+use jennifer\template\Template;
 use thedaysoflife\com\Com;
 
 class Admin extends Model {
