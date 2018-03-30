@@ -7,8 +7,8 @@ use jennifer\db\driver\DriverFactory;
 
 /**
  * Class Database
- * @package db
- */
+ * @package jennifer\db
+   */
 abstract class Database implements DatabaseInterface {
   /** @var string */
   private $defaultDriver = "MySQL";

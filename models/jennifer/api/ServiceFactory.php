@@ -2,7 +2,7 @@
 namespace jennifer\api;
 /**
  * Class ServiceFactory
- * @package api
+ * @package jennifer\api
  */
 class ServiceFactory {
   /**

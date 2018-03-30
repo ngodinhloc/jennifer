@@ -1,35 +1,36 @@
 <?php
+
 namespace jennifer\controller;
 
 use jennifer\auth\Authentication;
+use jennifer\http\Request;
 use jennifer\io\Output;
-use jennifer\sys\Globals;
 
 /**
  * The base controller class: all controllers will extend this class
  * Each public function of controller class is an action
- * @package controller
+ * @package jennifer\controller
  */
 class Controller implements ControllerInterface {
   /** @var Authentication */
   protected $authentication;
+  /** @var  Request */
+  protected $request;
   /** @var Output */
   protected $output;
   /** @var array|bool usr data */
   protected $userData = false;
-  /** @var array|bool|string _POST */
-  protected $post = [];
   /** @var bool|array required permission */
   protected $requiredPermission = false;
   /** @var mixed result of the action */
   protected $result;
 
   public function __construct() {
+    $this->request        = new Request();
     $this->authentication = new Authentication();
+    $this->output         = new Output();
     $this->authentication->checkUserPermission($this->requiredPermission, "controller");
     $this->userData = $this->authentication->getUserData();
-    $this->post     = Globals::post();
-    $this->output   = new Output();
   }
 
   /**
@@ -38,7 +39,7 @@ class Controller implements ControllerInterface {
    */
   public function action($action) {
     $result = $this->$action();
-    $this->response($result, $this->post["json"]);
+    $this->response($result, $this->request->post["json"]);
   }
 
   /**

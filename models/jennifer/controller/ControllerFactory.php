@@ -2,7 +2,7 @@
 namespace jennifer\controller;
 /**
  * Class ControllerFactory: create Controller
- * @package controller
+ * @package jennifer\controller
  */
 class ControllerFactory {
   /**

@@ -3,7 +3,7 @@ namespace jennifer\cache;
 
 /**
  * Class Cache
- * @package cache
+ * @package jennifer\cache
  */
 class Cache {
   const CACHE_EXPIRE = 36000; // seconds

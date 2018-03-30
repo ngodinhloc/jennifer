@@ -42,7 +42,7 @@ $("a.remove-day").live("click", function () {
 function ajaxUpdateInfo() {
   CKEDITOR.instances['content'].updateElement();
   data = $("#div-edit-info").find("select[name], textarea[name], input[name]").serialize();
-  ajaxAction({"action": "ajaxUpdateInfo", "controller": "ControllerBack"}, data, false, "#ajax-loader",
+  jennifer.ajaxAction({"action": "ajaxUpdateInfo", "controller": "ControllerBack"}, data, false, "#ajax-loader",
     {"container": "#ajax-loader", "act": "replace"}, false);
 }
 
@@ -55,7 +55,7 @@ function ajaxPostToFacebook(id, type) {
   loader = "#fb-post-" + id;
   data = $.param({"id": id, "type": type});
   callback = processPostToFacebook;
-  ajaxAction({
+  jennifer.ajaxAction({
     "action":     "ajaxPostToFacebook",
     "controller": "ControllerFacebook"
   }, data, false, loader, false, callback);
@@ -73,7 +73,7 @@ function processPostToFacebook(data) {
  */
 function ajaxPrintDay(page) {
   data = $.param({page: page});
-  ajaxAction({"action": "ajaxPrintDay", "controller": "ControllerBack"}, data, false, "#loader",
+  jennifer.ajaxAction({"action": "ajaxPrintDay", "controller": "ControllerBack"}, data, false, "#loader",
     {"container": "#print-list", "act": "replace"}, false);
 }
 
@@ -81,7 +81,7 @@ function ajaxPrintDay(page) {
  * Remove unused photos
  */
 function ajaxRemoveUnusedPhoto() {
-  ajaxAction({"action": "ajaxRemoveUnusedPhoto", "controller": "ControllerBack"},
+  jennifer.ajaxAction({"action": "ajaxRemoveUnusedPhoto", "controller": "ControllerBack"},
     false, false, "#remove-photo-result", {"container": "#remove-photo-result", "act": "replace"}, false);
 }
 
@@ -90,7 +90,7 @@ function ajaxRemoveUnusedPhoto() {
  */
 function ajaxCheckDatabase() {
   act = $('input[name=checkdb]:checked').val();
-  ajaxAction({"action": "ajaxCheckDatabase", "controller": "ControllerBack"},
+  jennifer.ajaxAction({"action": "ajaxCheckDatabase", "controller": "ControllerBack"},
     $.param({"act": act}), false, "#check-database-result", {
       "container": "#check-database-result",
       "act":       "replace"
@@ -106,7 +106,7 @@ function ajaxUpdateADay() {
   photos = getIDs();
   data = content + "&" + $.param({"photos": photos})
   callback = processUpdateADay;
-  ajaxAction({
+  jennifer.ajaxAction({
     "action":     "ajaxUpdateADay",
     "controller": "ControllerBack"
   }, data, false, "#ajax-loader", false, callback);
@@ -129,7 +129,7 @@ function processUpdateADay(data) {
 function ajaxRemoveADay(id) {
   loader = "#remove-day-" + id;
   callback = processRemoveADay;
-  ajaxAction({"action": "ajaxRemoveADay", "controller": "ControllerBack"},
+  jennifer.ajaxAction({"action": "ajaxRemoveADay", "controller": "ControllerBack"},
     $.param({"id": id}), loader, false, callback);
 }
 /**

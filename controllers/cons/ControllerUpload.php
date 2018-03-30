@@ -5,6 +5,7 @@ use jennifer\controller\Controller;
 use jennifer\file\SimpleImage;
 use jennifer\sys\Globals;
 use thedaysoflife\com\Com;
+use thedaysoflife\sys\Configs;
 
 class ControllerUpload extends Controller {
 
@@ -20,7 +21,7 @@ class ControllerUpload extends Controller {
     $files = Globals::files("inputfile");
     if ($files) {
       $image = new SimpleImage();
-      $count = count($files['name']) > NUM_PHOTO_UPLOAD ? NUM_PHOTO_UPLOAD : count($files['name']);
+      $count = count($files['name']) > Configs::NUM_PHOTO_UPLOAD ? Configs::NUM_PHOTO_UPLOAD : count($files['name']);
       for ($i = 0; $i < $count; $i++) {
         $tempFile = $files['tmp_name'][$i];
         if ($tempFile) {
@@ -29,25 +30,25 @@ class ControllerUpload extends Controller {
           $allowed  = [IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG];
 
           if (in_array($fileType, $allowed)) {
-            if ($fileSize <= PHOTO_MAX_SIZE * 1000000) {
+            if ($fileSize <= Configs::PHOTO_MAX_SIZE * 1000000) {
               list($photoDir, $name) = $this->initPhotoInfo();
-              $fullName  = Com::getPhotoName($name, PHOTO_FULL_NAME);
-              $titleName = Com::getPhotoName($name, PHOTO_TITLE_NAME);
-              $thumbName = Com::getPhotoName($name, PHOTO_THUMB_NAME);
+              $fullName  = Com::getPhotoName($name, Configs::PHOTO_FULL_NAME);
+              $titleName = Com::getPhotoName($name, Configs::PHOTO_TITLE_NAME);
+              $thumbName = Com::getPhotoName($name, Configs::PHOTO_THUMB_NAME);
 
               $image->load($tempFile);
-              $image->fit_to_width(PHOTO_FULL_WIDTH);
+              $image->fit_to_width(Configs::PHOTO_FULL_WIDTH);
               $image->save($photoDir . $fullName, 75);
-              $image->fit_to_width(PHOTO_TITLE_WIDTH);
+              $image->fit_to_width(Configs::PHOTO_TITLE_WIDTH);
               $image->save($photoDir . $titleName);
-              $image->thumbnail(PHOTO_THUMB_WIDTH, PHOTO_THUMB_HEIGHT);
+              $image->thumbnail(Configs::PHOTO_THUMB_WIDTH, Configs::PHOTO_THUMB_HEIGHT);
               $image->save($photoDir . $thumbName);
 
-              $thumbURL = Com::getPhotoURL($name, PHOTO_THUMB_NAME);
+              $thumbURL = Com::getPhotoURL($name, Configs::PHOTO_THUMB_NAME);
               $this->result .= $this->createPhotoHTML($name, $thumbURL);
             }
             else {
-              $this->result = "File size is too big (Maximum size is " . PHOTO_MAX_SIZE . "MB)";
+              $this->result = "File size is too big (Maximum size is " . Configs::PHOTO_MAX_SIZE . "MB)";
             }
           }
           else {
@@ -82,7 +83,7 @@ class ControllerUpload extends Controller {
   private function initPhotoInfo() {
     $year     = date('Y');
     $month    = date('m');
-    $photoDir = DOC_ROOT . PHOTO_DIR . $year . "/" . $month . "/";
+    $photoDir = DOC_ROOT . Configs::PHOTO_DIR . $year . "/" . $month . "/";
     if (!file_exists(str_replace('//', '/', $photoDir))) {
       mkdir(str_replace('//', '/', $photoDir), 0755, true);
     }

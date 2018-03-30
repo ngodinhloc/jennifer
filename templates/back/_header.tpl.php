@@ -13,19 +13,19 @@
           <div class="container">
             <header class="navbar navbar-static-top bs-docs-nav menu-top" id="top" role="banner">
               <?php
-              if ($this->meta["view"] != DEFAULT_VIEW) {
+              if ($this->meta["view"] != \thedaysoflife\sys\Configs::DEFAULT_VIEW) {
                 include('include/menu.inc.php');
               }
               ?>
             </header>
             <div class="col-xs-6 wrapper clearfix">
-              <a class="logo navbar-btn pull-left" title="Home" href="<?= SITE_URL ?>">
-                <img alt="Home" src="<?= SITE_URL ?>/interface/images/logo.png">
+              <a class="logo navbar-btn pull-left" title="Home" href="<?= \thedaysoflife\sys\Configs::SITE_URL ?>">
+                <img alt="Home" src="<?= \thedaysoflife\sys\Configs::SITE_URL ?>/interface/images/logo.png">
               </a>
             </div>
             <div class="col-xs-2 reggion">
               <div class="button_list">
-                <a href="<?= SITE_URL ?>/share/" class="btn btn-lg btn-primary" type="button">Share Your Day</a>
+                <a href="<?= \thedaysoflife\sys\Configs::SITE_URL ?>/share/" class="btn btn-lg btn-primary" type="button">Share Your Day</a>
               </div>
             </div>
             <form class="form-search">
@@ -42,7 +42,7 @@
     <div class="main_container region">
       <header class="navbar navbar-static-top bs-docs-nav" id="top" role="banner">
         <?php
-        if ($this->meta["view"] != DEFAULT_VIEW) {
+        if ($this->meta["view"] != \thedaysoflife\sys\Configs::DEFAULT_VIEW) {
           include('include/menu.inc.php');
         }
         ?>

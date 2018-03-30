@@ -2,7 +2,7 @@
 namespace jennifer\html;
 /**
  * Class HTML: This class is used to create HTML element (so that we no longer print HTML code inside models)
- * @package html
+ * @package jennifer\html
  */
 class HTML implements HTMLInterface {
   private $tag;

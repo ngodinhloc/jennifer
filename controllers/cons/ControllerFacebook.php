@@ -1,11 +1,15 @@
 <?php
+
 namespace cons;
 
+use Facebook\Exceptions\FacebookSDKException;
 use jennifer\controller\Controller;
 use jennifer\fb\FacebookHelper;
+use jennifer\sys\Config;
 use jennifer\sys\Globals;
 use thedaysoflife\com\Com;
 use thedaysoflife\model\Admin;
+use thedaysoflife\sys\Configs;
 
 class ControllerFacebook extends Controller {
   /** @var Admin */
@@ -23,17 +27,19 @@ class ControllerFacebook extends Controller {
   /**
    * Post days to facebook
    * @return array
+   * @throws FacebookSDKException
    */
   public function ajaxPostToFacebook() {
     $appAccessToken = Globals::session("FB_appAccessToken");
-    $id             = (int)$this->post['id'];
-    $type           = $this->post['type'];
+    $id             = (int)$this->request->post['id'];
+    $type           = $this->request->post['type'];
     if ($appAccessToken) {
       $day = $this->admin->getDayById($id);
       switch($type) {
         case FacebookHelper::FB_TEXT:
           $attachment = $this->fbText($day);
-          $response   = $this->helper->fb->post('/' . FacebookHelper::FB_PAGEID . '/feed', $attachment, $appAccessToken);
+          $response   = $this->helper->fb->post('/' . Config::FB_PAGEID .
+                                                '/feed', $attachment, $appAccessToken);
           $postID     = $response->getGraphNode();
           if ($postID) {
             $this->admin->updateFB($id, $type);
@@ -43,7 +49,8 @@ class ControllerFacebook extends Controller {
 
         case FacebookHelper::FB_FEED:
           $attachment = $this->fbFeed($day);
-          $response   = $this->helper->fb->post('/' . FacebookHelper::FB_PAGEID . '/feed', $attachment, $appAccessToken);
+          $response   = $this->helper->fb->post('/' . Config::FB_PAGEID .
+                                                '/feed', $attachment, $appAccessToken);
           $postID     = $response->getGraphNode();
           if ($postID) {
             $this->admin->updateFB($id, $type);
@@ -53,7 +60,8 @@ class ControllerFacebook extends Controller {
 
         case FacebookHelper::FB_LINK:
           $attachment = $this->fbLink($day);
-          $response   = $this->helper->fb->post('/' . FacebookHelper::FB_PAGEID . '/feed', $attachment, $appAccessToken);
+          $response   = $this->helper->fb->post('/' . Config::FB_PAGEID .
+                                                '/feed', $attachment, $appAccessToken);
           $postID     = $response->getGraphNode();
           if ($postID) {
             $this->admin->updateFB($id, $type);
@@ -67,12 +75,13 @@ class ControllerFacebook extends Controller {
           $status = "NO";
           if (sizeof($photos) > 0) {
             $albumData = $this->fbAlbum($day);
-            $newAlbum  = $this->helper->fb->post("/" . FacebookHelper::FB_PAGEID . "/albums", $albumData, $appAccessToken);
+            $newAlbum  = $this->helper->fb->post("/" . Config::FB_PAGEID .
+                                                 "/albums", $albumData, $appAccessToken);
             $album     = $newAlbum->getDecodedBody();
             if (isset($album["id"])) {
               foreach ($photos as $i => $name) {
                 $photoName = html_entity_decode($title . " - " . ($i + 1), ENT_COMPAT, "UTF-8");
-                $photoURL  = Com::getPhotoURL($name, PHOTO_FULL_NAME);
+                $photoURL  = Com::getPhotoURL($name, Configs::PHOTO_FULL_NAME);
                 $photoData = ['message' => $photoName, 'url' => $photoURL];
                 $newPhoto  = $this->helper->fb->post('/' . $album["id"] . '/photos', $photoData, $appAccessToken);
                 $photo     = $newPhoto->getDecodedBody();
@@ -90,7 +99,7 @@ class ControllerFacebook extends Controller {
     else {
       $permissions  = ['manage_pages', 'publish_actions'];
       $helper       = $this->helper->fb->getRedirectLoginHelper();
-      $loginUrl     = $helper->getLoginUrl(SITE_URL . '/back/days/', $permissions);
+      $loginUrl     = $helper->getLoginUrl(Configs::SITE_URL . '/back/days/', $permissions);
       $this->result = ["status" => "login",
                        "id"     => $id,
                        "data"   => '<a href="' . $loginUrl . '">FBLogin</a>'];
@@ -127,7 +136,7 @@ class ControllerFacebook extends Controller {
     $content    = $this->fbEscape($day["content"], "feed");
     $content    = Com::subString($content, 300, 3);
     $photos     = explode(',', $day['photos']);
-    $photoURL   = Com::getPhotoURL($photos[0], PHOTO_TITLE_NAME);
+    $photoURL   = Com::getPhotoURL($photos[0], Configs::PHOTO_TITLE_NAME);
 
     $message    = html_entity_decode($title . " (by {$day["username"]})", ENT_COMPAT, "UTF-8");
     $name       = html_entity_decode($title, ENT_COMPAT, "UTF-8");

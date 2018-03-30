@@ -1,22 +1,19 @@
 <?php
+
 namespace jennifer\fb;
 
 use Facebook;
 use jennifer\html\Element;
+use jennifer\sys\Config;
 use jennifer\sys\Globals;
 
 /**
  * Class FacebookHelper: create Facebook object and do things
- * @package fb
+ * @package jennifer\fb
  */
 class FacebookHelper {
   /** @var Facebook\Facebook */
   public $fb;
-  // Facebook configurations
-  const FB_APPID   = '*****';
-  const FB_SECRET  = '*****';
-  const FB_PAGEID  = '*****';
-  const FB_ALBUMID = '*****';
   // Post type
   const FB_TEXT  = 'text';
   const FB_FEED  = 'feed';
@@ -48,7 +45,7 @@ class FacebookHelper {
           foreach ($response->getDecodedBody() as $allPages) {
             foreach ($allPages as $page) {
               // if page found then set session
-              if (isset($page['id']) && $page['id'] == FacebookHelper::FB_PAGEID) {
+              if (isset($page['id']) && $page['id'] == Config::FB_PAGEID) {
                 $appAccessToken = (string)$page['access_token'];
                 Globals::setSession("FB_appAccessToken", $appAccessToken);
                 break;

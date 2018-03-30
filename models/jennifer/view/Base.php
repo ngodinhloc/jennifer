@@ -1,19 +1,20 @@
 <?php
+
 namespace jennifer\view;
 
 use jennifer\auth\Authentication;
 use jennifer\cache\CacheInterface;
 use jennifer\cache\FileCache;
+use jennifer\com\Common;
 use jennifer\html\JObject;
 use jennifer\http\Request;
 use jennifer\io\Output;
-use jennifer\sys\Globals;
-use jennifer\sys\System;
 use jennifer\template\Template;
+use jennifer\sys\Config;
 
 /**
  * Class Base: Base view class: all view classes will extend this base class
- * @package view
+ * @package jennifer\view
  */
 class Base {
   /** @var Authentication */
@@ -35,9 +36,7 @@ class Base {
   /** @var array meta data : module, view, title, description, keyword, metaTags, userData
    * Only $data and $meta are accessible in templates */
   protected $meta = [];
-  /** @var array store _POST */
-  protected $post = [];
-  /** @var array store _GET and uri  para */
+  /** @var array store para from uri */
   protected $para = [];
   /** @var array|bool user data */
   protected $userData = false;
@@ -47,8 +46,8 @@ class Base {
   protected $module;
   /** @var  string view class name */
   protected $view;
-  /** @var  string uri of the view */
-  protected $uri;
+  /** @var  string url of the view */
+  protected $url;
   /** @var  string title of the view */
   protected $title;
   /** @var  string description of the view */
@@ -64,12 +63,13 @@ class Base {
 
   public function __construct() {
     list($this->module, $this->view) = explode("\\", static::class);
-    $this->uri            = Globals::server("REQUEST_URI");
     $this->authentication = new Authentication();
+    $this->request        = new Request();
+    $this->output         = new Output();
+    $this->cacher         = new FileCache();
+    $this->url            = $this->request->uri;
     $this->authentication->checkUserPermission($this->requiredPermission, "view");
     $this->userData = $this->authentication->getUserData();
-    $this->output   = new Output();
-    $this->cacher   = new FileCache();
     $this->processPara();
     if ($this->cache) {
       $this->retrieveCache();
@@ -115,52 +115,21 @@ class Base {
   }
 
   /**
-   * Check if a form or ajax is posted to the the view and store post para
-   * @return bool
-   */
-  public function posted() {
-    if (empty(Globals::post())) {
-      return false;
-    }
-    foreach (Globals::post() as $key => $value) {
-      $this->post[$key] = $value;
-    }
-
-    return true;
-  }
-
-  /**
-   * Process URI and GET para
+   * Process URI para
    */
   protected function processPara() {
-    $paras = explode("/", $this->uri);
-    $index = ($this->module == DEFAULT_MODULE) ? 1 : 2;
+    $paras = explode("/", $this->request->uri);
+    $index = ($this->module == Config::DEFAULT_MODULE) ? 1 : 2;
     if (isset($paras[$index])) {
       switch($paras[$index]) {
         case "day":
           $this->para["day"] = $paras[$index + 1];
           break;
         case "search":
-          $this->para["search"] = urldecode(trim(str_replace("/search/", "", $this->uri)));
+          $this->para["search"] = urldecode(trim(str_replace("/search/", "", $this->request->uri)));
           break;
       }
     }
-
-    $get = Globals::get();
-    if (!empty($get)) {
-      foreach ($get as $name => $value) {
-        $this->para[$name] = $value;
-      }
-    }
-  }
-
-  /**
-   * Check if post para exists then return value, else return false
-   * @param $name
-   * @return bool|mixed
-   */
-  public function hasPost($name) {
-    return isset($this->post[$name]) ? $this->post[$name] : false;
   }
 
   /**
@@ -185,7 +154,7 @@ class Base {
    * @param string $file
    */
   public function addMetaFile($file) {
-    $ext = System::getFileExtension($file);
+    $ext = Common::getFileExtension($file);
     switch($ext) {
       case "css":
         array_push($this->metaFiles["header"], ["type" => $ext, "src" => $file]);
@@ -253,7 +222,7 @@ class Base {
    * else : process to prepare data and render
    */
   protected function retrieveCache() {
-    $cache = $this->cacher->getCache($this->uri);
+    $cache = $this->cacher->getCache($this->url);
     if ($cache) {
       $this->output->html($cache);
     }
@@ -273,7 +242,7 @@ class Base {
     $html            = $this->tpl->render($compress);
     // cache the whole view html
     if ($this->cache) {
-      $this->cacher->writeCache($this->uri, $html);
+      $this->cacher->writeCache($this->url, $html);
     }
 
     $this->output->html($html);

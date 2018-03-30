@@ -3,6 +3,8 @@ namespace thedaysoflife\com;
 
 use jennifer\com\Common;
 use jennifer\html\HTML;
+use jennifer\sys\Config;
+use thedaysoflife\sys\Configs;
 
 class Com extends Common {
 
@@ -14,7 +16,7 @@ class Com extends Common {
   public static function getSearchLink($search, $encode = true) {
     $search = $encode ? urlencode($search) : $search;
 
-    return SITE_URL . "/search/" . $search;
+    return Config::SITE_URL . "/search/" . $search;
   }
 
   /**
@@ -22,8 +24,8 @@ class Com extends Common {
    * @return string
    */
   public static function getDayLink($day) {
-    return $link = LIST_URL . $day['id'] . '/' . $day['day'] . $day['month'] . $day['year'] . '-' . $day['slug'] .
-                   URL_EXT;
+    return $link = Configs::LIST_URL . $day['id'] . '/' . $day['day'] . $day['month'] . $day['year'] . '-' . $day['slug'] .
+                   Configs::URL_EXT;
   }
 
   /**
@@ -31,7 +33,7 @@ class Com extends Common {
    * @return string
    */
   public static function getDayDescription($day) {
-    return self::subString(strip_tags($day['content']), DESC_LENGTH, 3);
+    return self::subString(strip_tags($day['content']), Configs::DESC_LENGTH, 3);
   }
 
   /**
@@ -40,8 +42,8 @@ class Com extends Common {
    */
   public static function getDayPreviewText($day) {
     $preview = trim(str_replace('<br>', ' ', $day['preview']));
-    if (strlen($preview) > PREVIEW_LENGTH) {
-      $preview = Com::subString($preview, PREVIEW_LENGTH, 3);
+    if (strlen($preview) > Configs::PREVIEW_LENGTH) {
+      $preview = Com::subString($preview, Configs::PREVIEW_LENGTH, 3);
     }
 
     return $preview;
@@ -89,12 +91,12 @@ class Com extends Common {
    * @return string
    */
   public static function getMenu($page) {
-    $menuArray = ['index'    => ['title' => 'The Days Of Life', 'url' => SITE_URL],
-                  'like'     => ['title' => 'Most Liked Days', 'url' => SITE_URL . '/like/'],
-                  'calendar' => ['title' => 'The Calendar Of Life', 'url' => SITE_URL . '/calendar/'],
-                  'picture'  => ['title' => 'The Picture Of Life', 'url' => SITE_URL . '/picture/'],
-                  'about'    => ['title' => 'About', 'url' => SITE_URL . '/about/'],
-                  'privacy'  => ['title' => 'Privacy', 'url' => SITE_URL . '/privacy/']];
+    $menuArray = ['index'    => ['title' => 'The Days Of Life', 'url' => Configs::SITE_URL],
+                  'like'     => ['title' => 'Most Liked Days', 'url' => Configs::SITE_URL . '/like/'],
+                  'calendar' => ['title' => 'The Calendar Of Life', 'url' => Configs::SITE_URL . '/calendar/'],
+                  'picture'  => ['title' => 'The Picture Of Life', 'url' => Configs::SITE_URL . '/picture/'],
+                  'about'    => ['title' => 'About', 'url' => Configs::SITE_URL . '/about/'],
+                  'privacy'  => ['title' => 'Privacy', 'url' => Configs::SITE_URL . '/privacy/']];
     $html      = new HTML();
     $output    = "";
     foreach ($menuArray as $view => $menu) {
@@ -120,14 +122,14 @@ class Com extends Common {
    */
   public static function getPhotoName($name, $type) {
     switch($type) {
-      case PHOTO_FULL_NAME:
-        $name = $name . PHOTO_FULL_NAME . PHOTO_EXT;
+      case Configs::PHOTO_FULL_NAME:
+        $name = $name . Configs::PHOTO_FULL_NAME . Configs::PHOTO_EXT;
         break;
-      case PHOTO_TITLE_NAME:
-        $name = $name . PHOTO_TITLE_NAME . PHOTO_EXT;
+      case Configs::PHOTO_TITLE_NAME:
+        $name = $name . Configs::PHOTO_TITLE_NAME . Configs::PHOTO_EXT;
         break;
-      case PHOTO_THUMB_NAME:
-        $name = $name . PHOTO_THUMB_NAME . PHOTO_EXT;
+      case Configs::PHOTO_THUMB_NAME:
+        $name = $name . Configs::PHOTO_THUMB_NAME . Configs::PHOTO_EXT;
         break;
     }
 
@@ -139,7 +141,7 @@ class Com extends Common {
    * @param string $type
    * @return string
    */
-  public static function getFirstPhotoURL($day, $type = PHOTO_TITLE_NAME) {
+  public static function getFirstPhotoURL($day, $type = Configs::PHOTO_TITLE_NAME) {
     $photoUrl = "";
     $photos   = trim($day['photos']);
     if ($photos != "") {
@@ -162,7 +164,7 @@ class Com extends Common {
     $year  = substr($ym, 0, 4);
     $month = substr($ym, 4, 2);
     $name  = self::getPhotoName($name, $type);
-    $url   = PHOTO_URL . $year . "/" . $month . "/" . $name;
+    $url   = Configs::PHOTO_URL . $year . "/" . $month . "/" . $name;
 
     return $url;
   }
@@ -175,7 +177,7 @@ class Com extends Common {
     $photos = explode(',', $photos);
     $array  = [];
     foreach ($photos as $photo) {
-      $thumb_url = self::getPhotoURL($photo, PHOTO_THUMB_NAME);
+      $thumb_url = self::getPhotoURL($photo, Configs::PHOTO_THUMB_NAME);
       $array []  = ["id" => $photo, "thumb" => $thumb_url];
     }
 
@@ -204,7 +206,7 @@ class Com extends Common {
     $html   = new HTML();
     $output = "";
     foreach ($photos as $i => $name) {
-      $url = self::getPhotoURL($name, PHOTO_FULL_NAME);
+      $url = self::getPhotoURL($name, Configs::PHOTO_FULL_NAME);
       $output .= $html->setTag("li")->open() .
                  $html->setTag("img")->setProp(["src" => $url])->create() .
                  $html->setTag("li")->close();
@@ -221,7 +223,7 @@ class Com extends Common {
     $html   = new HTML();
     $output = "";
     foreach ($photos as $i => $name) {
-      $url = self::getPhotoURL($name, PHOTO_THUMB_NAME);
+      $url = self::getPhotoURL($name, Configs::PHOTO_THUMB_NAME);
       $output .= $html->setTag("li")->open() .
                  $html->setTag("img")->setProp(["src" => $url])->create() .
                  $html->setTag("span")->create() .

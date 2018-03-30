@@ -8,7 +8,7 @@ use jennifer\html\jobject\FileUploader;
 
 /**
  * Class Jquery
- * @package html
+ * @package jennifer\html
  */
 class Jquery {
   public static function colorPicker($attr, $data) {

@@ -3,7 +3,7 @@ namespace jennifer\file;
 /**
  * Class SimpleImage
  * This class makes image manipulation in PHP as simple as possible.
- * @package file
+ * @package jennifer\file
  * @version    2.5.3
  * @author    Cory LaViska for A Beautiful Site, LLC. (http://www.abeautifulsite.net/)
  * @author    Nazar Mokrynskyi <nazar@mokrynskyi.com> - merging of forks, namespace support, PhpDoc editing, adaptive_resize() method, other fixes

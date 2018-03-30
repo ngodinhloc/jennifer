@@ -4,13 +4,13 @@
     <div class="row">
       <div class="col-xs-12 col-md-3 footer_logo">
         <a href="http://www.thedaysoflife.com">
-          <img src="<?= SITE_URL ?>/interface/images/logo.png" alt="They Days of Life""/>
+          <img src="<?= \thedaysoflife\sys\Configs::SITE_URL ?>/interface/images/logo.png" alt="They Days of Life""/>
         </a>
       </div>
       <div class="col-xs-12 col-md-4 copyright-text">
         © 2014
-        <a href="<?= SITE_URL ?>/about/">About</a>
-        <a href="<?= SITE_URL ?>/policy/">Policy</a>
+        <a href="<?= \thedaysoflife\sys\Configs::SITE_URL ?>/about/">About</a>
+        <a href="<?= \thedaysoflife\sys\Configs::SITE_URL ?>/policy/">Policy</a>
       </div>
       <div class="col-xs-12 col-md-3 media-social">
         <ul class="social">

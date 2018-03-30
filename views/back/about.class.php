@@ -3,6 +3,7 @@ namespace back;
 
 use jennifer\view\ViewInterface;
 use thedaysoflife\model\Admin;
+use thedaysoflife\sys\Configs;
 use thedaysoflife\view\ViewBack;
 
 class about extends ViewBack implements ViewInterface {
@@ -18,6 +19,6 @@ class about extends ViewBack implements ViewInterface {
     $tag        = "about";
     $info       = $this->admin->getInfoByTag($tag);
     $this->data = ["tag" => $tag, "info" => $info];
-    $this->addMetaFile(SITE_URL . "/plugins/ckeditor/ckeditor.js");
+    $this->addMetaFile(Configs::SITE_URL . "/plugins/ckeditor/ckeditor.js");
   }
 }

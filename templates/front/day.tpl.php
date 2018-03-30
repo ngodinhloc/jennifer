@@ -49,7 +49,7 @@
             <a href="javascript:void(0)" class="reply-focus"><i class="icon"></i>Reply</a></span>
         </div>
         <div class="social-content">
-          <div class="fb-like" data-href="<?= $this->data["day"]["uri"] ?>" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
+          <div class="fb-like" data-href="<?= $this->data["day"]["url"] ?>" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
         </div>
       </div>
       <div class="comment" id="comment-container">

@@ -3,7 +3,7 @@ namespace jennifer\sys;
 /**
  * Class Globals: utility static class, this is the only model that deals with system variables
  * such as: session, cookie, $_POST, $_GET, $_REQUEST, $_SERVER
- * @package sys
+ * @package jennifer\sys
  */
 class Globals {
   /**
@@ -138,7 +138,7 @@ class Globals {
    * Get _FILES para
    * @param string $name
    * @param null $default
-   * @return bool|string
+   * @return bool|string|array
    */
   public static function files($name = null, $default = null) {
     if (!$name) {
@@ -158,7 +158,7 @@ class Globals {
    * Get _SERVER para
    * @param string $name
    * @param null $default
-   * @return bool|string
+   * @return bool|string|array
    */
   public static function server($name = null, $default = null) {
     if (!$name) {

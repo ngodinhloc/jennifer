@@ -2,10 +2,10 @@
 namespace jennifer\com;
 
 use jennifer\html\Element;
-
+use jennifer\sys\Globals;
 /**
  * Class Common: static helper methods
- * @package com
+ * @package jennifer\com
  */
 class Common {
   /**
@@ -226,5 +226,47 @@ class Common {
     }
 
     return $newArr;
+  }
+
+  /**
+   * Start ob compression
+   */
+  public static function obStart() {
+    ob_start("ob_gzhandler");
+  }
+
+  /**
+   * Output ob
+   */
+  public static function obFlush() {
+    ob_flush();
+    flush();
+  }
+
+  /**
+   * @param $newpage
+   */
+  public static function redirectTo($newpage) {
+    $host = Globals::server("HTTP_HOST");
+    $uri  = rtrim(dirname(Globals::server("PHP_SELF")), '/\\');
+    header("Location: http://{$host}{$uri}{$newpage}");
+    exit();
+  }
+
+  /**
+   * @param $uri
+   */
+  public static function jsRedirect($uri) {
+    echo("<script>window.location.href = '{$uri}'</script>");
+  }
+
+  /**
+   * @param $filename
+   * @return mixed
+   */
+  public static function getFileExtension($filename) {
+    $pathInfo = pathinfo($filename);
+
+    return $pathInfo['extension'];
   }
 }

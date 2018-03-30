@@ -17,10 +17,10 @@ class index extends ViewBack implements ViewInterface {
   }
 
   public function prepare() {
-    if ($this->posted()) {
-      if ($this->hasPost("email")) {
-        $email    = $this->post["email"];
-        $password = $this->authentication->encryptPassword($this->post["password"]);
+    if ($this->request->posted()) {
+      if ($this->request->hasPost("email")) {
+        $email    = $this->request->post["email"];
+        $password = $this->authentication->encryptPassword($this->request->post["password"]);
         $row      = $this->admin->checkLogin($email, $password);
         $message  = "";
         if (isset($row['id'])) {

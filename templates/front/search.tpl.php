@@ -1,6 +1,6 @@
 <div id="search-container">
   <?= $this->data["searchResult"] ?>
-  <img id="loading-tiny" src="<?= SITE_URL ?>/interface/images/ajax-loader.gif" class="hidden"/>
+  <img id="loading-tiny" src="<?= \thedaysoflife\sys\Configs::SITE_URL ?>/interface/images/ajax-loader.gif" class="hidden"/>
 </div>
 <script type="text/javascript">
   $(function () {

@@ -1,16 +1,21 @@
 <?php
+
 namespace jennifer\api;
 
-use jennifer\auth\Authentication;
+use jennifer\exception\RequestException;
+use jennifer\http\Request;
 use jennifer\io\Output;
 use jennifer\jwt\JWT;
+use jennifer\sys\Config;
 
 /**
  * API gateway which will call requested service to perform action
  * then response output and log api request
- * @package api
+ * @package jennifer\api
  */
 class API {
+  /** @var Request */
+  protected $request;
   /** @var  \jennifer\api\ServiceFactory */
   protected $factory;
   /** @var ServiceMap mapper to map from requested service to api service */
@@ -35,10 +40,13 @@ class API {
     "NO_SERVICE_MODEL"    => ["message" => "Service model not found"],
   ];
 
-  public function __construct() {
-    $this->mapper  = new ServiceMap();
+  const API_REQUEST_NAME = "req";
+
+  public function __construct(ServiceMap $serviceMap = null, ServiceFactory $serviceFactory = null) {
+    $this->mapper  = $serviceMap ? $serviceMap : new ServiceMap();
+    $this->factory = $serviceFactory ? $serviceFactory : new ServiceFactory();
     $this->output  = new Output();
-    $this->factory = new ServiceFactory();
+    $this->request = new Request();
   }
 
   /**
@@ -54,29 +62,47 @@ class API {
 
   /**
    * Process api request
-   * @param string $req
    * @return $this
+   * @throws RequestException
    */
-  public function process($req) {
-    $json = json_decode($req, true);
-    if (!isset($json["token"]) || !isset($json["service"]) || !isset($json["action"])) {
-      die($this->messages["INVALID_API_REQUEST"]["message"]);
+  public function processRequest() {
+    $req = $this->getRequest();
+    if ($req) {
+      $json = json_decode($req, true);
+      if (!isset($json["token"]) || !isset($json["service"]) || !isset($json["action"])) {
+        throw new RequestException($this->messages["INVALID_API_REQUEST"]["message"], HTTP_E_INVALID_PARAM);
+      }
+
+      $this->token    = $json["token"];
+      $this->userData = (array)JWT::decode($this->token, Config::JWT_KEY_API, ['HS256']);
+      if (!isset($this->userData["userID"]) || !isset($this->userData["permission"])) {
+        throw new RequestException($this->messages["INVALID_API_TOKEN"]["message"], HTTP_AUTH_ANY);
+      }
+
+      list($this->serviceClass, $this->action) = $this->mapper->map($json["service"], $json["action"]);
+      if (!$this->serviceClass || !$this->action) {
+        throw new RequestException($this->messages["NO_SERVICE"]["message"], HTTP_E_INVALID_PARAM);
+      }
+      $this->para = isset($json["para"]) ? $json["para"] : [];
+
+      return $this;
+    }
+    throw new RequestException($this->messages["INVALID_API_REQUEST"]["message"], HTTP_E_INVALID_PARAM);
+  }
+
+  /**
+   * Get request: first looking for post, then get
+   * @return bool|mixed
+   */
+  protected function getRequest() {
+    if ($this->request->hasPost(self::API_REQUEST_NAME)) {
+      return $this->request->hasPost(self::API_REQUEST_NAME);
     }
 
-    $this->token    = $json["token"];
-    $this->userData = (array)JWT::decode($this->token, Authentication::JWT_KEY_API, ['HS256']);
-    if (!isset($this->userData["userID"]) || !isset($this->userData["permission"])) {
-      die($this->messages["INVALID_API_TOKEN"]["message"]);
+    if ($this->request->hasGet(self::API_REQUEST_NAME)) {
+      return $this->request->hasGet(self::API_REQUEST_NAME);
     }
 
-    list($this->serviceClass, $this->action) = $this->mapper->map($json["service"], $json["action"]);
-    if (!$this->serviceClass || !$this->action) {
-      die($this->messages["NO_SERVICE"]["message"]);
-    }
-
-    $this->para = isset($json["para"]) ? $json["para"] : [];
-
-    return $this;
   }
 
   /**

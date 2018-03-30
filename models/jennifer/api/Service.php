@@ -5,7 +5,7 @@ use jennifer\auth\Authentication;
 
 /**
  * Class Service: all services must extend this class
- * @package api
+ * @package jennifer\api
  */
 class Service {
   /** @var Authentication */

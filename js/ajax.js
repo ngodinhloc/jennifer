@@ -1,3 +1,44 @@
+var jennifer = {
+  'ajaxAction': function (actionPara, para, json, loader, containerPara, callback) {
+    var data = para + "&" + $.param(actionPara) + "&" + $.param({"json": json});
+    if (loader) {
+      $(loader).html(AJAX_LOADER);
+    }
+    $.ajax({
+             url:     CONST.CONTROLLER_URL,
+             type:    "POST",
+             cache:   false,
+             data:    data,
+             success: function (data, textStatus, jqXHR) {
+               if (loader) {
+                 $(loader).html('');
+               }
+               if ($.isFunction(callback)) {
+                 callback(data);
+                 return;
+               }
+               if (containerPara) {
+                 container = containerPara.container;
+                 act = containerPara.act;
+                 switch (act) {
+                   case "replace":
+                     $(container).html(data);
+                     break;
+                   case "append":
+                     $(container).append(data);
+                     break;
+                   case "prepend":
+                     $(container).prepend(data);
+                     break;
+                 }
+               }
+             },
+             error:   function (jqXHR, textStatus, errorThrown) {
+             }
+           });
+  }
+};
+
 /**
  * @param actionPara object {"action":action, "controller":controller}
  * @param para string $.para({"name":value})
@@ -12,30 +53,35 @@ function ajaxAction(actionPara, para, json, loader, containerPara, callback) {
     $(loader).html(AJAX_LOADER);
   }
   $.ajax({
-    url:     CONST.CONTROLLER_URL,
-    type:    "POST",
-    cache:   false,
-    data:    data,
-    success: function (data, textStatus, jqXHR) {
-      if (loader) {
-        $(loader).html('');
-      }
-      if (callback) {
-        callback(data);
-        return;
-      }
-      if (containerPara) {
-        container = containerPara.container;
-        act = containerPara.act;
-        if (act == "replace") {
-          $(container).html(data);
-        }
-        if (act == "append") {
-          $(container).append(data);
-        }
-      }
-    },
-    error:   function (jqXHR, textStatus, errorThrown) {
-    }
-  });
+           url:     CONST.CONTROLLER_URL,
+           type:    "POST",
+           cache:   false,
+           data:    data,
+           success: function (data, textStatus, jqXHR) {
+             if (loader) {
+               $(loader).html('');
+             }
+             if (callback) {
+               callback(data);
+               return;
+             }
+             if (containerPara) {
+               container = containerPara.container;
+               act = containerPara.act;
+               switch (act) {
+                 case "replace":
+                   $(container).html(data);
+                   break;
+                 case "append":
+                   $(container).append(data);
+                   break;
+                 case "prepend":
+                   $(container).prepend(data);
+                   break;
+               }
+             }
+           },
+           error:   function (jqXHR, textStatus, errorThrown) {
+           }
+         });
 }

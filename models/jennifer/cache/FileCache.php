@@ -1,11 +1,13 @@
 <?php
+
 namespace jennifer\cache;
 
 use jennifer\exception\IOException;
+use jennifer\sys\Config;
 
 /**
  * Class FileCache: store and retrieve cache in text file
- * @package cache
+ * @package jennifer\cache
  */
 class FileCache extends Cache implements CacheInterface {
   /**
@@ -15,7 +17,7 @@ class FileCache extends Cache implements CacheInterface {
    * @return bool
    */
   public function writeCache($key, $data) {
-    $file  = CACHE_DIR . $this->createKey($key);
+    $file  = Config::CACHE_DIR . $this->createKey($key);
     $array = ['time' => time(), 'data' => $data];
     $json  = json_encode($array);
     if ($json) {
@@ -25,7 +27,10 @@ class FileCache extends Cache implements CacheInterface {
           return true;
         }
       }
-      catch (IOException $e) {
+      catch (IOException $exception) {
+        $exception->getMessage();
+
+        return false;
       }
     }
 
@@ -38,7 +43,7 @@ class FileCache extends Cache implements CacheInterface {
    * @return bool|mixed
    */
   public function getCache($key) {
-    $file = CACHE_DIR . $this->createKey($key);
+    $file = Config::CACHE_DIR . $this->createKey($key);
     if (file_exists($file)) {
       try {
         $content = file_get_contents($file);
@@ -51,7 +56,10 @@ class FileCache extends Cache implements CacheInterface {
           }
         }
       }
-      catch (IOException $e) {
+      catch (IOException $exception) {
+        $exception->getMessage();
+
+        return false;
       }
     }
 

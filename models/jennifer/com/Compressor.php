@@ -2,7 +2,7 @@
 namespace jennifer\com;
 /**
  * Compressor class: compress html, css, js (string and files)
- * @package com
+ * @package jennifer\com
  */
 class Compressor {
   /**

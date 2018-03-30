@@ -17,7 +17,6 @@ class search extends ViewFront implements ViewInterface {
   public function prepare() {
     $search = $this->hasPara("search");
     if ($search) {
-      $search       = $this->user->escapeString($search);
       $searchResult = $this->user->getSearch($search);
       $this->data   = ["searchTerm" => $search, "searchResult" => $searchResult];
     }

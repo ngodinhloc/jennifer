@@ -2,7 +2,7 @@
 namespace jennifer\cache;
 /**
  * Class Memcache: to do implement memcache
- * @package cache
+ * @package jennifer\cache
  */
 class MemCache extends Cache implements CacheInterface {
   public function writeCache($key, $data) {

@@ -5,7 +5,7 @@ use thedaysoflife\service\DayService;
 
 /**
  * Class ServiceMap
- * @package api
+ * @package jennifer\api
  */
 class ServiceMap {
   /** @var array list of all registered service maps */

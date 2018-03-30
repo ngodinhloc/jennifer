@@ -14,14 +14,14 @@
               <? include('include/menu.inc.php'); ?>
             </header>
             <div class="col-xs-6 wrapper clearfix">
-              <a class="logo navbar-btn pull-left" title="Home" href="<?= SITE_URL ?>">
-                <img alt="Home" src="<?= SITE_URL ?>/interface/images/logo.png">
+              <a class="logo navbar-btn pull-left" title="Home" href="<?= \thedaysoflife\sys\Configs::SITE_URL ?>">
+                <img alt="Home" src="<?= \thedaysoflife\sys\Configs::SITE_URL ?>/interface/images/logo.png">
               </a>
               <span class="slogan">Share Memories, Inspire People</span>
             </div>
             <div class="col-xs-2 reggion">
               <div class="button_list">
-                <a href="<?= SITE_URL ?>/share/" class="btn btn-lg btn-primary" type="button">Share Your Day</a>
+                <a href="<?= \thedaysoflife\sys\Configs::SITE_URL ?>/share/" class="btn btn-lg btn-primary" type="button">Share Your Day</a>
               </div>
             </div>
             <div class="form-search">

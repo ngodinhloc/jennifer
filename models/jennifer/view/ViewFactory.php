@@ -2,7 +2,7 @@
 namespace jennifer\view;
 /**
  * Class ViewFactory: create view
- * @package view
+ * @package jennifer\view
  */
 class ViewFactory {
   /**

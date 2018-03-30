@@ -2,6 +2,7 @@
 
 namespace jennifer\exception;
 use Exception;
-class IOException extends Exception {
+
+class RequestException extends Exception {
 
 }

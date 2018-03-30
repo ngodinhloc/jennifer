@@ -3,7 +3,7 @@ namespace jennifer\file;
 
 /**
  * Class CSV
- * @package file
+ * @package jennifer\file
  */
 class CSV extends Downloadable {
   /**

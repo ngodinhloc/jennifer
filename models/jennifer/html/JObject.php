@@ -5,7 +5,7 @@ use jennifer\template\Template;
 
 /**
  * Class JObject: Jquery and Bootstrap Object class
- * @package html
+ * @package jennifer\html
  */
 class JObject {
   /** @var  \jennifer\template\Template */

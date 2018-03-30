@@ -3,7 +3,7 @@ namespace jennifer\html;
 
 /**
  * Class Elements
- * @package html
+ * @package jennifer\html
  */
 class Element {
   /**

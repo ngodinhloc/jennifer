@@ -1,8 +1,6 @@
 <?php
-
   use jennifer\fb\FacebookHelper;
   use thedaysoflife\com\Com;
-
 ?>
   <table>
     <thead>

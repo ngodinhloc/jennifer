@@ -3,10 +3,12 @@ namespace front;
 
 use jennifer\fb\FacebookHelper;
 use jennifer\html\jobject\FlexSlider;
+use jennifer\sys\Config;
 use jennifer\sys\Globals;
 use jennifer\view\ViewInterface;
 use thedaysoflife\com\Com;
 use thedaysoflife\model\User;
+use thedaysoflife\sys\Configs;
 use thedaysoflife\view\ViewFront;
 
 class day extends ViewFront implements ViewInterface {
@@ -25,15 +27,15 @@ class day extends ViewFront implements ViewInterface {
     if ($id) {
       $day = $user->getDayById($id);
       if ($day) {
-        $this->uri         = Com::getDayLink($day);
+        $this->url         = Com::getDayLink($day);
         $this->title       = Com::getDayTitle($day);
         $this->description = Com::getDayDescription($day);
         $this->keyword     = $day['title'];
         $slider            = "";
         if (trim($day['photos']) != "") {
           $photoArray  = explode(',', trim($day['photos']));
-          $fullPhotos  = Com::getPhotoArray($photoArray, PHOTO_FULL_NAME);
-          $thumbPhotos = Com::getPhotoArray($photoArray, PHOTO_THUMB_NAME);
+          $fullPhotos  = Com::getPhotoArray($photoArray, Configs::PHOTO_FULL_NAME);
+          $thumbPhotos = Com::getPhotoArray($photoArray, Configs::PHOTO_THUMB_NAME);
           $flexSlider  = new FlexSlider([], ["fullPhotos"  => $fullPhotos,
                                              "thumbPhotos" => $thumbPhotos]);
           $slider      = $flexSlider->render();
@@ -43,7 +45,7 @@ class day extends ViewFront implements ViewInterface {
         $ipAddress = Globals::todayIPAddress();
         $likeIP    = explode('|', $day['like_ip']);
 
-        $data = ["uri"          => $this->uri,
+        $data = ["url"          => $this->url,
                  "title"        => $this->title,
                  "time"         => Com::getTimeDiff($day['time']),
                  "photoURL"     => $photoURL,
@@ -64,13 +66,13 @@ class day extends ViewFront implements ViewInterface {
                         "relatedDays" => $relatedDays != "" ? $relatedDays : "No related days found",
                         "topDays"     => $topDays,];
 
-        $this->addMetaTag("<meta property='fb:admins' content='" . FacebookHelper::FB_PAGEID . "'/>");
+        $this->addMetaTag("<meta property='fb:admins' content='" . Config::FB_PAGEID . "'/>");
         $this->addMetaTag("<meta property='og:type' content='article'/>");
-        $this->addMetaTag("<meta property='og:url' content='{$this->uri}'/>");
+        $this->addMetaTag("<meta property='og:url' content='{$this->url}'/>");
         $this->addMetaTag("<meta property='og:title' content='{$this->title}'/>");
         $this->addMetaTag("<meta property='og:description' content='{$this->description}'/>");
         $this->addMetaTag("<meta property='og:image' content='{$photoURL}'/>");
-        $this->addMetaFile(SITE_URL . "/plugins/jquery/jquery.autosize.min.js");
+        $this->addMetaFile(Configs::SITE_URL . "/plugins/jquery/jquery.autosize.min.js");
       }
     }
   }

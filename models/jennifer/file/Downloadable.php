@@ -3,7 +3,7 @@
 namespace jennifer\file;
 /**
  * Class Downloadable
- * @package file
+ * @package jennifer\file
  */
 class Downloadable {
   /**

@@ -4,12 +4,12 @@
 
   use jennifer\com\Common;
   use jennifer\jwt\JWT;
+  use jennifer\sys\Config;
   use jennifer\sys\Globals;
-  use jennifer\sys\System;
 
   /**
    * Class Authentication: responsible for checking user permission, api permission
-   * @package auth
+   * @package jennifer\auth
    */
   class Authentication implements AuthenticationInterface {
     /** @var bool|object */
@@ -116,7 +116,7 @@
      * @return string
      */
     public function encryptPassword($password) {
-      $password = crypt($password, SALT_MD5);
+      $password = crypt($password, Config::SALT_MD5);
       $password = md5($password);
 
       return $password;
@@ -129,7 +129,7 @@
     public function getJWT() {
       $jwt = Globals::session("jwt");
       if ($jwt) {
-        $decoded = JWT::decode($jwt, self::JWT_KEY_USER, ['HS256']);
+        $decoded = JWT::decode($jwt, Config::JWT_KEY_USER, ['HS256']);
         if (isset($decoded->id) && isset($decoded->name) && isset($decoded->permission)) {
           return $decoded;
         }
@@ -144,7 +144,7 @@
      * @return string
      */
     public function setJWT($data) {
-      $jwt = JWT::encode($data, self::JWT_KEY_USER);
+      $jwt = JWT::encode($data, Config::JWT_KEY_USER);
       Globals::setSession("jwt", $jwt);
 
       return $jwt;
@@ -158,7 +158,7 @@
         session_start();
       }
       session_destroy();
-      System::redirectTo("/back/");
+      Common::redirectTo("/back/");
     }
 
     /**
@@ -168,7 +168,7 @@
      */
     public function redirect($url, $paras = []) {
       $str = Common::arrayToParas($paras);
-      System::redirectTo($url . $str);
+      Common::redirectTo($url . $str);
     }
 
     /**
@@ -178,7 +178,7 @@
     protected function handleNoPermission($checkType) {
       switch ($checkType) {
         case "view":
-          $this->redirect(LOGIN_VIEW_URL, $this->messages["NO_PERMISSION_VIEW"]);
+          $this->redirect(Config::LOGIN_VIEW_URL, $this->messages["NO_PERMISSION_VIEW"]);
           break;
         case "controller":
           die($this->messages["NO_PERMISSION_CONTROLLER"]["message"]);

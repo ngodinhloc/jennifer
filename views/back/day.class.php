@@ -5,6 +5,7 @@ use jennifer\html\jobject\PhotoUploader;
 use jennifer\view\ViewInterface;
 use thedaysoflife\com\Com;
 use thedaysoflife\model\Admin;
+use thedaysoflife\sys\Configs;
 use thedaysoflife\view\ViewBack;
 
 class day extends ViewBack implements ViewInterface {
@@ -27,7 +28,7 @@ class day extends ViewBack implements ViewInterface {
                         "monthSelect"   => Com::getMonthOptions($row["month"]),
                         "yearSelect"    => Com::getYearOptions($row["year"]),
                         "photoUploader" => $photoUploader->render()];
-      $this->addMetaFile(SITE_URL . "/plugins/ckeditor/ckeditor.js");
+      $this->addMetaFile(Configs::SITE_URL . "/plugins/ckeditor/ckeditor.js");
     }
   }
 }

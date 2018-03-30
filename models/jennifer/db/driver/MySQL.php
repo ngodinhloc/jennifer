@@ -1,6 +1,8 @@
 <?php
+
 namespace jennifer\db\driver;
 
+use jennifer\sys\Config;
 use mysqli;
 
 class MySQL implements DriverInterface {
@@ -18,7 +20,8 @@ class MySQL implements DriverInterface {
 
   public function __construct($mode) {
     $this->devMode = $mode;
-    $this->mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME) or die($this->messages["SERVER_ERROR"]);
+    $this->mysqli = new mysqli(Config::DB_HOST, Config::DB_USER, Config::DB_PASSWORD, Config::DB_NAME) or
+    die($this->messages["SERVER_ERROR"]);
   }
 
   public function __destruct() {
@@ -90,8 +93,8 @@ class MySQL implements DriverInterface {
     while ($tables = $result->fetch_assoc()) {
       foreach ($tables as $db => $table) {
         $count += 1;
-        $sql = "$do $table";
-        $re  = $this->query($sql);
+        $sql   = "$do $table";
+        $re    = $this->query($sql);
         if ($re) {
           $done += 1;
         }
