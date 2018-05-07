@@ -1770,10 +1770,10 @@ class HTML2PDF {
 
     // adding some loose (0.01mm)
     $loose = 0.01;
-    $x -= $loose;
-    $y -= $loose;
-    $w += 2. * $loose;
-    $h += 2. * $loose;
+    $x     -= $loose;
+    $y     -= $loose;
+    $w     += 2. * $loose;
+    $h     += 2. * $loose;
     if ($border['l']['width']) {
       $border['l']['width'] += 2. * $loose;
     }
@@ -1927,7 +1927,7 @@ class HTML2PDF {
 
       $bord = 3;
       if (is_array($outBL)) {
-        $bord -= 1;
+        $bord  -= 1;
         $pt[3] -= $outBL[1] - $border['b']['width'];
         if ($inBL) {
           $pt[11] -= $inBL[1];
@@ -1936,7 +1936,7 @@ class HTML2PDF {
         unset($pt[1]);
       }
       if (is_array($outTL)) {
-        $bord -= 2;
+        $bord  -= 2;
         $pt[5] += $outTL[1] - $border['t']['width'];
         if ($inTL) {
           $pt[9] += $inTL[1];
@@ -1967,7 +1967,7 @@ class HTML2PDF {
 
       $bord = 3;
       if (is_array($outTL)) {
-        $bord -= 1;
+        $bord  -= 1;
         $pt[2] += $outTL[0] - $border['l']['width'];
         if ($inTL) {
           $pt[10] += $inTL[0];
@@ -1976,7 +1976,7 @@ class HTML2PDF {
         unset($pt[1]);
       }
       if (is_array($outTR)) {
-        $bord -= 2;
+        $bord  -= 2;
         $pt[4] -= $outTR[0] - $border['r']['width'];
         if ($inTR) {
           $pt[8] -= $inTR[0];
@@ -2007,7 +2007,7 @@ class HTML2PDF {
 
       $bord = 3;
       if (is_array($outTR)) {
-        $bord -= 1;
+        $bord  -= 1;
         $pt[3] += $outTR[1] - $border['t']['width'];
         if ($inTR) {
           $pt[11] += $inTR[1];
@@ -2016,7 +2016,7 @@ class HTML2PDF {
         unset($pt[1]);
       }
       if (is_array($outBR)) {
-        $bord -= 2;
+        $bord  -= 2;
         $pt[5] -= $outBR[1] - $border['b']['width'];
         if ($inBR) {
           $pt[9] -= $inBR[1];
@@ -2047,7 +2047,7 @@ class HTML2PDF {
 
       $bord = 3;
       if (is_array($outBL)) {
-        $bord -= 2;
+        $bord  -= 2;
         $pt[4] += $outBL[0] - $border['l']['width'];
         if ($inBL) {
           $pt[8] += $inBL[0];
@@ -2056,7 +2056,7 @@ class HTML2PDF {
         unset($pt[7]);
       }
       if (is_array($outBR)) {
-        $bord -= 1;
+        $bord  -= 1;
         $pt[2] -= $outBR[0] - $border['r']['width'];
         if ($inBR) {
           $pt[10] -= $inBR[0];
@@ -3307,7 +3307,7 @@ class HTML2PDF {
     $marge['t'] = $this->parsingCss->value['border']['t']['width'] + $this->parsingCss->value['padding']['t'] + 0.03;
     $marge['b'] = $this->parsingCss->value['border']['b']['width'] + $this->parsingCss->value['padding']['b'] + 0.03;
 
-    $this->parsingCss->value['width'] -= $marge['l'] + $marge['r'];
+    $this->parsingCss->value['width']  -= $marge['l'] + $marge['r'];
     $this->parsingCss->value['height'] -= $marge['t'] + $marge['b'];
 
     $xCorr = 0;
@@ -3827,10 +3827,10 @@ class HTML2PDF {
     $words = explode(' ', $txt);
     foreach ($words as $k => $word) {
       $words[$k] = [$word, $this->pdf->GetStringWidth($word)];
-      $w += $words[$k][1];
+      $w         += $words[$k][1];
     }
     $space = $this->pdf->GetStringWidth(' ');
-    $w += $space * (count($words) - 1);
+    $w     += $space * (count($words) - 1);
 
     // position in the text
     $currPos = 0;
@@ -3897,7 +3897,7 @@ class HTML2PDF {
       $maxX = max($maxX, $this->pdf->getX());
 
       // new position and new width for the "while"
-      $w -= $str[1];
+      $w  -= $str[1];
       $y  = $this->pdf->getY();
       $x  = $this->pdf->getX();
       $dy = $this->_getElementY($lh);
@@ -4506,7 +4506,7 @@ class HTML2PDF {
     }
 
     $this->_maxH += $this->parsingCss->value['margin']['b'];
-    $h = max($this->_maxH, $this->parsingCss->getLineHeight());
+    $h           = max($this->_maxH, $this->parsingCss->getLineHeight());
 
     $this->parsingCss->load();
     $this->parsingCss->fontSet();
@@ -4687,7 +4687,7 @@ class HTML2PDF {
       $y                                  = $this->pdf->getY() + $this->parsingCss->value['margin']['t'] +
                                             $this->parsingCss->value['padding']['t'];
       $this->_pageMarges[floor($y * 100)] = [$mL + $this->parsingCss->value['text-indent'], $this->pdf->getW() - $mR];
-      $y += $this->parsingCss->getLineHeight() * 0.1;
+      $y                                  += $this->parsingCss->getLineHeight() * 0.1;
       $this->_pageMarges[floor($y * 100)] = [$mL, $this->pdf->getW() - $mR];
     }
     $this->_makeBreakLine($this->parsingCss->value['margin']['t'] + $this->parsingCss->value['padding']['t']);
@@ -4803,7 +4803,7 @@ class HTML2PDF {
   protected function _tag_open_BIG($param) {
     $this->parsingCss->save();
     $this->parsingCss->value['mini-decal'] -= $this->parsingCss->value['mini-size'] * 0.12;
-    $this->parsingCss->value['mini-size'] *= 1.2;
+    $this->parsingCss->value['mini-size']  *= 1.2;
     $this->parsingCss->analyse('big', $param);
     $this->parsingCss->setPosition();
     $this->parsingCss->fontSet();
@@ -4835,7 +4835,7 @@ class HTML2PDF {
   protected function _tag_open_SMALL($param) {
     $this->parsingCss->save();
     $this->parsingCss->value['mini-decal'] += $this->parsingCss->value['mini-size'] * 0.05;
-    $this->parsingCss->value['mini-size'] *= 0.82;
+    $this->parsingCss->value['mini-size']  *= 0.82;
     $this->parsingCss->analyse('small', $param);
     $this->parsingCss->setPosition();
     $this->parsingCss->fontSet();
@@ -4867,7 +4867,7 @@ class HTML2PDF {
   protected function _tag_open_SUP($param) {
     $this->parsingCss->save();
     $this->parsingCss->value['mini-decal'] -= $this->parsingCss->value['mini-size'] * 0.15;
-    $this->parsingCss->value['mini-size'] *= 0.75;
+    $this->parsingCss->value['mini-size']  *= 0.75;
     $this->parsingCss->analyse('sup', $param);
     $this->parsingCss->setPosition();
     $this->parsingCss->fontSet();
@@ -4899,7 +4899,7 @@ class HTML2PDF {
   protected function _tag_open_SUB($param) {
     $this->parsingCss->save();
     $this->parsingCss->value['mini-decal'] += $this->parsingCss->value['mini-size'] * 0.15;
-    $this->parsingCss->value['mini-size'] *= 0.75;
+    $this->parsingCss->value['mini-size']  *= 0.75;
     $this->parsingCss->analyse('sub', $param);
     $this->parsingCss->setPosition();
     $this->parsingCss->fontSet();
@@ -5049,7 +5049,7 @@ class HTML2PDF {
     // if small LI
     if ($inf[1]) {
       $this->parsingCss->value['mini-decal'] += $this->parsingCss->value['mini-size'] * 0.045;
-      $this->parsingCss->value['mini-size'] *= 0.75;
+      $this->parsingCss->value['mini-size']  *= 0.75;
     }
 
     // if we are in a sub html => prepare. Else : display
@@ -5183,8 +5183,8 @@ class HTML2PDF {
       }
     }
     else {
-      $level = $this->parsingHtml->getLevel($this->_parsePos);
-      $this->_parsePos += count($level);
+      $level                                       = $this->parsingHtml->getLevel($this->_parsePos);
+      $this->_parsePos                             += count($level);
       HTML2PDF::$_tables[$param['num']]['tr_curr'] += count(HTML2PDF::$_tables[$param['num']]['thead']['tr']);
     }
 
@@ -5249,8 +5249,8 @@ class HTML2PDF {
       }
     }
     else {
-      $level = $this->parsingHtml->getLevel($this->_parsePos);
-      $this->_parsePos += count($level);
+      $level                                       = $this->parsingHtml->getLevel($this->_parsePos);
+      $this->_parsePos                             += count($level);
       HTML2PDF::$_tables[$param['num']]['tr_curr'] += count(HTML2PDF::$_tables[$param['num']]['tfoot']['tr']);
     }
 
@@ -5896,9 +5896,9 @@ class HTML2PDF {
       }
 
       // new position
-      HTML2PDF::$_tables[$param['num']]['td_x'] = HTML2PDF::$_tables[$param['num']]['curr_x'] +
-                                                  HTML2PDF::$_tables[$param['num']]['marge']['l'];
-      HTML2PDF::$_tables[$param['num']]['td_y'] += $ty;
+      HTML2PDF::$_tables[$param['num']]['td_x']     = HTML2PDF::$_tables[$param['num']]['curr_x'] +
+                                                      HTML2PDF::$_tables[$param['num']]['marge']['l'];
+      HTML2PDF::$_tables[$param['num']]['td_y']     += $ty;
       HTML2PDF::$_tables[$param['num']]['new_page'] = false;
     }
     else {
@@ -6347,9 +6347,9 @@ class HTML2PDF {
    */
   protected function _tag_open_OPTION($param) {
     // get the content of the option : it is the text of the option
-    $level = $this->parsingHtml->getLevel($this->_parsePos);
+    $level           = $this->parsingHtml->getLevel($this->_parsePos);
     $this->_parsePos += count($level);
-    $value = isset($param['value']) ? $param['value'] : 'aut_tag_open_opt_' . (count($this->_lstSelect) + 1);
+    $value           = isset($param['value']) ? $param['value'] : 'aut_tag_open_opt_' . (count($this->_lstSelect) + 1);
 
     $this->_lstSelect['options'][$value] = isset($level[0]['param']['txt']) ? $level[0]['param']['txt'] : '';
 
@@ -6452,7 +6452,7 @@ class HTML2PDF {
     $fy = 1.08 * $this->parsingCss->value['font-size'];
 
     // extract the content the textarea : value
-    $level = $this->parsingHtml->getLevel($this->_parsePos);
+    $level           = $this->parsingHtml->getLevel($this->_parsePos);
     $this->_parsePos += count($level);
 
     // automatic size, from cols and rows properties
@@ -6733,7 +6733,7 @@ class HTML2PDF {
     $marge['t'] = $this->parsingCss->value['border']['t']['width'];
     $marge['b'] = $this->parsingCss->value['border']['b']['width'];
 
-    $this->parsingCss->value['width'] -= $marge['l'] + $marge['r'];
+    $this->parsingCss->value['width']  -= $marge['l'] + $marge['r'];
     $this->parsingCss->value['height'] -= $marge['t'] + $marge['b'];
 
     $overW -= $marge['l'] + $marge['r'];
@@ -7111,7 +7111,7 @@ class HTML2PDF {
             $action[] = $this->parsingCss->ConvertToMM($path[$k + 3], $this->_isInDraw['h']);    // y2
             $action[] = $this->parsingCss->ConvertToMM($path[$k + 4], $this->_isInDraw['w']);    // x
             $action[] = $this->parsingCss->ConvertToMM($path[$k + 5], $this->_isInDraw['h']);    // y
-            $k += 6;
+            $k        += 6;
             break;
 
           case 'Q':
@@ -7122,7 +7122,7 @@ class HTML2PDF {
             $action[] = $this->parsingCss->ConvertToMM($path[$k + 1], $this->_isInDraw['h']);    // y2
             $action[] = $this->parsingCss->ConvertToMM($path[$k + 2], $this->_isInDraw['w']);    // x
             $action[] = $this->parsingCss->ConvertToMM($path[$k + 3], $this->_isInDraw['h']);    // y
-            $k += 4;
+            $k        += 4;
             break;
 
           case 'A':
@@ -7135,7 +7135,7 @@ class HTML2PDF {
             $action[] = ($path[$k + 4] == '1') ? 1 : 0;                                            // sweep-flag
             $action[] = $this->parsingCss->ConvertToMM($path[$k + 5], $this->_isInDraw['w']);    // x
             $action[] = $this->parsingCss->ConvertToMM($path[$k + 6], $this->_isInDraw['h']);    // y
-            $k += 7;
+            $k        += 7;
             break;
 
           case 'M':
@@ -7146,19 +7146,19 @@ class HTML2PDF {
           case 't':
             $action[] = $this->parsingCss->ConvertToMM($path[$k + 0], $this->_isInDraw['w']);    // x
             $action[] = $this->parsingCss->ConvertToMM($path[$k + 1], $this->_isInDraw['h']);    // y
-            $k += 2;
+            $k        += 2;
             break;
 
           case 'H':
           case 'h':
             $action[] = $this->parsingCss->ConvertToMM($path[$k + 0], $this->_isInDraw['w']);    // x
-            $k += 1;
+            $k        += 1;
             break;
 
           case 'V':
           case 'v':
             $action[] = $this->parsingCss->ConvertToMM($path[$k + 0], $this->_isInDraw['h']);    // y
-            $k += 1;
+            $k        += 1;
             break;
 
           case 'z':

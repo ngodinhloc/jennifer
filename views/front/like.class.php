@@ -1,4 +1,5 @@
 <?php
+
 namespace front;
 
 use jennifer\view\ViewInterface;
@@ -9,9 +10,9 @@ class like extends ViewFront implements ViewInterface {
   protected $contentTemplate = "like";
   protected $title = "Most Liked Days";
 
-  public function __construct() {
+  public function __construct(User $user = null) {
     parent::__construct();
-    $this->user = new User();
+    $this->user = $user ? $user : new User();
   }
 
   public function prepare() {

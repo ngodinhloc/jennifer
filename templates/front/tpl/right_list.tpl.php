@@ -6,7 +6,7 @@
       </a>
     </div>
     <div class="right-title">
-      <a href="<?= $day["link"] ?>"><?= $day["title"] ?></a></div>
+      <a href="<?= $day["link"] ?>"><?= htmlspecialchars($day["title"]) ?></a></div>
     <div class="clear-both"></div>
   </li>
 <? } ?>

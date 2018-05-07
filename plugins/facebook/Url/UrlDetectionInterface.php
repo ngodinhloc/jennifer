@@ -21,6 +21,7 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
+
 namespace Facebook\Url;
 
 /**
@@ -28,12 +29,11 @@ namespace Facebook\Url;
  *
  * @package Facebook
  */
-interface UrlDetectionInterface
-{
-    /**
-     * Get the currently active URL.
-     *
-     * @return string
-     */
-    public function getCurrentUrl();
+interface UrlDetectionInterface {
+  /**
+   * Get the currently active URL.
+   *
+   * @return string
+   */
+  public function getCurrentUrl();
 }

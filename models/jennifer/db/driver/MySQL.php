@@ -2,6 +2,7 @@
 
 namespace jennifer\db\driver;
 
+use jennifer\exception\DBException;
 use jennifer\sys\Config;
 use mysqli;
 
@@ -32,6 +33,7 @@ class MySQL implements DriverInterface {
    * Private function query
    * @param string $sql
    * @return \mysqli_result
+   * @throws DBException
    */
   public function query($sql = "") {
     $this->isDevMode($sql);

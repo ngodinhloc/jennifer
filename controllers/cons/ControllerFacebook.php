@@ -18,10 +18,10 @@ class ControllerFacebook extends Controller {
   private $helper;
   protected $requiredPermission = ["admin"];
 
-  public function __construct() {
+  public function __construct(Admin $admin = null, FacebookHelper $facebookHelper = null) {
     parent::__construct();
-    $this->admin  = new Admin();
-    $this->helper = new FacebookHelper();
+    $this->admin  = $admin ? $admin : new Admin();
+    $this->helper = $facebookHelper ? $facebookHelper : new FacebookHelper();
   }
 
   /**

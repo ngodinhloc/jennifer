@@ -21,7 +21,8 @@
             </div>
             <div class="col-xs-2 reggion">
               <div class="button_list">
-                <a href="<?= \thedaysoflife\sys\Configs::SITE_URL ?>/share/" class="btn btn-lg btn-primary" type="button">Share Your Day</a>
+                <a href="<?= \thedaysoflife\sys\Configs::SITE_URL ?>/share/" class="btn btn-lg btn-primary" type="button">Share
+                  Your Day</a>
               </div>
             </div>
             <div class="form-search">

@@ -1,4 +1,5 @@
 <?php
+
 namespace back;
 
 use jennifer\html\jobject\PhotoUploader;
@@ -12,9 +13,9 @@ class day extends ViewBack implements ViewInterface {
   protected $title = "Dashboard :: Edit";
   protected $contentTemplate = "day";
 
-  public function __construct() {
+  public function __construct(Admin $admin = null) {
     parent::__construct();
-    $this->admin = new Admin();
+    $this->admin = $admin ? $admin : new Admin();
   }
 
   public function prepare() {

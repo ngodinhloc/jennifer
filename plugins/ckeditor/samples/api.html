@@ -48,8 +48,9 @@ For licensing, see LICENSE.md or http://ckeditor.com/license
         // http://docs.ckeditor.com/#!/api/CKEDITOR.editor-method-insertText
         editor.insertText(value);
       }
-      else
+      else {
         alert('You must be in WYSIWYG mode!');
+      }
     }
 
     function SetContents() {
@@ -81,8 +82,9 @@ For licensing, see LICENSE.md or http://ckeditor.com/license
         // http://docs.ckeditor.com/#!/api/CKEDITOR.editor-method-execCommand
         editor.execCommand(commandName);
       }
-      else
+      else {
         alert('You must be in WYSIWYG mode!');
+      }
     }
 
     function CheckDirty() {
@@ -156,10 +158,12 @@ For licensing, see LICENSE.md or http://ckeditor.com/license
         // Check for availability of corresponding plugins.
         pluginsLoaded: function (evt) {
           var doc = CKEDITOR.document, ed = evt.editor;
-          if (!ed.getCommand('bold'))
+          if (!ed.getCommand('bold')) {
             doc.getById('exec-bold').hide();
-          if (!ed.getCommand('link'))
+          }
+          if (!ed.getCommand('link')) {
             doc.getById('exec-link').hide();
+          }
         }
       }
     });

@@ -1,4 +1,5 @@
 <?php
+
 namespace jennifer\db\driver;
 
 use jennifer\cache\FileCache;

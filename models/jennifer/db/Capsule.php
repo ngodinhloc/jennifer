@@ -3,6 +3,7 @@
  * This is the capsule class of Database table
  * Be able to access to any table by implementing table()
  */
+
 namespace jennifer\db;
 
 class Capsule extends Database {

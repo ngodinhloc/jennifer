@@ -1,4 +1,5 @@
 <?php
+
 namespace back;
 
 use jennifer\html\jobject\ClockPicker;
@@ -15,9 +16,9 @@ class home extends ViewBack implements ViewInterface {
   protected $title = "Dashboard";
   protected $contentTemplate = "home";
 
-  public function __construct() {
+  public function __construct(Admin $admin = null) {
     parent::__construct();
-    $this->admin = new Admin();
+    $this->admin = $admin ? $admin : new Admin();
   }
 
   public function prepare() {

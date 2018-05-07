@@ -1,4 +1,5 @@
 <?php
+
 namespace back;
 
 use jennifer\auth\Authentication;
@@ -11,9 +12,9 @@ class index extends ViewBack implements ViewInterface {
   protected $contentTemplate = "index";
   protected $requiredPermission = false;
 
-  public function __construct() {
+  public function __construct(Admin $admin) {
     parent::__construct();
-    $this->admin = new Admin();
+    $this->admin = $admin ? $admin : new Admin();
   }
 
   public function prepare() {

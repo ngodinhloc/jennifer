@@ -1,4 +1,5 @@
 <?php
+
 namespace jennifer\auth;
 
 interface AuthenticationInterface {

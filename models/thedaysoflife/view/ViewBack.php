@@ -1,4 +1,5 @@
 <?php
+
 namespace thedaysoflife\view;
 
 use jennifer\view\Base;

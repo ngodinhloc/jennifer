@@ -127,16 +127,15 @@ $content = '
     </draw>
 </page>';
 
-    // onvert to PDF
-    require_once(dirname(__FILE__).'/../vendor/autoload.php');
-    try
-    {
-        $html2pdf = new HTML2PDF('P', 'A4', 'fr');
-        $html2pdf->pdf->SetDisplayMode('fullpage');
-        $html2pdf->writeHTML($content, isset($_GET['vuehtml']));
-        $html2pdf->Output('svg_tree.pdf');
-    }
-    catch(HTML2PDF_exception $e) {
-        echo $e;
-        exit;
-    }
+// onvert to PDF
+require_once(dirname(__FILE__) . '/../vendor/autoload.php');
+try {
+  $html2pdf = new HTML2PDF('P', 'A4', 'fr');
+  $html2pdf->pdf->SetDisplayMode('fullpage');
+  $html2pdf->writeHTML($content, isset($_GET['vuehtml']));
+  $html2pdf->Output('svg_tree.pdf');
+}
+catch (HTML2PDF_exception $e) {
+  echo $e;
+  exit;
+}

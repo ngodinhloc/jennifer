@@ -21,6 +21,7 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
+
 namespace Facebook\GraphNodes;
 
 /**
@@ -31,6 +32,5 @@ namespace Facebook\GraphNodes;
  * @deprecated 5.0.0 GraphObject has been renamed to GraphNode
  * @todo v6: Remove this class
  */
-class GraphObject extends GraphNode
-{
+class GraphObject extends GraphNode {
 }

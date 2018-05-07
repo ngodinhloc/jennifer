@@ -1,10 +1,10 @@
 <div id="comment-<?= $this->data["comment"]["id"] ?>" class="media comment <?= $this->data["comment"]["repClass"] ?>">
   <div class="media-body">
     <div class="author">
-      <i class="icon"></i><span id="name-<?= $this->data["comment"]["id"] ?>"><?= $this->data["comment"]["username"] ?></span>
+      <i class="icon"></i><span id="name-<?= $this->data["comment"]["id"] ?>"><?= htmlspecialchars($this->data["comment"]["username"], ENT_QUOTES) ?></span>
     </div>
     <div class="date"><i class="icon"></i><span><?= $this->data["comment"]["time"] ?></span></div>
-    <p><?= $this->data["comment"]["repName"] ?><?= $this->data["comment"]["content"] ?></p>
+    <p><?= $this->data["comment"]["repName"] ?><?= htmlspecialchars($this->data["comment"]["content"]) ?></p>
     <div class="stat pull-right">
       <? if ($this->data["comment"]["liked"]) { ?>
         <span class="like liked" title="Liked"><i class="icon"></i><?= $this->data["comment"]["like"] ?></span>

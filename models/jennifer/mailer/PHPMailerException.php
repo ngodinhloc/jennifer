@@ -3,6 +3,7 @@
  * PHPMailer exception handler
  * @package PHPMailer
  */
+
 namespace jennifer\mailer;
 use Exception;
 

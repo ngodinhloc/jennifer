@@ -1,7 +1,7 @@
 <?php
+
 namespace front;
 
-use jennifer\fb\FacebookHelper;
 use jennifer\html\jobject\FlexSlider;
 use jennifer\sys\Config;
 use jennifer\sys\Globals;
@@ -14,9 +14,9 @@ use thedaysoflife\view\ViewFront;
 class day extends ViewFront implements ViewInterface {
   protected $contentTemplate = "day";
 
-  public function __construct() {
+  public function __construct(User $user = null) {
     parent::__construct();
-    $this->user = new User();
+    $this->user = $user ? $user : new User();
   }
 
   public function prepare() {

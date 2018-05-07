@@ -1,4 +1,5 @@
 <?php
+
 namespace jennifer\file;
 /**
  * Class Image: Modified from SimpleImage.php of Simon Jarvis

@@ -1,4 +1,5 @@
 <?php
+
 namespace jennifer\jwt;
 
 use DateTime;
@@ -315,7 +316,7 @@ class JWT {
     $remainder = strlen($input) % 4;
     if ($remainder) {
       $padlen = 4 - $remainder;
-      $input .= str_repeat('=', $padlen);
+      $input  .= str_repeat('=', $padlen);
     }
 
     return base64_decode(strtr($input, '-_', '+/'));

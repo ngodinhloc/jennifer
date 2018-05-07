@@ -1,8 +1,10 @@
 <?php
+
 namespace jennifer\com;
 
 use jennifer\html\Element;
 use jennifer\sys\Globals;
+
 /**
  * Class Common: static helper methods
  * @package jennifer\com
@@ -143,8 +145,8 @@ class Common {
     $len = 0;
     foreach (explode(' ', $str) as $word) {
       $part = (($sub != '') ? ' ' : '') . $word;
-      $sub .= $part;
-      $len += strlen($part);
+      $sub  .= $part;
+      $len  += strlen($part);
       if (strlen($word) > $minword && strlen($sub) >= $length) {
         break;
       }

@@ -1,4 +1,5 @@
 <?php
+
 namespace thedaysoflife\com;
 
 use jennifer\com\Common;
@@ -24,7 +25,8 @@ class Com extends Common {
    * @return string
    */
   public static function getDayLink($day) {
-    return $link = Configs::LIST_URL . $day['id'] . '/' . $day['day'] . $day['month'] . $day['year'] . '-' . $day['slug'] .
+    return $link = Configs::LIST_URL . $day['id'] . '/' . $day['day'] . $day['month'] . $day['year'] . '-' .
+                   $day['slug'] .
                    Configs::URL_EXT;
   }
 
@@ -206,7 +208,7 @@ class Com extends Common {
     $html   = new HTML();
     $output = "";
     foreach ($photos as $i => $name) {
-      $url = self::getPhotoURL($name, Configs::PHOTO_FULL_NAME);
+      $url    = self::getPhotoURL($name, Configs::PHOTO_FULL_NAME);
       $output .= $html->setTag("li")->open() .
                  $html->setTag("img")->setProp(["src" => $url])->create() .
                  $html->setTag("li")->close();
@@ -223,7 +225,7 @@ class Com extends Common {
     $html   = new HTML();
     $output = "";
     foreach ($photos as $i => $name) {
-      $url = self::getPhotoURL($name, Configs::PHOTO_THUMB_NAME);
+      $url    = self::getPhotoURL($name, Configs::PHOTO_THUMB_NAME);
       $output .= $html->setTag("li")->open() .
                  $html->setTag("img")->setProp(["src" => $url])->create() .
                  $html->setTag("span")->create() .

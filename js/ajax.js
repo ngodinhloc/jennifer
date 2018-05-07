@@ -5,37 +5,37 @@ var jennifer = {
       $(loader).html(AJAX_LOADER);
     }
     $.ajax({
-             url:     CONST.CONTROLLER_URL,
-             type:    "POST",
-             cache:   false,
-             data:    data,
-             success: function (data, textStatus, jqXHR) {
-               if (loader) {
-                 $(loader).html('');
-               }
-               if ($.isFunction(callback)) {
-                 callback(data);
-                 return;
-               }
-               if (containerPara) {
-                 container = containerPara.container;
-                 act = containerPara.act;
-                 switch (act) {
-                   case "replace":
-                     $(container).html(data);
-                     break;
-                   case "append":
-                     $(container).append(data);
-                     break;
-                   case "prepend":
-                     $(container).prepend(data);
-                     break;
-                 }
-               }
-             },
-             error:   function (jqXHR, textStatus, errorThrown) {
-             }
-           });
+      url:     CONST.CONTROLLER_URL,
+      type:    "POST",
+      cache:   false,
+      data:    data,
+      success: function (data, textStatus, jqXHR) {
+        if (loader) {
+          $(loader).html('');
+        }
+        if ($.isFunction(callback)) {
+          callback(data);
+          return;
+        }
+        if (containerPara) {
+          container = containerPara.container;
+          act = containerPara.act;
+          switch (act) {
+            case "replace":
+              $(container).html(data);
+              break;
+            case "append":
+              $(container).append(data);
+              break;
+            case "prepend":
+              $(container).prepend(data);
+              break;
+          }
+        }
+      },
+      error:   function (jqXHR, textStatus, errorThrown) {
+      }
+    });
   }
 };
 
@@ -53,35 +53,35 @@ function ajaxAction(actionPara, para, json, loader, containerPara, callback) {
     $(loader).html(AJAX_LOADER);
   }
   $.ajax({
-           url:     CONST.CONTROLLER_URL,
-           type:    "POST",
-           cache:   false,
-           data:    data,
-           success: function (data, textStatus, jqXHR) {
-             if (loader) {
-               $(loader).html('');
-             }
-             if (callback) {
-               callback(data);
-               return;
-             }
-             if (containerPara) {
-               container = containerPara.container;
-               act = containerPara.act;
-               switch (act) {
-                 case "replace":
-                   $(container).html(data);
-                   break;
-                 case "append":
-                   $(container).append(data);
-                   break;
-                 case "prepend":
-                   $(container).prepend(data);
-                   break;
-               }
-             }
-           },
-           error:   function (jqXHR, textStatus, errorThrown) {
-           }
-         });
+    url:     CONST.CONTROLLER_URL,
+    type:    "POST",
+    cache:   false,
+    data:    data,
+    success: function (data, textStatus, jqXHR) {
+      if (loader) {
+        $(loader).html('');
+      }
+      if (callback) {
+        callback(data);
+        return;
+      }
+      if (containerPara) {
+        container = containerPara.container;
+        act = containerPara.act;
+        switch (act) {
+          case "replace":
+            $(container).html(data);
+            break;
+          case "append":
+            $(container).append(data);
+            break;
+          case "prepend":
+            $(container).prepend(data);
+            break;
+        }
+      }
+    },
+    error:   function (jqXHR, textStatus, errorThrown) {
+    }
+  });
 }

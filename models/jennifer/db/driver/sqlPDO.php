@@ -1,4 +1,5 @@
 <?php
+
 namespace jennifer\db\driver;
 
 class sqlPDO implements DriverInterface {

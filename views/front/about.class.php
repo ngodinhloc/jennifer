@@ -1,4 +1,5 @@
 <?php
+
 namespace front;
 
 use jennifer\view\ViewInterface;
@@ -10,9 +11,9 @@ class about extends ViewFront implements ViewInterface {
   protected $contentTemplate = "about";
   protected $cache = true;
 
-  public function __construct() {
+  public function __construct(User $user = null) {
     parent::__construct();
-    $this->user = new User();
+    $this->user = $user ? $user : new User();
   }
 
   public function prepare() {

@@ -1,4 +1,5 @@
 <?php
+
 namespace front;
 
 use jennifer\html\jobject\PhotoUploader;

@@ -25,6 +25,9 @@ class Controller implements ControllerInterface {
   /** @var mixed result of the action */
   protected $result;
 
+  const ERROR_CODE_CONTROLLER_NOT_FOUND = 1;
+  const ERROR_CODE_ACTION_NOT_FOUND     = 2;
+
   public function __construct() {
     $this->request        = new Request();
     $this->authentication = new Authentication();
@@ -38,8 +41,12 @@ class Controller implements ControllerInterface {
    * @param string $action public action (method) name
    */
   public function action($action) {
-    $result = $this->$action();
-    $this->response($result, $this->request->post["json"]);
+    if (method_exists($this, $action)) {
+      $result = $this->$action();
+      $this->response($result, $this->request->post["json"]);
+    }
+
+    $this->error(self::ERROR_CODE_ACTION_NOT_FOUND);
   }
 
   /**
@@ -64,5 +71,13 @@ class Controller implements ControllerInterface {
    */
   protected function loadRequiredPermission() {
 
+  }
+
+  /**
+   * @param $errorCode
+   */
+  public function error($errorCode) {
+    $response = ["status" => "error", "code" => $errorCode];
+    $this->response($response);
   }
 }

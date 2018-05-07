@@ -67,6 +67,7 @@ function processPostToFacebook(data) {
     $("#fb-type-" + data.id).addClass("fb-posted");
   }
 }
+
 /**
  * Print list
  * @param page
@@ -132,6 +133,7 @@ function ajaxRemoveADay(id) {
   jennifer.ajaxAction({"action": "ajaxRemoveADay", "controller": "ControllerBack"},
     $.param({"id": id}), loader, false, callback);
 }
+
 /**
  * @param data
  */

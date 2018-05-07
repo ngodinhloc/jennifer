@@ -1,4 +1,5 @@
 <?php
+
 namespace back;
 
 use jennifer\fb\FacebookHelper;
@@ -11,10 +12,10 @@ class days extends ViewBack implements ViewInterface {
   protected $contentTemplate = "days";
   protected $fbHelper;
 
-  public function __construct() {
+  public function __construct(Admin $admin = null, FacebookHelper $facebookHelper = null) {
     parent::__construct();
-    $this->admin    = new Admin();
-    $this->fbHelper = new FacebookHelper();
+    $this->admin    = $admin ? $admin : new Admin();
+    $this->fbHelper = $facebookHelper ? $facebookHelper : new FacebookHelper();
   }
 
   public function prepare() {

@@ -1,4 +1,5 @@
 <?php
+
 namespace jennifer\api;
 
 use jennifer\auth\Authentication;

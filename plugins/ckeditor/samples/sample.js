@@ -25,7 +25,7 @@
       if (missing.length) {
         var warn = CKEDITOR.dom.element.createFromHtml(
           '<div class="warning">' +
-          '<span>To fully experience this demo, the ' + missing.join(', ') + ' plugin' + ( missing.length > 1 ? 's are' : ' is' ) + ' required.</span>' +
+          '<span>To fully experience this demo, the ' + missing.join(', ') + ' plugin' + (missing.length > 1 ? 's are' : ' is') + ' required.</span>' +
           '</div>'
         );
         warn.insertBefore(editor.container);
@@ -39,7 +39,7 @@
     for (i = 0; i < icons.count(); i++) {
       var icon = icons.getItem(i),
         name = icon.getAttribute('data-icon'),
-        style = CKEDITOR.skin.getIconStyle(name, ( CKEDITOR.lang.dir == 'rtl' ));
+        style = CKEDITOR.skin.getIconStyle(name, (CKEDITOR.lang.dir == 'rtl'));
 
       icon.addClass('cke_button_icon');
       icon.addClass('cke_button__' + name + '_icon');

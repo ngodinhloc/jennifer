@@ -13,21 +13,20 @@
  * it allow to display the result in the HTML format
  */
 
-    // get the HTML
-    ob_start();
-    include(dirname(__FILE__).'/res/exemple05.php');
-    $content = ob_get_clean();
+// get the HTML
+ob_start();
+include(dirname(__FILE__) . '/res/exemple05.php');
+$content = ob_get_clean();
 
-    // convert to PDF
-    require_once(dirname(__FILE__).'/../vendor/autoload.php');
-    try
-    {
-        $html2pdf = new HTML2PDF('P', 'A4', 'fr');
-        $html2pdf->pdf->SetDisplayMode('fullpage');
-        $html2pdf->writeHTML($content, isset($_GET['vuehtml']));
-        $html2pdf->Output('exemple05.pdf');
-    }
-    catch(HTML2PDF_exception $e) {
-        echo $e;
-        exit;
-    }
+// convert to PDF
+require_once(dirname(__FILE__) . '/../vendor/autoload.php');
+try {
+  $html2pdf = new HTML2PDF('P', 'A4', 'fr');
+  $html2pdf->pdf->SetDisplayMode('fullpage');
+  $html2pdf->writeHTML($content, isset($_GET['vuehtml']));
+  $html2pdf->Output('exemple05.pdf');
+}
+catch (HTML2PDF_exception $e) {
+  echo $e;
+  exit;
+}

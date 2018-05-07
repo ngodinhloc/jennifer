@@ -3,6 +3,7 @@
  * Sample controller for JFileUploader
  * @see \jennifer\html\jobject\FileUploader
  */
+
 namespace cons;
 require_once(DOC_ROOT . '/plugins/jquery/fileuploader/FileUploader.php');
 

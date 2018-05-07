@@ -32,13 +32,6 @@ class API {
   protected $userData = [];
   /** @var array parameters */
   protected $para = [];
-  /** @var array output message */
-  public $messages = [
-    "INVALID_API_REQUEST" => ["message" => "Invalid API request"],
-    "INVALID_API_TOKEN"   => ["message" => "Invalid API authenticating token"],
-    "NO_SERVICE"          => ["message" => "Service not found"],
-    "NO_SERVICE_MODEL"    => ["message" => "Service model not found"],
-  ];
 
   const API_REQUEST_NAME = "req";
 
@@ -70,24 +63,24 @@ class API {
     if ($req) {
       $json = json_decode($req, true);
       if (!isset($json["token"]) || !isset($json["service"]) || !isset($json["action"])) {
-        throw new RequestException($this->messages["INVALID_API_REQUEST"]["message"], HTTP_E_INVALID_PARAM);
+        throw new RequestException(RequestException::ERROR_MSG_INVALID_API_REQUEST, RequestException::ERROR_CODE_INVALID_API_REQUEST);
       }
 
       $this->token    = $json["token"];
       $this->userData = (array)JWT::decode($this->token, Config::JWT_KEY_API, ['HS256']);
       if (!isset($this->userData["userID"]) || !isset($this->userData["permission"])) {
-        throw new RequestException($this->messages["INVALID_API_TOKEN"]["message"], HTTP_AUTH_ANY);
+        throw new RequestException(RequestException::ERROR_MSG_INVALID_API_TOKEN, RequestException::ERROR_CODE_INVALID_API_TOKEN);
       }
 
       list($this->serviceClass, $this->action) = $this->mapper->map($json["service"], $json["action"]);
       if (!$this->serviceClass || !$this->action) {
-        throw new RequestException($this->messages["NO_SERVICE"]["message"], HTTP_E_INVALID_PARAM);
+        throw new RequestException(RequestException::ERROR_MSG_INVALID_SERVICE, RequestException::ERROR_CODE_INVALID_SERVICE);
       }
       $this->para = isset($json["para"]) ? $json["para"] : [];
 
       return $this;
     }
-    throw new RequestException($this->messages["INVALID_API_REQUEST"]["message"], HTTP_E_INVALID_PARAM);
+    throw new RequestException(RequestException::ERROR_MSG_INVALID_API_REQUEST, RequestException::ERROR_CODE_INVALID_API_REQUEST);
   }
 
   /**

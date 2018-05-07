@@ -1,4 +1,5 @@
 <?php
+
 namespace jennifer\io;
 
 interface OutputInterface {

@@ -3,20 +3,21 @@
   <div class="col-md-12 col-md-8 no-front">
     <? if (isset($this->data["day"])) { ?>
       <h4 class="title">
-        <?= $this->data["day"]['title'] ?>
+        <?= htmlspecialchars($this->data["day"]['title']) ?>
         <input type="hidden" id="day-id" value="<?= $this->data["day"]['id'] ?>">
       </h4>
       <div class="post-meta">
         <div class="author post">
           <i class="icon"></i>
-          <span><a href="<?= $this->data["day"]["authorLink"] ?>"><?= $this->data["day"]['username'] ?></a></span>
+          <span><a href="<?= htmlspecialchars($this->data["day"]["authorLink"]) ?>"><?= htmlspecialchars($this->data["day"]['username']) ?></a></span>
           <? if ($this->data["day"]['locationLink']) { ?>
-            - <a href="<?= $this->data["day"]["locationLink"] ?>"><?= $this->data["day"]['location'] ?></a>
+            -
+            <a href="<?= htmlspecialchars($this->data["day"]["locationLink"]) ?>"><?= htmlspecialchars($this->data["day"]['location']) ?></a>
           <? } ?>
         </div>
         <div class="date post">
           <i class="icon"></i>
-          <span><a href="<?= $this->data["day"]["dateLink"] ?>"><?= $this->data["day"]["time"] ?></a></span>
+          <span><a href="<?= htmlspecialchars($this->data["day"]["dateLink"]) ?>"><?= $this->data["day"]["time"] ?></a></span>
         </div>
         <div class="stat post">
         <span class="view">
@@ -28,7 +29,7 @@
       </div>
       <hr/>
       <div class="body">
-        <p><?= $this->data["day"]['content'] ?></p>
+        <p><?= htmlspecialchars($this->data["day"]['content']) ?></p>
       </div>
       <?= $this->data["day"]["slider"] ?>
       <div class="action-content" id="action-container">

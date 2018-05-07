@@ -1,4 +1,5 @@
 <?php
+
 namespace thedaysoflife\service;
 
 use jennifer\api\Service;

@@ -24,8 +24,9 @@ For licensing, see LICENSE.md or http://ckeditor.com/license
     }
 
     function removeEditor() {
-      if (!editor)
+      if (!editor) {
         return;
+      }
 
       // Retrieve the editor contents. In an Ajax application, this data would be
       // sent to the server or used in any other way.
