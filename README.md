@@ -11,24 +11,30 @@ The code using in this example includes source code of Thedaysoflife project htt
     - views 
     - controllers 
     - templates 
+    - api
     - js 
     - plugins 
     - caches
+    
 - [Single Point Entry](#single-point-entry)
-    - index.php
     - .htaccess
+    - index.php
+    - api/index.php
+    - controllers/index.php
+    
 - [Models](#models)
-    - db\driver\MySQL.php
-    - db\Database.php
-    - view\Base.php
-    - tpl\Template.php
-    - cons\Controller.php
-    - sys\System.php
-    - html\HTML.php
-    - html\jobject\ClockerPicker.php
-    - cache\FileCache.php
-    - thedaysoflife\User.php
-    - thedaysoflife\Admin.php
+    - jennifer\db\driver\MySQL.php
+    - jennifer\db\Database.php
+    - jennifer\view\Base.php
+    - jennifer\tpl\Template.php
+    - jennifer\cons\Controller.php
+    - jennifer\sys\System.php
+    - jennifer\html\HTML.php
+    - jennifer\html\jobject\ClockerPicker.php
+    - jennifer\cache\FileCache.php
+    - thedaysoflife\model\User.php
+    - thedaysoflife\model\Admin.php
+    
 - [Views](#views)
     - views/front/index.class.php
 - [Controllers](#controllers)
