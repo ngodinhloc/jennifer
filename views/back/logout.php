@@ -1,5 +1,4 @@
 <?php
-
 namespace back;
 
 use jennifer\view\ViewInterface;

@@ -17,7 +17,7 @@ class Config {
   const CACHE_DIR      = "caches/";
   // EXTENSIONS
   const MODEL_EXT      = ".php";
-  const VIEW_EXT       = ".class.php";
+  const VIEW_EXT       = ".php";
   const CONTROLLER_EXT = ".php";
   const SERVICE_EXT    = ".php";
   const TEMPLATE_EXT   = ".tpl.php";
