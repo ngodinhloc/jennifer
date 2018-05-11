@@ -7,19 +7,19 @@ The code using in this example includes source code of Thedaysoflife project htt
 ### Jennifer Framework
 - [Ajax MVC Pattern](#ajax-mvc-pattern)
 - [The Framework Structure](#the-framework-structure)
-    - models
-    - views 
-    - controllers 
-    - templates 
     - api
-    - js 
-    - plugins 
     - caches
+    - controllers
+    - interface
+    - js
+    - models
+    - plugins
+    - templates
+    - views 
     
 - [Single Point Entry](#single-point-entry)
-    - .htaccess
     - index.php
-    - api/index.php
+    - api\index.php
     - controllers/index.php
     
 - [Models](#models)
@@ -36,9 +36,8 @@ The code using in this example includes source code of Thedaysoflife project htt
     - thedaysoflife\model\Admin.php
     
 - [Views](#views)
-    - views/front/index.class.php
+    - views/front/index.php
 - [Controllers](#controllers)
-    - index.php
     - ControllerView.php
 - [Templates](#templates)
     - front\index.tpl.php
