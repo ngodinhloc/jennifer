@@ -9,12 +9,12 @@ For example of usage please take a look at Thedaysoflife project https://github.
 - [Models](#models)
     - jennifer\db\driver\MySQL.php
     - jennifer\db\Database.php
-    - jennifer\tpl\Template.php
-    - jennifer\cons\Controller.php
+    - jennifer\template\Template.php
+    - jennifer\controller\Controller.php
     - jennifer\sys\System.php
     
 ### Models
-#### db\driver\MySQL.php
+#### jennifer\db\driver\MySQL.php
 <pre>
 namespace jennifer\db\driver;
 
@@ -71,7 +71,7 @@ class MySQL implements DriverInterface {
   }
 }
 </pre>
-#### db\Database.php
+#### jennifer\db\Database.php
 <pre>
 namespace jennifer\db;
 
@@ -237,7 +237,7 @@ use jennifer\db\driver\DriverFactory;
     }
 }
 </pre>
-#### tpl\Template.php
+#### jennifer\template\Template.php
 <pre>
 namespace jennifer\template;
 
@@ -264,7 +264,7 @@ class Template implements TemplateInterface {
   }
 }
 </pre>
-#### cons\Controller.php
+#### jennifer\controller\Controller.php
 <pre>
 /**
  * The base controller class: all controller will extend this class
@@ -325,7 +325,7 @@ class Controller implements ControllerInterface {
       }
 }
 </pre>
-#### sys\System.php
+#### jennifer\sys\System.php
 <pre>
 namespace jennifer/sys;
 class System {
