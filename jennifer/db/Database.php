@@ -1,5 +1,4 @@
 <?php
-
 namespace jennifer\db;
 
 use jennifer\cache\CacheInterface;
@@ -9,7 +8,7 @@ use jennifer\db\driver\DriverFactory;
 /**
  * Class Database
  * @package jennifer\db
- */
+   */
 abstract class Database implements DatabaseInterface {
   /** @var string */
   private $defaultDriver = "MySQL";
@@ -398,7 +397,7 @@ abstract class Database implements DatabaseInterface {
     foreach ($cols as $col) {
       $op = substr($col, 0, 1);
       if ($op == "#") {
-        $col     = substr($col, 1);
+        $col = substr($col, 1);
         $columns .= "{$col}, ";
       }
       else {
@@ -422,7 +421,7 @@ abstract class Database implements DatabaseInterface {
     foreach ($cols as $col) {
       $op = substr($col, 0, 1);
       if ($op == "#") {
-        $col     = substr($col, 1);
+        $col = substr($col, 1);
         $columns .= "{$col}, ";
       }
       else {

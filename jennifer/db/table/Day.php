@@ -2,7 +2,6 @@
 /**
  * Table class: one single table specified by $tableName
  */
-
 namespace jennifer\db\table;
 
 use jennifer\db\Database;

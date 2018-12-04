@@ -1,5 +1,4 @@
 <?php
-
 namespace jennifer\template;
 
 interface TemplateInterface {

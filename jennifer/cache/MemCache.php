@@ -1,5 +1,4 @@
 <?php
-
 namespace jennifer\cache;
 /**
  * Class Memcache: to do implement memcache

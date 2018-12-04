@@ -1,5 +1,4 @@
 <?php
-
 namespace jennifer\html;
 
 use jennifer\html\jobject\ClockPicker;

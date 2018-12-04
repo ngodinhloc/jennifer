@@ -1,5 +1,4 @@
 <?php
-
 namespace jennifer\html\jobject;
 
 use jennifer\html\JObject;

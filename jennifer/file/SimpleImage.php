@@ -1,5 +1,4 @@
 <?php
-
 namespace jennifer\file;
 /**
  * Class SimpleImage
@@ -1146,8 +1145,8 @@ class SimpleImage {
 
     // Get image width and height and percentage
     $pct /= 100;
-    $w   = imagesx($src_im);
-    $h   = imagesy($src_im);
+    $w = imagesx($src_im);
+    $h = imagesy($src_im);
 
     // Turn alpha blending off
     imagealphablending($src_im, false);

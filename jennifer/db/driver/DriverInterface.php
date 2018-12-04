@@ -1,5 +1,4 @@
 <?php
-
 namespace jennifer\db\driver;
 interface DriverInterface {
   public function escapeString($sql);

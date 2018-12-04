@@ -1,5 +1,4 @@
 <?php
-
 namespace jennifer\db;
 interface DatabaseInterface {
   public function insert();

@@ -1,5 +1,4 @@
 <?php
-
 namespace jennifer\sys;
 /**
  * Class Globals: utility static class, this is the only model that deals with system variables

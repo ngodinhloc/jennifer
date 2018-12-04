@@ -1,5 +1,4 @@
 <?php
-
 namespace jennifer\com;
 /**
  * Compressor class: compress html, css, js (string and files)

@@ -1,5 +1,4 @@
 <?php
-
 namespace jennifer\core;
 
 use jennifer\db\Capsule;

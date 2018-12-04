@@ -1868,8 +1868,8 @@ class PHPMailer {
     }
     else {
       return $this->encodeHeader($this->secureHeader($addr[1]), 'phrase') . ' <' . $this->secureHeader(
-          $addr[0]
-        ) . '>';
+        $addr[0]
+      ) . '>';
     }
   }
 
@@ -1926,9 +1926,9 @@ class PHPMailer {
               elseif (substr($word, $len - 2, 1) == '=') {
                 $len -= 2;
               }
-              $part    = substr($word, 0, $len);
-              $word    = substr($word, $len);
-              $buf     .= ' ' . $part;
+              $part = substr($word, 0, $len);
+              $word = substr($word, $len);
+              $buf .= ' ' . $part;
               $message .= $buf . sprintf('=%s', self::CRLF);
             }
             else {
@@ -1970,7 +1970,7 @@ class PHPMailer {
 
           if (strlen($buf) > $length and $buf_o != '') {
             $message .= $buf_o . $soft_break;
-            $buf     = $word;
+            $buf = $word;
           }
         }
         $firstword = false;
@@ -2181,7 +2181,7 @@ class PHPMailer {
         break;
       default:
         // Catches case 'plain': and case '':
-        $result      .= $this->textLine('Content-Type: ' . $this->ContentType . '; charset=' . $this->CharSet);
+        $result .= $this->textLine('Content-Type: ' . $this->ContentType . '; charset=' . $this->CharSet);
         $ismultipart = false;
         break;
     }
@@ -2377,7 +2377,7 @@ class PHPMailer {
         // Catch case 'plain' and case '', applies to simple `text/plain` and `text/html` body content types
         //Reset the `Encoding` property in case we changed it for line length reasons
         $this->Encoding = $bodyEncoding;
-        $body           .= $this->encodeString($this->Body, $this->Encoding);
+        $body .= $this->encodeString($this->Body, $this->Encoding);
         break;
     }
 
@@ -2421,9 +2421,9 @@ class PHPMailer {
           $body = file_get_contents($signed);
           @unlink($signed);
           //The message returned by openssl contains both headers and body, so need to split them up
-          $parts            = explode("\n\n", $body, 2);
+          $parts = explode("\n\n", $body, 2);
           $this->MIMEHeader .= $parts[0] . $this->LE . $this->LE;
-          $body             = $parts[1];
+          $body = $parts[1];
         }
         else {
           @unlink($file);
@@ -2852,7 +2852,7 @@ class PHPMailer {
       }
       else {
         $encoded = base64_encode($str);
-        $maxlen  -= $maxlen % 4;
+        $maxlen -= $maxlen % 4;
         $encoded = trim(chunk_split($encoded, $maxlen, "\n"));
       }
     }

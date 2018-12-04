@@ -1,5 +1,4 @@
 <?php
-
 namespace jennifer\html;
 /**
  * Class HTML: This class is used to create HTML element (so that we no longer print HTML code inside models)
