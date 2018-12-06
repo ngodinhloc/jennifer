@@ -34,10 +34,6 @@ class System {
     protected $controller;
     protected $action;
     
-    const MSG_ROUTE_NOT_FOUND      = "Route not found.";
-    const MSG_VIEW_NOT_FOUND       = "View not found.";
-    const MSG_CONTROLLER_NOT_FOUND = "Controller not found";
-    
     /**
      * System constructor.
      * @param array $configFiles
