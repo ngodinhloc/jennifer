@@ -1,4 +1,5 @@
 <?php
+
 namespace jennifer\sys;
 /**
  * Class Globals: utility static class, this is the only model that deals with system variables
@@ -6,199 +7,206 @@ namespace jennifer\sys;
  * @package jennifer\sys
  */
 class Globals {
-  /**
-   * Start session
-   */
-  public static function sessionStart() {
-    session_start();
-  }
-
-  /**
-   * Check is session status
-   */
-  private static function checkSession() {
-    if (session_status() == PHP_SESSION_NONE) {
-      session_start();
+    /**
+     * Start session
+     */
+    public static function sessionStart() {
+        session_start();
     }
-  }
-
-  /**
-   * Get session id
-   * @return string
-   */
-  public static function sessionID() {
-    self::checkSession();
-
-    return session_id();
-  }
-
-  /**
-   * @param $name
-   * @param $val
-   */
-  public static function setSession($name = null, $val = null) {
-    if ($name) {
-      self::checkSession();
-      $_SESSION[$name] = $val;
+    
+    /**
+     * Check is session status
+     */
+    private static function checkSession() {
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
     }
-  }
-
-  /**
-   * @param string $name
-   * @param null $default
-   * @return bool|null
-   */
-  public static function session($name = null, $default = null) {
-    self::checkSession();
-    if (!$name) {
-      return $_SESSION;
+    
+    /**
+     * Get session id
+     * @return string
+     */
+    public static function sessionID() {
+        self::checkSession();
+        
+        return session_id();
     }
-    if (isset($_SESSION[$name])) {
-      return $_SESSION[$name];
+    
+    /**
+     * @param $name
+     * @param $val
+     */
+    public static function setSession($name = null, $val = null) {
+        if ($name) {
+            self::checkSession();
+            $_SESSION[$name] = $val;
+        }
     }
-    if ($default) {
-      return $default;
+    
+    /**
+     * @param string $name
+     * @param null $default
+     * @return bool|null
+     */
+    public static function session($name = null, $default = null) {
+        self::checkSession();
+        if (!$name) {
+            return $_SESSION;
+        }
+        if (isset($_SESSION[$name])) {
+            return $_SESSION[$name];
+        }
+        if ($default) {
+            return $default;
+        }
+        
+        return false;
     }
-
-    return false;
-  }
-
-  /**
-   * @param string $name
-   * @param null $default
-   * @return bool|null
-   */
-  public static function cookie($name = null, $default = null) {
-    if (!$name) {
-      return $_COOKIE;
+    
+    /**
+     * @param string $name
+     * @param null $default
+     * @return bool|null
+     */
+    public static function cookie($name = null, $default = null) {
+        if (!$name) {
+            return $_COOKIE;
+        }
+        if (isset($_COOKIE[$name])) {
+            return $_COOKIE[$name];
+        }
+        if ($default) {
+            return $default;
+        }
+        
+        return false;
     }
-    if (isset($_COOKIE[$name])) {
-      return $_COOKIE[$name];
+    
+    /**
+     * @param string $name
+     * @param null $val
+     */
+    public static function setCookie($name = null, $val = null) {
+        if ($name) {
+            $_COOKIE[$name] = $val;
+        }
     }
-    if ($default) {
-      return $default;
+    
+    /**
+     * Get _POST para
+     * @param string $name
+     * @param null $default
+     * @return bool|string|array
+     */
+    public static function post($name = null, $default = null) {
+        // not para name provide: return all _POST
+        if (!$name) {
+            return $_POST;
+        }
+        if (isset($_POST[$name])) {
+            return $_POST[$name];
+        }
+        if ($default) {
+            return $default;
+        }
+        
+        return false;
     }
-
-    return false;
-  }
-
-  /**
-   * @param string $name
-   * @param null $val
-   */
-  public static function setCookie($name = null, $val = null) {
-    if ($name) {
-      $_COOKIE[$name] = $val;
+    
+    /**
+     * Get _GET para
+     * @param string $name
+     * @param null $default
+     * @return bool|string|array
+     */
+    public static function get($name = null, $default = null) {
+        // not para name provide: return all _GET
+        if (!$name) {
+            return $_GET;
+        }
+        if (isset($_GET[$name])) {
+            return $_GET[$name];
+        }
+        if ($default) {
+            return $default;
+        }
+        
+        return false;
     }
-  }
-
-  /**
-   * Get _POST para
-   * @param string $name
-   * @param null $default
-   * @return bool|string|array
-   */
-  public static function post($name = null, $default = null) {
-    // not para name provide: return all _POST
-    if (!$name) {
-      return $_POST;
+    
+    /**
+     * Get _FILES para
+     * @param string $name
+     * @param null $default
+     * @return bool|string|array
+     */
+    public static function files($name = null, $default = null) {
+        if (!$name) {
+            return $_FILES;
+        }
+        if (isset($_FILES[$name])) {
+            return $_FILES[$name];
+        }
+        if ($default) {
+            return $default;
+        }
+        
+        return false;
     }
-    if (isset($_POST[$name])) {
-      return $_POST[$name];
+    
+    /**
+     * Get _SERVER para
+     * @param string $name
+     * @param null $default
+     * @return bool|string|array
+     */
+    public static function server($name = null, $default = null) {
+        if (!$name) {
+            return $_SERVER;
+        }
+        if (isset($_SERVER[$name])) {
+            return $_SERVER[$name];
+        }
+        if ($default) {
+            return $default;
+        }
+        
+        return false;
     }
-    if ($default) {
-      return $default;
+    
+    /**
+     * @return mixed
+     */
+    public static function docRoot() {
+        return $_SERVER['DOCUMENT_ROOT'];
     }
-
-    return false;
-  }
-
-  /**
-   * Get _GET para
-   * @param string $name
-   * @param null $default
-   * @return bool|string|array
-   */
-  public static function get($name = null, $default = null) {
-    // not para name provide: return all _GET
-    if (!$name) {
-      return $_GET;
+    
+    /**
+     * @return mixed
+     */
+    public static function realIPAddress() {
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {        //check ip from share internet
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        }
+        elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {    //to check ip is pass from proxy
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        }
+        else {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        }
+        
+        return $ip;
     }
-    if (isset($_GET[$name])) {
-      return $_GET[$name];
+    
+    /**
+     * @return mixed|string
+     */
+    public static function todayIPAddress() {
+        $today = date('Ymd');
+        $ip    = self::realIPAddress();
+        $ip    = $today . '-' . $ip;
+        
+        return $ip;
     }
-    if ($default) {
-      return $default;
-    }
-
-    return false;
-  }
-
-  /**
-   * Get _FILES para
-   * @param string $name
-   * @param null $default
-   * @return bool|string|array
-   */
-  public static function files($name = null, $default = null) {
-    if (!$name) {
-      return $_FILES;
-    }
-    if (isset($_FILES[$name])) {
-      return $_FILES[$name];
-    }
-    if ($default) {
-      return $default;
-    }
-
-    return false;
-  }
-
-  /**
-   * Get _SERVER para
-   * @param string $name
-   * @param null $default
-   * @return bool|string|array
-   */
-  public static function server($name = null, $default = null) {
-    if (!$name) {
-      return $_SERVER;
-    }
-    if (isset($_SERVER[$name])) {
-      return $_SERVER[$name];
-    }
-    if ($default) {
-      return $default;
-    }
-
-    return false;
-  }
-
-  /**
-   * @return mixed
-   */
-  public static function realIPAddress() {
-    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {        //check ip from share internet
-      $ip = $_SERVER['HTTP_CLIENT_IP'];
-    }
-    elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {    //to check ip is pass from proxy
-      $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-    }
-    else {
-      $ip = $_SERVER['REMOTE_ADDR'];
-    }
-
-    return $ip;
-  }
-
-  /**
-   * @return mixed|string
-   */
-  public static function todayIPAddress() {
-    $today = date('Ymd');
-    $ip    = self::realIPAddress();
-    $ip    = $today . '-' . $ip;
-
-    return $ip;
-  }
 }

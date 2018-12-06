@@ -6,6 +6,7 @@ use jennifer\controller\ControllerFactory;
 use jennifer\http\Request;
 use jennifer\http\Response;
 use jennifer\http\Router;
+use jennifer\view\Base;
 use jennifer\view\ViewFactory;
 use jennifer\view\ViewInterface;
 use jennifer\exception\RequestException;
@@ -27,20 +28,22 @@ class System {
     protected $request;
     /** @var Response */
     protected $response;
+    protected $route;
     protected $view;
     protected $controller;
     protected $action;
     
-    const MSG_ROUTE_NOT_FOUND = "Route not found.";
+    const MSG_ROUTE_NOT_FOUND      = "Route not found.";
+    const MSG_VIEW_NOT_FOUND       = "View not found.";
+    const MSG_CONTROLLER_NOT_FOUND = "Controller not found";
     
-    public function __construct(Config $config = null, Request $request = null, ViewFactory $viewFactory = null,
-                                ControllerFactory $controllerFactory = null) {
-        $this->config            = $config ? $config : new Config();
-        $this->router            = new Router($this->config->getRoutes());
-        $this->request           = $request ? $request : new Request();
+    public function __construct($configFiles = [], $routeFiles = []) {
+        $this->config            = new Config($configFiles);
+        $this->router            = new Router($routeFiles);
+        $this->request           = new Request();
         $this->response          = new Response();
-        $this->viewFactory       = $viewFactory ? $viewFactory : new ViewFactory();
-        $this->controllerFactory = $controllerFactory ? $controllerFactory : new ControllerFactory();
+        $this->viewFactory       = new ViewFactory();
+        $this->controllerFactory = new ControllerFactory();
     }
     
     /**
@@ -50,7 +53,9 @@ class System {
     public function renderView() {
         if ($this->view) {
             try {
+                /** @var ViewInterface|Base $view */
                 $view = $this->viewFactory->createView($this->view);
+                $view->setRoute($this->route)->processPara();
             }
             catch (RequestException $exception) {
                 throw $exception;
@@ -80,9 +85,18 @@ class System {
      * @return $this
      */
     public function loadView() {
-        if ($class = $this->router->getRoute($this->request->uri)) {
-            $this->view = $class;
-            
+        if ($this->view = $this->router->getView($this->request->uri)) {
+            return $this;
+        }
+    
+        $this->response->error(self::MSG_VIEW_NOT_FOUND);
+    }
+    
+    /**
+     * @return $this
+     */
+    public function matchRoute() {
+        if ($this->route = $this->router->getRoute($this->request->uri)) {
             return $this;
         }
         
@@ -95,15 +109,18 @@ class System {
     public function loadController() {
         $action     = $this->request->post["action"];
         $controller = $this->request->post["controller"];
-        $file       = Config::CONTROLLER_DIR . $controller . Config::CONTROLLER_EXT;
+        $file       = Globals::docRoot() . "/" . getenv("CONTROLLER_DIR") . $controller . ".php";
+        
         if (file_exists($file)) {
-            $class = str_replace("/", "", Config::CONTROLLER_DIR) . "\\" . $controller;
+            $class = str_replace("/", "", getenv("CONTROLLER_DIR") . "\\" . $controller);
             require_once($file);
             $this->action     = $action;
             $this->controller = $class;
+    
+            return $this;
         }
-        
-        return $this;
+    
+        $this->response->error(self::MSG_CONTROLLER_NOT_FOUND);
     }
     
 }

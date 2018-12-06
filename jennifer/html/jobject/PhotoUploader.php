@@ -2,7 +2,7 @@
 namespace jennifer\html\jobject;
 
 use jennifer\html\JObject;
-use jennifer\sys\Config;
+use thedaysoflife\sys\Configs;
 
 /**
  * Class PhotoUploader: Simple photo uploader that allow drag to order preview photos
@@ -13,7 +13,7 @@ class PhotoUploader extends JObject {
   protected $templates = "jobject/photouploader";
   protected $data = ["action"        => "uploadPhotos",
                      "controller"    => "ControllerUpload",
-                     "maxSize"       => Config::PHOTO_MAX_SIZE,
+                     "maxSize"       => Configs::PHOTO_MAX_SIZE,
                      "currentPhotos" => [],
                      "accept"        => "image/jpeg,image/gif,image/png",
                      "text"          => "Have some photos to upload ?",

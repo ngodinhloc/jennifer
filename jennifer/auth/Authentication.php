@@ -2,10 +2,8 @@
 
 namespace jennifer\auth;
 
-use jennifer\com\Common;
 use jennifer\http\Response;
 use jennifer\jwt\JWT;
-use jennifer\sys\Config;
 use jennifer\sys\Globals;
 
 /**
@@ -120,7 +118,7 @@ class Authentication implements AuthenticationInterface {
      * @return string
      */
     public function encryptPassword($password) {
-        return md5(crypt($password, Config::SALT_MD5));
+        return md5(crypt($password, getenv("SALT_MD5")));
     }
     
     /**
@@ -130,7 +128,7 @@ class Authentication implements AuthenticationInterface {
     public function getJWT() {
         $jwt = Globals::session("jwt");
         if ($jwt) {
-            $decoded = JWT::decode($jwt, Config::JWT_KEY_USER, ['HS256']);
+            $decoded = JWT::decode($jwt, getenv("JWT_KEY_USER"), ['HS256']);
             if (isset($decoded->id) && isset($decoded->name) && isset($decoded->permission)) {
                 return $decoded;
             }
@@ -145,7 +143,7 @@ class Authentication implements AuthenticationInterface {
      * @return string
      */
     public function setJWT($data) {
-        $jwt = JWT::encode($data, Config::JWT_KEY_USER);
+        $jwt = JWT::encode($data, getenv("JWT_KEY_USER"));
         Globals::setSession("jwt", $jwt);
         
         return $jwt;
@@ -169,7 +167,7 @@ class Authentication implements AuthenticationInterface {
     protected function handleNoPermission($checkType) {
         switch($checkType) {
             case "view":
-                $this->response->redirect(Config::LOGIN_VIEW_URL, $this->messages["NO_PERMISSION_VIEW"]);
+                $this->response->redirect(getenv("LOGIN_VIEW_URL"), $this->messages["NO_PERMISSION_VIEW"]);
                 break;
             case "controller":
                 $this->response->error($this->messages["NO_PERMISSION_CONTROLLER"]["message"]);

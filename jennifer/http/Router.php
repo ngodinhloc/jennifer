@@ -1,23 +1,37 @@
 <?php
 
 namespace jennifer\http;
-use back\about;
-use jennifer\sys\Config;
+use jennifer\sys\Globals;
 
 class Router {
+    private $files = [];
     private $routes;
     
-    public function __construct($routes = []) {
-        $this->routes = $routes;
+    public function __construct($files = []) {
+        $this->files = $files;
+        $this->loadRoutes();
+    }
+    
+    /**
+     * Load route from config files
+     */
+    public function loadRoutes() {
+        foreach ($this->files as $file) {
+            $routes = parse_ini_file($file, false);
+            foreach ($routes as $url => $route) {
+                $this->routes[$url] = $route;
+            }
+        }
     }
     
     /**
      * @param $uri
      * @return string|bool
      */
-    public function getRoute($uri) {
-        if ($route = $this->matchRoute($uri)) {
-            $file = DOC_ROOT . "/" . Config::VIEW_DIR . $route . Config::VIEW_EXT;
+    public function getView($uri) {
+        if ($url = $this->getRoute($uri)) {
+            $route = $this->routes[$url];
+            $file  = Globals::docRoot() . "/" . getenv("VIEW_DIR") . $route . ".php";
             if (file_exists($file)) {
                 $class = str_replace("/", "\\", $route);
                 require_once($file);
@@ -33,16 +47,16 @@ class Router {
      * @param $uri
      * @return bool|mixed
      */
-    public function matchRoute($uri) {
+    public function getRoute($uri) {
         if ($uri == "/") {
             if (isset($this->routes[$uri])) {
-                return $this->routes[$uri];
+                return $uri;
             }
         }
         foreach ($this->routes as $url => $route) {
             if ($url != "/" && strpos($uri, $url) === 0) {
-                
-                return $route;
+    
+                return $url;
             }
         }
         
