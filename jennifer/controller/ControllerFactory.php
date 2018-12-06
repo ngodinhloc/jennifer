@@ -8,15 +8,13 @@ use jennifer\exception\RequestException;
  * Class ControllerFactory: create Controller
  * @package jennifer\controller
  */
-class ControllerFactory
-{
+class ControllerFactory {
     /**
      * @param $controllerClass
      * @return \jennifer\controller\ControllerInterface
      * @throws RequestException
      */
-    public function createController($controllerClass)
-    {
+    public function createController($controllerClass) {
         $controller = new $controllerClass();
         if ($controller) {
             return $controller;

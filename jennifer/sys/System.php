@@ -3,6 +3,7 @@
 namespace jennifer\sys;
 
 use jennifer\controller\ControllerFactory;
+use jennifer\exception\ConfigException;
 use jennifer\http\Request;
 use jennifer\http\Response;
 use jennifer\http\Router;
@@ -37,9 +38,20 @@ class System {
     const MSG_VIEW_NOT_FOUND       = "View not found.";
     const MSG_CONTROLLER_NOT_FOUND = "Controller not found";
     
+    /**
+     * System constructor.
+     * @param array $configFiles
+     * @param array $routeFiles
+     * @throws ConfigException
+     */
     public function __construct($configFiles = [], $routeFiles = []) {
-        $this->config            = new Config($configFiles);
-        $this->router            = new Router($routeFiles);
+        try {
+            $this->config = new Config($configFiles);
+            $this->router = new Router($routeFiles);
+        }
+        catch (ConfigException $exception) {
+            throw $exception;
+        }
         $this->request           = new Request();
         $this->response          = new Response();
         $this->viewFactory       = new ViewFactory();
@@ -83,44 +95,51 @@ class System {
     
     /**
      * @return $this
+     * @throws RequestException
      */
     public function loadView() {
-        if ($this->view = $this->router->getView($this->request->uri)) {
-            return $this;
+        try {
+            $this->view = $this->router->getView($this->request->uri);
+        }
+        catch (RequestException $exception) {
+            throw $exception;
         }
     
-        $this->response->error(self::MSG_VIEW_NOT_FOUND);
+        return $this;
     }
     
     /**
      * @return $this
+     * @throws RequestException
      */
     public function matchRoute() {
-        if ($this->route = $this->router->getRoute($this->request->uri)) {
-            return $this;
+        try {
+            $this->route = $this->router->getRoute($this->request->uri);
         }
-        
-        $this->response->error(self::MSG_ROUTE_NOT_FOUND);
+        catch (RequestException $exception) {
+            throw $exception;
+        }
+    
+        return $this;
     }
     
     /**
      * @return $this
+     * @throws RequestException
      */
     public function loadController() {
         $action     = $this->request->post["action"];
         $controller = $this->request->post["controller"];
         $file       = Globals::docRoot() . "/" . getenv("CONTROLLER_DIR") . $controller . ".php";
-        
-        if (file_exists($file)) {
-            $class = str_replace("/", "", getenv("CONTROLLER_DIR") . "\\" . $controller);
-            require_once($file);
-            $this->action     = $action;
-            $this->controller = $class;
-    
-            return $this;
+        if (!file_exists($file)) {
+            throw new RequestException(RequestException::ERROR_MSG_INVALID_CONTROLLER, RequestException::ERROR_CODE_INVALID_CONTROLLER);
         }
+        require_once($file);
+        $class            = str_replace("/", "", getenv("CONTROLLER_DIR") . "\\" . $controller);
+        $this->action     = $action;
+        $this->controller = $class;
     
-        $this->response->error(self::MSG_CONTROLLER_NOT_FOUND);
+        return $this;
     }
     
 }

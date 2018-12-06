@@ -8,8 +8,7 @@ namespace jennifer\api;
  */
 use jennifer\exception\RequestException;
 
-class ServiceFactory
-{
+class ServiceFactory {
     /**
      * Create service
      * @param $serviceClass
@@ -18,8 +17,7 @@ class ServiceFactory
      * @return \jennifer\api\ServiceInterface;
      * @throws RequestException
      */
-    public function createService($serviceClass, $userData, $para)
-    {
+    public function createService($serviceClass, $userData, $para) {
         $service = new $serviceClass($userData, $para);
         if ($service) {
             return $service;

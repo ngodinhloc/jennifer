@@ -8,16 +8,14 @@ use jennifer\exception\RequestException;
  * Class ViewFactory: create view
  * @package jennifer\view
  */
-class ViewFactory
-{
+class ViewFactory {
     /**
      * Create view from class name
      * @param $viewClass
      * @return \jennifer\view\ViewInterface
      * @throws RequestException
      */
-    public function createView($viewClass)
-    {
+    public function createView($viewClass) {
         $view = new $viewClass();
         if ($view) {
             return $view;
