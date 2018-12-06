@@ -6,6 +6,7 @@ use jennifer\auth\Authentication;
 use jennifer\cache\CacheInterface;
 use jennifer\cache\FileCache;
 use jennifer\com\Common;
+use jennifer\exception\RequestException;
 use jennifer\html\JObject;
 use jennifer\http\Request;
 use jennifer\io\Output;
@@ -55,13 +56,22 @@ class Base {
     protected $metaFiles = ["header" => [], "footer" => []];
     protected $metaTags = ["header" => "", "footer" => ""];
     
+    /**
+     * Base constructor.
+     * @throws RequestException
+     */
     public function __construct() {
         $this->authentication = new Authentication();
         $this->request        = new Request();
         $this->output         = new Output();
         $this->cacher         = new FileCache();
         $this->url            = $this->request->uri;
-        $this->authentication->checkUserPermission($this->requiredPermission, "view");
+        try {
+            $this->authentication->checkUserPermission($this->requiredPermission, "view");
+        }
+        catch (RequestException $exception) {
+            throw $exception;
+        }
         $this->userData = $this->authentication->getUserData();
         if ($this->cache) {
             $this->retrieveCache();

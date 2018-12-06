@@ -3,6 +3,7 @@
 namespace jennifer\controller;
 
 use jennifer\auth\Authentication;
+use jennifer\exception\RequestException;
 use jennifer\http\Request;
 use jennifer\io\Output;
 
@@ -28,35 +29,35 @@ class Controller implements ControllerInterface {
     const ERROR_CODE_CONTROLLER_NOT_FOUND = 1;
     const ERROR_CODE_ACTION_NOT_FOUND     = 2;
     
+    /**
+     * Controller constructor.
+     * @throws RequestException
+     */
     public function __construct() {
         $this->request        = new Request();
         $this->authentication = new Authentication();
         $this->output         = new Output();
-        $this->authentication->checkUserPermission($this->requiredPermission, "controller");
+        try {
+            $this->authentication->checkUserPermission($this->requiredPermission, "controller");
+        }
+        catch (RequestException $exception) {
+            throw $exception;
+        }
         $this->userData = $this->authentication->getUserData();
     }
     
     /**
      * Run the action
      * @param string $action public action (method) name
+     * @throws RequestException
      */
     public function action($action) {
         if (method_exists($this, $action)) {
             $result = $this->$action();
-            $this->response($result, $this->request->post["json"]);
+            $this->output->ajax($result, $this->request->post["json"]);
         }
-        
-        $this->error(self::ERROR_CODE_ACTION_NOT_FOUND);
-    }
     
-    /**
-     * Controller response
-     * @param array|string $data
-     * @param bool $json
-     * @param int $jsonOpt
-     */
-    protected function response($data, $json = false, $jsonOpt = JSON_UNESCAPED_SLASHES) {
-        $this->output->ajax($data, $json, $jsonOpt);
+        throw new RequestException(RequestException::ERROR_MSG_NO_CONTROLLER_ACTION, RequestException::ERROR_CODE_NO_CONTROLLER_ACTION);
     }
     
     /**
@@ -71,13 +72,5 @@ class Controller implements ControllerInterface {
      */
     protected function loadRequiredPermission() {
         
-    }
-    
-    /**
-     * @param $errorCode
-     */
-    public function error($errorCode) {
-        $response = ["status" => "error", "code" => $errorCode];
-        $this->response($response);
     }
 }

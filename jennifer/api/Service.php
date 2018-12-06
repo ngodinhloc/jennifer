@@ -3,6 +3,7 @@
 namespace jennifer\api;
 
 use jennifer\auth\Authentication;
+use jennifer\exception\RequestException;
 
 /**
  * Class Service: all services must extend this class
@@ -24,12 +25,18 @@ class Service {
      * Service constructor.
      * @param array $userData
      * @param array $para
+     * @throws RequestException
      */
     public function __construct($userData, $para) {
         $this->userData       = $userData;
         $this->para           = $para;
         $this->authentication = new Authentication(Authentication::AUTH_TYPE_API);
-        $this->authentication->checkServicePermission($this->userData["permission"], $this->requiredPermission);
+        try {
+            $this->authentication->checkServicePermission($this->userData["permission"], $this->requiredPermission);
+        }
+        catch (RequestException $exception) {
+            throw $exception;
+        }
     }
     
     /**

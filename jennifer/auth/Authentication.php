@@ -2,6 +2,7 @@
 
 namespace jennifer\auth;
 
+use jennifer\exception\RequestException;
 use jennifer\http\Response;
 use jennifer\jwt\JWT;
 use jennifer\sys\Globals;
@@ -42,6 +43,7 @@ class Authentication implements AuthenticationInterface {
      * @param bool|array $userPermission
      * @param bool|array $requiredPermission
      * @return bool
+     * @throws RequestException
      */
     public function checkServicePermission($userPermission = false, $requiredPermission = false) {
         // no permission required
@@ -51,13 +53,13 @@ class Authentication implements AuthenticationInterface {
         
         // user has no permission
         if (!$userPermission) {
-            $this->response->error($this->messages["NO_PERMISSION_API"]["message"]);
+            throw new RequestException(RequestException::ERROR_MSG_NO_API_PERMISSION, RequestException::ERROR_CODE_NO_API_PERMISSION);
         }
         
         // check each required permission against user permission
         foreach ($requiredPermission as $per) {
             if (!in_array($per, $userPermission)) {
-                $this->response->error($this->messages["NO_PERMISSION_API"]["message"]);
+                throw new RequestException(RequestException::ERROR_MSG_NO_API_PERMISSION, RequestException::ERROR_CODE_NO_API_PERMISSION);
             }
         }
         
@@ -69,6 +71,7 @@ class Authentication implements AuthenticationInterface {
      * @param array|boolean $requiredPermission
      * @param string $checkType
      * @return bool
+     * @throws RequestException
      */
     public function checkUserPermission($requiredPermission = false, $checkType = "view") {
         // no permission required
@@ -163,6 +166,7 @@ class Authentication implements AuthenticationInterface {
     /**
      * Handle user with no permission
      * @param $checkType
+     * @throws RequestException
      */
     protected function handleNoPermission($checkType) {
         switch($checkType) {
@@ -170,7 +174,7 @@ class Authentication implements AuthenticationInterface {
                 $this->response->redirect(getenv("LOGIN_VIEW_URL"), $this->messages["NO_PERMISSION_VIEW"]);
                 break;
             case "controller":
-                $this->response->error($this->messages["NO_PERMISSION_CONTROLLER"]["message"]);
+                throw new RequestException(RequestException::ERROR_MSG_NO_CONTROLLER_PERMISSION, RequestException::ERROR_CODE_NO_CONTROLLER_PERMISSION);
                 break;
         }
     }

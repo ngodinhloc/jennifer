@@ -85,11 +85,11 @@ class System {
         if ($this->controller && $this->action) {
             try {
                 $controller = $this->controllerFactory->createController($this->controller);
+                $controller->action($this->action);
             }
             catch (RequestException $exception) {
                 throw $exception;
             }
-            $controller->action($this->action);
         }
     }
     
