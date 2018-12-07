@@ -2,6 +2,7 @@
 
 namespace jennifer\jwt;
 
-class ExpiredException extends \UnexpectedValueException {
-    
+class ExpiredException extends \UnexpectedValueException
+{
+
 }

@@ -16,7 +16,8 @@ use jennifer\template\Template;
  * Class Base: Base view class: all view classes will extend this base class
  * @package jennifer\view
  */
-class Base {
+class Base
+{
     /** @var Authentication */
     protected $authentication;
     /** @var  Template */
@@ -52,24 +53,24 @@ class Base {
     protected $description;
     /** @var  string keywords of the view */
     protected $keyword;
-    
+
     protected $metaFiles = ["header" => [], "footer" => []];
     protected $metaTags = ["header" => "", "footer" => ""];
-    
+
     /**
      * Base constructor.
      * @throws RequestException
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->authentication = new Authentication();
-        $this->request        = new Request();
-        $this->output         = new Output();
-        $this->cacher         = new FileCache();
-        $this->url            = $this->request->uri;
+        $this->request = new Request();
+        $this->output = new Output();
+        $this->cacher = new FileCache();
+        $this->url = $this->request->uri;
         try {
             $this->authentication->checkUserPermission($this->requiredPermission, "view");
-        }
-        catch (RequestException $exception) {
+        } catch (RequestException $exception) {
             throw $exception;
         }
         $this->userData = $this->authentication->getUserData();
@@ -77,114 +78,144 @@ class Base {
             $this->retrieveCache();
         }
     }
-    
+
+    /**
+     * Check if there is valid cache
+     * If there is cache than output the cache and exit
+     * else : process to prepare data and render
+     */
+    protected function retrieveCache()
+    {
+        $cache = $this->cacher->getCache($this->url);
+        if ($cache) {
+            $this->output->html($cache);
+        }
+    }
+
     /**
      * @return array
      */
-    public function getTemplates() {
+    public function getTemplates()
+    {
         return $this->templates;
     }
-    
+
     /**
      * @param array $templates
      * @return Base
      */
-    public function setTemplates(array $templates) {
+    public function setTemplates(array $templates)
+    {
         $this->templates = $templates;
-        
+
         return $this;
     }
-    
+
     /**
      * @return string
      */
-    public function getRoute() {
+    public function getRoute()
+    {
         return $this->route;
     }
-    
+
     /**
      * @param string $route
      * @return Base
      */
-    public function setRoute($route) {
+    public function setRoute($route)
+    {
         $this->route = $route;
-        
+
         return $this;
     }
-    
-    /**
-     * Set view data
-     * @param $data
-     */
-    public function setData($data) {
-        $this->data = $data;
-    }
-    
+
     /**
      * Get view data
      * @return mixed
      */
-    public function getData() {
+    public function getData()
+    {
         return $this->data;
     }
-    
+
+    /**
+     * Set view data
+     * @param $data
+     */
+    public function setData($data)
+    {
+        $this->data = $data;
+    }
+
     /**
      * Get user data
      * @return bool
      */
-    public function getUserData() {
+    public function getUserData()
+    {
         return $this->userData;
     }
-    
+
     /**
      * Get the required permissions for this view
      */
-    public function getRequiredPermission() {
+    public function getRequiredPermission()
+    {
         return $this->requiredPermission;
     }
-    
-    /**
-     * Load required permission from database or set required permission on each view
-     */
-    protected function loadRequiredPermission() {
-    
-    }
-    
+
     /**
      * Process URI para
      * @return $this;
      */
-    public function processPara() {
-        $paras            = explode("/", str_replace($this->route, "", $this->request->uri));
+    public function processPara()
+    {
+        $paras = explode("/", str_replace($this->route, "", $this->request->uri));
         $this->para["id"] = $paras[0];
-        
+
         return $this;
     }
-    
+
     /**
      * Check if uri para exists then return value, else return false
      * @param $name
      * @return bool|mixed
      */
-    public function hasPara($name) {
+    public function hasPara($name)
+    {
         return isset($this->para[$name]) ? $this->para[$name] : false;
     }
-    
+
     /**
      * Add html code to header
      * @param $tag
      */
-    public function addMetaTag($tag) {
+    public function addMetaTag($tag)
+    {
         $this->metaTags["header"] .= $tag;
     }
-    
+
+    /**
+     * Register object meta files
+     * @param JObject $object
+     */
+    public function registerMetaFiles($object)
+    {
+        $metaFiles = $object->getMetaFiles();
+        foreach ($metaFiles as $file) {
+            $this->addMetaFile($file);
+        }
+    }
+
     /**
      * Add meta file
      * @param string $file
      */
-    public function addMetaFile($file) {
+    public function addMetaFile($file)
+    {
         $ext = Common::getFileExtension($file);
-        switch($ext) {
+        switch ($ext) {
             case "css":
                 array_push($this->metaFiles["header"], ["type" => $ext, "src" => $file]);
                 break;
@@ -193,44 +224,52 @@ class Base {
                 break;
         }
     }
-    
+
     /**
-     * Register object meta files
-     * @param JObject $object
+     * Render this view
+     * @param bool $compress
      */
-    public function registerMetaFiles($object) {
-        $metaFiles = $object->getMetaFiles();
-        foreach ($metaFiles as $file) {
-            $this->addMetaFile($file);
+    public function render($compress = true)
+    {
+        $this->initMeta();
+        $this->tpl = new Template($this->templates, $this->data, $this->meta);
+        $html = $this->tpl->render($compress);
+        // cache the whole view html
+        if ($this->cache) {
+            $this->cacher->writeCache($this->url, $html);
         }
+
+        $this->output->html($html);
     }
-    
+
     /**
      * Initialise view meta data
      */
-    protected function initMeta() {
+    protected function initMeta()
+    {
         $this->initMetaTags();
         $this->meta = [
-            "route"       => $this->route,
-            "title"       => $this->title,
+            "route" => $this->route,
+            "title" => $this->title,
             "description" => $this->description,
-            "keyword"     => $this->keyword,
-            "metaTags"    => $this->metaTags,
-            "userData"    => (array)$this->userData,
+            "keyword" => $this->keyword,
+            "metaTags" => $this->metaTags,
+            "userData" => (array)$this->userData,
         ];
     }
-    
+
     /**
      * Initialise meta tags to html
      */
-    protected function initMetaTags() {
+    protected function initMetaTags()
+    {
         foreach ($this->metaFiles as $pos => $files) {
             if (!empty($files)) {
                 array_unique($files);
                 $tags = "";
                 foreach ($files as $file) {
                     $tag = "";
-                    switch($file["type"]) {
+                    switch ($file["type"]) {
                         case "css":
                             $tag = "<link rel='stylesheet' href='{$file["src"]}' type='text/css'/>";
                             break;
@@ -244,32 +283,12 @@ class Base {
             }
         }
     }
-    
+
     /**
-     * Check if there is valid cache
-     * If there is cache than output the cache and exit
-     * else : process to prepare data and render
+     * Load required permission from database or set required permission on each view
      */
-    protected function retrieveCache() {
-        $cache = $this->cacher->getCache($this->url);
-        if ($cache) {
-            $this->output->html($cache);
-        }
-    }
-    
-    /**
-     * Render this view
-     * @param bool $compress
-     */
-    public function render($compress = true) {
-        $this->initMeta();
-        $this->tpl = new Template($this->templates, $this->data, $this->meta);
-        $html      = $this->tpl->render($compress);
-        // cache the whole view html
-        if ($this->cache) {
-            $this->cacher->writeCache($this->url, $html);
-        }
-        
-        $this->output->html($html);
+    protected function loadRequiredPermission()
+    {
+
     }
 }

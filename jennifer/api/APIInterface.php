@@ -2,14 +2,18 @@
 
 namespace jennifer\api;
 
-interface APIInterface {
+use http\Exception\RuntimeException;
+use jennifer\exception\RequestException;
+
+interface APIInterface
+{
     /**
      * Process api request: map service and action before calling run();
-     * @param $req
+     * @throws RequestException
      * @return mixed
      */
-    public function process($req);
-    
+    public function processRequest();
+
     /**
      * Run service and response to api request
      * @return mixed

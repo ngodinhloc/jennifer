@@ -2,6 +2,7 @@
 
 namespace jennifer\jwt;
 
-class BeforeValidException extends \UnexpectedValueException {
-    
+class BeforeValidException extends \UnexpectedValueException
+{
+
 }

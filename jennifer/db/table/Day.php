@@ -7,6 +7,7 @@ namespace jennifer\db\table;
 
 use jennifer\db\Database;
 
-class Day extends Database {
+class Day extends Database
+{
     protected $tableName = "tbl_day";
 }

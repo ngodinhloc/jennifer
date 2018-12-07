@@ -5,14 +5,16 @@ namespace jennifer\db\driver;
 use jennifer\cache\FileCache;
 use jennifer\cache\MemCache;
 
-class CacherFactory {
+class CacherFactory
+{
     /**
      * Load database driver
      * @param string $type
      * @return \jennifer\cache\CacheInterface
      */
-    public function createCacher($type = null) {
-        switch($type) {
+    public function createCacher($type = null)
+    {
+        switch ($type) {
             case "meme":
                 $cacher = new MemCache();
                 break;
@@ -21,7 +23,7 @@ class CacherFactory {
                 $cacher = new FileCache();
                 break;
         }
-        
+
         return $cacher;
     }
 }

@@ -9,17 +9,19 @@ use jennifer\html\JObject;
  * Only one instance of PhotoUploader per view
  * @package jennifer\html\jobject
  */
-class PhotoUploader extends JObject {
+class PhotoUploader extends JObject
+{
     protected $templates = "jobject/photouploader";
-    
-    public function __construct(array $attr = [], array $data = []) {
-        $this->data = ["action"        => "uploadPhotos",
-                       "controller"    => "ControllerUpload",
-                       "maxSize"       => getenv("PHOTO_MAX_SIZE"),
-                       "currentPhotos" => [],
-                       "accept"        => "image/jpeg,image/gif,image/png",
-                       "text"          => "Have some photos to upload ?",
-                       "drag"          => "Drag photo to change order."];
+
+    public function __construct(array $attr = [], array $data = [])
+    {
+        $this->data = ["action" => "uploadPhotos",
+            "controller" => "ControllerUpload",
+            "maxSize" => getenv("PHOTO_MAX_SIZE"),
+            "currentPhotos" => [],
+            "accept" => "image/jpeg,image/gif,image/png",
+            "text" => "Have some photos to upload ?",
+            "drag" => "Drag photo to change order."];
         parent::__construct($attr, $data);
     }
 }

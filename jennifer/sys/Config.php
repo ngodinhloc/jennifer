@@ -8,29 +8,31 @@ use jennifer\exception\ConfigException;
  * Class Config
  * @package jennifer\sys
  */
-class Config {
+class Config
+{
     protected $files;
-    
+
     /**
      * Config constructor.
      * @param array $files
      * @throws ConfigException
      */
-    public function __construct($files = []) {
+    public function __construct($files = [])
+    {
         $this->files = $files;
         try {
             $this->loadConfigs();
-        }
-        catch (ConfigException $exception) {
+        } catch (ConfigException $exception) {
             throw $exception;
         }
     }
-    
+
     /**
      * Load configs file to env
      * @throws ConfigException
      */
-    public function loadConfigs() {
+    public function loadConfigs()
+    {
         if (empty($this->files)) {
             throw new ConfigException(ConfigException::ERROR_MSG_REQUIRE_CONFIG_FILE, ConfigException::ERROR_CODE_REQUIRED_CONFIG_FILE);
         }

@@ -5,16 +5,19 @@
  */
 
 namespace jennifer\mailer;
+
 use Exception;
 
-class PHPMailerException extends Exception {
+class PHPMailerException extends Exception
+{
     /**
      * Prettify error message output
      * @return string
      */
-    public function errorMessage() {
+    public function errorMessage()
+    {
         $errorMsg = '<strong>' . $this->getMessage() . "</strong><br />\n";
-        
+
         return $errorMsg;
     }
 }

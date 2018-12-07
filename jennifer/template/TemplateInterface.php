@@ -2,6 +2,7 @@
 
 namespace jennifer\template;
 
-interface TemplateInterface {
+interface TemplateInterface
+{
     public function render();
 }

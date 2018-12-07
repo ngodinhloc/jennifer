@@ -6,24 +6,27 @@ namespace jennifer\file;
  * Class CSV
  * @package jennifer\file
  */
-class CSV extends Downloadable {
+class CSV extends Downloadable
+{
     /**
      * Output the csv file for download
      * @param array $data 2 dimensional array
      * @param string $fileName
      */
-    public function file($data = [], $fileName = "") {
+    public function file($data = [], $fileName = "")
+    {
         $this->headers($fileName);
         echo($this->arrayToCSV($data));
         exit();
     }
-    
+
     /**
      * Convert data (array) to csv ready content
      * @param array $array 2 dimensional array
      * @return null|string
      */
-    protected function arrayToCSV($array) {
+    protected function arrayToCSV($array)
+    {
         if (count($array) == 0) {
             return null;
         }
@@ -34,7 +37,7 @@ class CSV extends Downloadable {
             fputcsv($df, $row);
         }
         fclose($df);
-        
+
         return ob_get_clean();
     }
 }

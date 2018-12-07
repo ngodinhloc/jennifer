@@ -4,7 +4,8 @@ namespace jennifer\controller;
 
 use jennifer\exception\RequestException;
 
-interface ControllerInterface {
+interface ControllerInterface
+{
     /**
      * @throws RequestException
      */

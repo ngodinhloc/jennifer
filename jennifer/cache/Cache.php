@@ -6,15 +6,17 @@ namespace jennifer\cache;
  * Class Cache
  * @package jennifer\cache
  */
-class Cache {
+class Cache
+{
     const CACHE_EXPIRE = 36000; // seconds
-    
+
     /**
      * Create cache key
      * @param string $key
      * @return string
      */
-    protected function createKey($key) {
+    protected function createKey($key)
+    {
         return md5($key);
     }
 }

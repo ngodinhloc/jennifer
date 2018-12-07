@@ -10,24 +10,44 @@ use jennifer\sys\Globals;
  * Class FacebookHelper: create Facebook object and do things
  * @package jennifer\fb
  */
-class FacebookHelper {
+class FacebookHelper
+{
+    const FB_TEXT = 'text';
+    // Post type
+    const FB_FEED = 'feed';
+    const FB_ALBUM = 'album';
+    const FB_LINK = 'link';
     /** @var Facebook\Facebook */
     public $fb;
-    // Post type
-    const FB_TEXT  = 'text';
-    const FB_FEED  = 'feed';
-    const FB_ALBUM = 'album';
-    const FB_LINK  = 'link';
-    
-    public function __construct() {
-        $factory  = new FacebookFactory();
+
+    public function __construct()
+    {
+        $factory = new FacebookFactory();
         $this->fb = $factory->createFacebook();
     }
-    
+
+    /**
+     * Get FB act options
+     * @param string $selected selected option
+     * @return string
+     */
+    public static function getActOptions($selected)
+    {
+        $array = ["None" => "",
+            "Album" => self::FB_ALBUM,
+            "Link" => self::FB_LINK,
+            "Feed" => self::FB_FEED,
+            "Text" => self::FB_TEXT];
+        $options = Element::options($array, $selected);
+
+        return $options;
+    }
+
     /**
      * Login to Facebook page and set session
      */
-    public function fbLogin() {
+    public function fbLogin()
+    {
         if (!Globals::session("FB_appAccessToken")) {
             $helper = $this->fb->getRedirectLoginHelper();
             try {
@@ -36,8 +56,7 @@ class FacebookHelper {
                     $client = $this->fb->getOAuth2Client();
                     try {
                         $accessToken = $client->getLongLivedAccessToken($accessToken);
-                    }
-                    catch (Facebook\Exceptions\FacebookSDKException $e) {
+                    } catch (Facebook\Exceptions\FacebookSDKException $e) {
                         die($e->getMessage());
                     }
                     $response = $this->fb->get('/me/accounts', (string)$accessToken);
@@ -52,26 +71,9 @@ class FacebookHelper {
                         }
                     }
                 }
-            }
-            catch (Facebook\Exceptions\FacebookSDKException $e) {
+            } catch (Facebook\Exceptions\FacebookSDKException $e) {
                 die($e->getMessage());
             }
         }
-    }
-    
-    /**
-     * Get FB act options
-     * @param string $selected selected option
-     * @return string
-     */
-    public static function getActOptions($selected) {
-        $array   = ["None"  => "",
-                    "Album" => self::FB_ALBUM,
-                    "Link"  => self::FB_LINK,
-                    "Feed"  => self::FB_FEED,
-                    "Text"  => self::FB_TEXT];
-        $options = Element::options($array, $selected);
-        
-        return $options;
     }
 }

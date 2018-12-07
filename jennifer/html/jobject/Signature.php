@@ -8,15 +8,17 @@ use jennifer\html\JObject;
  * Class Signature: render Jquery signature
  * @package jennifer\html\jobject
  */
-class Signature extends JObject {
+class Signature extends JObject
+{
     protected $templates = "jobject/signature";
     protected $data = ["height" => 150, "jsonValue" => false];
-    
-    public function __construct(array $attr = [], array $data = []) {
+
+    public function __construct(array $attr = [], array $data = [])
+    {
         $this->metaFiles = ["http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.0/themes/south-street/jquery-ui.css",
-                            getenv("SITE_URL") . "/plugins/jquery/signature/jquery.signature.css",
-                            getenv("SITE_URL") . "/plugins/jquery/signature/jquery.signature.min.js",
-                            getenv("SITE_URL") . "/plugins/jquery/signature/jquery.ui.touch-punch.min.js"];
+            getenv("SITE_URL") . "/plugins/jquery/signature/jquery.signature.css",
+            getenv("SITE_URL") . "/plugins/jquery/signature/jquery.signature.min.js",
+            getenv("SITE_URL") . "/plugins/jquery/signature/jquery.ui.touch-punch.min.js"];
         parent::__construct($attr, $data);
     }
     /*

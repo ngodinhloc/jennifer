@@ -2,6 +2,7 @@
 
 namespace jennifer\jwt;
 
-class SignatureInvalidException extends \UnexpectedValueException {
-    
+class SignatureInvalidException extends \UnexpectedValueException
+{
+
 }
