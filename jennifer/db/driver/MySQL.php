@@ -15,7 +15,6 @@ class MySQL implements DriverInterface
         "ANALYZE" => "ANALYZE TABLE",
         "REPAIR" => "REPAIR TABLE",
         "OPTIMIZE" => "OPTIMIZE TABLE",];
-    const QUERY_ERROR = "Error occurs when trying to query MySQL database";
 
     /**
      * MySQL constructor.
@@ -90,7 +89,7 @@ class MySQL implements DriverInterface
             return $this->mysqli->error;
         }
 
-        return self::QUERY_ERROR;
+        return DBException::ERROR_MSG_QUERY_FAILED;
     }
 
     /**
