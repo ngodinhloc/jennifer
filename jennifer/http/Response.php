@@ -19,9 +19,10 @@ class Response
 
     /**
      * @param $message
+     * @param $code
      */
-    public function error($message)
+    public function error($message, $code)
     {
-        die($message);
+        die("Error code {$code}: {$message}");
     }
 }

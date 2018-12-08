@@ -7,22 +7,31 @@ use mysqli;
 
 class MySQL implements DriverInterface
 {
+    /** @var \mysqli * */
+    protected $mysqli;
+    protected $devMode = true;
+
     const DB_ACTIONS = ["CHECK" => "CHECK TABLE",
         "ANALYZE" => "ANALYZE TABLE",
         "REPAIR" => "REPAIR TABLE",
         "OPTIMIZE" => "OPTIMIZE TABLE",];
-    /** @var \mysqli * */
-    protected $mysqli;
-    protected $devMode = true;
-    private $messages = [
-        "SERVER_ERROR" => "Could not connect to MySQL server",
-        "QUERY_ERROR" => "Error occurs when trying to query MySQL database",
-    ];
+    const QUERY_ERROR = "Error occurs when trying to query MySQL database";
 
-    public function __construct($mode, $host, $user, $password, $db)
+    /**
+     * MySQL constructor.
+     * @param $host
+     * @param $user
+     * @param $password
+     * @param $db string database name
+     * @param bool $mode
+     * @throws DBException
+     */
+    public function __construct($host, $user, $password, $db, $mode = false)
     {
+        if (!$this->mysqli = new mysqli($host, $user, $password, $db)) {
+            throw new DBException(DBException::ERROR_MSG_CONNECTION_FAILED, DBException::ERROR_CODE_CONNECTION_FAILED);
+        }
         $this->devMode = $mode;
-        $this->mysqli = new mysqli($host, $user, $password, $db) or die($this->messages["SERVER_ERROR"]);
     }
 
     public function __destruct()
@@ -33,6 +42,7 @@ class MySQL implements DriverInterface
     /**
      * Get found rows from the most recent query
      * @return int
+     * @throws DBException
      */
     public function getFoundRows()
     {
@@ -52,7 +62,9 @@ class MySQL implements DriverInterface
     public function query($sql = "")
     {
         $this->isDevMode($sql);
-        $result = $this->mysqli->query($sql) or die($this->getErrorMessage($sql));
+        if (!$result = $this->mysqli->query($sql)) {
+            throw new DBException($this->getErrorMessage($sql), DBException::ERROR_CODE_QUERY_FAILED);
+        }
 
         return $result;
     }
@@ -78,7 +90,7 @@ class MySQL implements DriverInterface
             return $this->mysqli->error;
         }
 
-        return $this->messages["QUERY_ERROR"];
+        return self::QUERY_ERROR;
     }
 
     /**
@@ -111,6 +123,7 @@ class MySQL implements DriverInterface
     /**
      * @param $act
      * @return string
+     * @throws DBException
      */
     public function checkDB($act)
     {

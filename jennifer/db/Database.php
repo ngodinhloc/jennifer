@@ -6,6 +6,8 @@ use jennifer\cache\CacheInterface;
 use jennifer\cache\FileCache;
 use jennifer\db\driver\DriverFactory;
 use jennifer\db\driver\DriverInterface;
+use jennifer\exception\DBException;
+use jennifer\http\Response;
 
 /**
  * Class Database
@@ -13,10 +15,6 @@ use jennifer\db\driver\DriverInterface;
  */
 abstract class Database implements DatabaseInterface
 {
-    const  QUERY_SELECT = "SELECT";
-    const  QUERY_INSERT = "INSERT";
-    const  QUERY_UPDATE = "UPDATE";
-    const  QUERY_DELETE = "DELETE";
     /** @var  CacheInterface */
     protected $cacher;
     /** @var  string table name */
@@ -55,6 +53,10 @@ abstract class Database implements DatabaseInterface
     private $devMode = false;
     /** @var \jennifer\db\driver\DriverInterface * */
     private $driver;
+    const  QUERY_SELECT = "SELECT";
+    const  QUERY_INSERT = "INSERT";
+    const  QUERY_UPDATE = "UPDATE";
+    const  QUERY_DELETE = "DELETE";
 
     /**
      * Database constructor.
@@ -62,11 +64,15 @@ abstract class Database implements DatabaseInterface
      */
     public function __construct($driver = null)
     {
-        if ($driver) {
+        if ($driver instanceof DriverInterface) {
             $this->driver = $driver;
         } else {
             $factory = new DriverFactory();
-            $this->driver = $factory->createDriver($this->defaultDriver, $this->devMode);
+            try {
+                $this->driver = $factory->createDriver($this->defaultDriver, $this->devMode);
+            } catch (DBException $exception) {
+                (new Response())->error($exception->getMessage(), $exception->getCode());
+            }
         }
     }
 
@@ -93,6 +99,7 @@ abstract class Database implements DatabaseInterface
      * @param $act
      * @return string
      * @see \jennifer\db\driver\DriverInterface::checkDB()
+     * @throws DBException
      */
     public function checkDB($act)
     {
@@ -205,13 +212,16 @@ abstract class Database implements DatabaseInterface
      * Private function query
      * @param string $sql
      * @return mixed $result
-     * @see \jennifer\db\driver\DriverInterface::query()
      */
     private function query($sql = "")
     {
-        $result = $this->driver->query($sql);
+        try {
+            $result = $this->driver->query($sql);
+            return $result;
+        } catch (DBException $exception) {
+            (new Response())->error($exception->getMessage(), $exception->getCode());
+        }
 
-        return $result;
     }
 
     /**
@@ -270,7 +280,11 @@ abstract class Database implements DatabaseInterface
      */
     private function setFoundRows()
     {
-        $this->foundRows = $this->driver->getFoundRows();
+        try {
+            $this->foundRows = $this->driver->getFoundRows();
+        } catch (DBException $exception) {
+            (new Response())->error($exception->getMessage(), $exception->getCode());
+        }
     }
 
     /**

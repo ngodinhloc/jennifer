@@ -2,20 +2,35 @@
 
 namespace jennifer\db\driver;
 
+use jennifer\exception\DBException;
+
 class DriverFactory
 {
     /**
      * Load database driver
      * @param string $driverName
      * @param bool $devMode
-     * @return \jennifer\db\driver\DriverInterface
+     * @return DriverInterface
+     * @throws DBException
      */
-    public function createDriver($driverName = null, $devMode = false)
+    public function createDriver($driverName, $devMode = false)
     {
+        $host = getenv("DB_HOST");
+        $user = getenv("DB_USER");
+        $password = getenv("DB_PASSWORD");
+        $name = getenv("DB_NAME");
+
+        if (!$host || !$user || !$password || !$name) {
+            throw new DBException(DBException::ERROR_MSG_MISSING_CONFIG, DBException::ERROR_CODE_MISSING_CONFIGS);
+        }
         switch ($driverName) {
             case "MySQL":
             default:
-                $driver = new MySQL($devMode, getenv("DB_HOST"), getenv("DB_USER"), getenv("DB_PASSWORD"), getenv("DB_NAME"));
+                try {
+                    $driver = new MySQL($host, $user, $password, $name, $devMode);
+                } catch (DBException $exception) {
+                    throw $exception;
+                }
                 break;
         }
 
