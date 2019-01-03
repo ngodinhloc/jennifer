@@ -3,6 +3,7 @@
 namespace jennifer\template;
 
 use jennifer\com\Compressor;
+use jennifer\sys\Config;
 use jennifer\sys\Globals;
 
 /**
@@ -37,7 +38,7 @@ class Template implements TemplateInterface
     {
         ob_start();
         foreach ($this->templates as $template) {
-            $file = Globals::docRoot() . "/" . getenv("TEMPLATE_DIR") . $template . getenv("TEMPLATE_EXT");
+            $file = Globals::docRoot() . "/" . Config::getConfig("TEMPLATE_DIR") . $template . Config::getConfig("TEMPLATE_EXT");
             include($file);
         }
         $html = ob_get_clean();

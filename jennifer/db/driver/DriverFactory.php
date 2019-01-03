@@ -3,6 +3,7 @@
 namespace jennifer\db\driver;
 
 use jennifer\exception\DBException;
+use jennifer\sys\Config;
 
 class DriverFactory
 {
@@ -15,10 +16,10 @@ class DriverFactory
      */
     public function createDriver($driverName, $devMode = false)
     {
-        $host = getenv("DB_HOST");
-        $user = getenv("DB_USER");
-        $password = getenv("DB_PASSWORD");
-        $name = getenv("DB_NAME");
+        $host = Config::getConfig("DB_HOST");
+        $user = Config::getConfig("DB_USER");
+        $password = Config::getConfig("DB_PASSWORD");
+        $name = Config::getConfig("DB_NAME");
 
         if (!$host || !$user || !$password || !$name) {
             throw new DBException(DBException::ERROR_MSG_MISSING_CONFIG, DBException::ERROR_CODE_MISSING_CONFIGS);

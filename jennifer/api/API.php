@@ -7,6 +7,7 @@ use jennifer\exception\RequestException;
 use jennifer\http\Request;
 use jennifer\io\Output;
 use jennifer\jwt\JWT;
+use jennifer\sys\Config;
 
 /**
  * API gateway which will call requested service to perform action
@@ -85,7 +86,7 @@ class API implements APIInterface
         }
 
         $this->token = $json["token"];
-        $this->userData = (array)JWT::decode($this->token, getenv("JWT_KEY_API"), ['HS256']);
+        $this->userData = (array)JWT::decode($this->token, Config::getConfig("JWT_KEY_API"), ['HS256']);
         if (!isset($this->userData["userID"]) || !isset($this->userData["permission"])) {
             throw new RequestException(RequestException::ERROR_MSG_INVALID_API_TOKEN, RequestException::ERROR_CODE_INVALID_API_TOKEN);
         }

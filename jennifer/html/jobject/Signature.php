@@ -3,6 +3,7 @@
 namespace jennifer\html\jobject;
 
 use jennifer\html\JObject;
+use jennifer\sys\Config;
 
 /**
  * Class Signature: render Jquery signature
@@ -16,9 +17,9 @@ class Signature extends JObject
     public function __construct(array $attr = [], array $data = [])
     {
         $this->metaFiles = ["http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.0/themes/south-street/jquery-ui.css",
-            getenv("SITE_URL") . "/plugins/jquery/signature/jquery.signature.css",
-            getenv("SITE_URL") . "/plugins/jquery/signature/jquery.signature.min.js",
-            getenv("SITE_URL") . "/plugins/jquery/signature/jquery.ui.touch-punch.min.js"];
+            Config::getConfig("SITE_URL") . "/plugins/jquery/signature/jquery.signature.css",
+            Config::getConfig("SITE_URL") . "/plugins/jquery/signature/jquery.signature.min.js",
+            Config::getConfig("SITE_URL") . "/plugins/jquery/signature/jquery.ui.touch-punch.min.js"];
         parent::__construct($attr, $data);
     }
     /*

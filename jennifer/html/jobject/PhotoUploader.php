@@ -3,6 +3,7 @@
 namespace jennifer\html\jobject;
 
 use jennifer\html\JObject;
+use jennifer\sys\Config;
 
 /**
  * Class PhotoUploader: Simple photo uploader that allow drag to order preview photos
@@ -17,7 +18,7 @@ class PhotoUploader extends JObject
     {
         $this->data = ["action" => "uploadPhotos",
             "controller" => "ControllerUpload",
-            "maxSize" => getenv("PHOTO_MAX_SIZE"),
+            "maxSize" => Config::getConfig("PHOTO_MAX_SIZE"),
             "currentPhotos" => [],
             "accept" => "image/jpeg,image/gif,image/png",
             "text" => "Have some photos to upload ?",

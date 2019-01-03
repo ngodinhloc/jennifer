@@ -3,6 +3,7 @@
 namespace jennifer\html\jobject;
 
 use jennifer\html\JObject;
+use jennifer\sys\Config;
 
 /**
  * Class QRCode : render Jquery QR code
@@ -15,7 +16,7 @@ class QRCode extends JObject
 
     public function __construct(array $attr = [], array $data = [])
     {
-        $this->metaFiles = [getenv("SITE_URL") . "/plugins/jquery/qrcode/jquery.qrcode.min.js",];
+        $this->metaFiles = [Config::getConfig("SITE_URL") . "/plugins/jquery/qrcode/jquery.qrcode.min.js",];
         parent::__construct($attr, $data);
     }
 }

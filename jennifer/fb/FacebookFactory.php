@@ -5,6 +5,7 @@ require_once(DOC_ROOT . '/plugins/facebook/autoload.php');
 
 use Facebook;
 use Facebook\Exceptions\FacebookSDKException;
+use jennifer\sys\Config;
 
 /**
  * Class FacebookFactory
@@ -18,8 +19,8 @@ class FacebookFactory
      */
     public function createFacebook()
     {
-        $facebook = new Facebook\Facebook(['app_id' => getenv("FB_APPID"),
-            'app_secret' => getenv("FB_SECRET"),
+        $facebook = new Facebook\Facebook(['app_id' => Config::getConfig("FB_APPID"),
+            'app_secret' => Config::getConfig("FB_SECRET"),
             'default_graph_version' => 'v2.8',]);
 
         return $facebook;

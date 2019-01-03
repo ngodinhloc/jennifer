@@ -3,6 +3,7 @@
 namespace jennifer\html\jobject;
 
 use jennifer\html\JObject;
+use jennifer\sys\Config;
 
 /**
  * Class ColorPicker: render JQuery colour picker
@@ -15,8 +16,8 @@ class ColorPicker extends JObject
 
     public function __construct(array $attr = [], array $data = [])
     {
-        $this->metaFiles = [getenv("SITE_URL") . "/plugins/jquery/colorpicker/jquery.colorpicker.min.css",
-            getenv("SITE_URL") . "/plugins/jquery/colorpicker/jquery.colorpicker.min.js"];
+        $this->metaFiles = [Config::getConfig("SITE_URL") . "/plugins/jquery/colorpicker/jquery.colorpicker.min.css",
+            Config::getConfig("SITE_URL") . "/plugins/jquery/colorpicker/jquery.colorpicker.min.js"];
         parent::__construct($attr, $data);
     }
 }

@@ -4,6 +4,7 @@ namespace jennifer\fb;
 
 use Facebook;
 use jennifer\html\Element;
+use jennifer\sys\Config;
 use jennifer\sys\Globals;
 
 /**
@@ -12,18 +13,26 @@ use jennifer\sys\Globals;
  */
 class FacebookHelper
 {
-    const FB_TEXT = 'text';
+    /** @var Facebook\Facebook */
+    public $fb;
     // Post type
+    const FB_TEXT = 'text';
     const FB_FEED = 'feed';
     const FB_ALBUM = 'album';
     const FB_LINK = 'link';
-    /** @var Facebook\Facebook */
-    public $fb;
 
+    /**
+     * FacebookHelper constructor.
+     * @throws Facebook\Exceptions\FacebookSDKException
+     */
     public function __construct()
     {
-        $factory = new FacebookFactory();
-        $this->fb = $factory->createFacebook();
+        try {
+            $factory = new FacebookFactory();
+            $this->fb = $factory->createFacebook();
+        } catch (Facebook\Exceptions\FacebookSDKException $exception) {
+            throw $exception;
+        }
     }
 
     /**
@@ -63,7 +72,7 @@ class FacebookHelper
                     foreach ($response->getDecodedBody() as $allPages) {
                         foreach ($allPages as $page) {
                             // if page found then set session
-                            if (isset($page['id']) && $page['id'] == getenv("FB_PAGEID")) {
+                            if (isset($page['id']) && $page['id'] == Config::getConfig("FB_PAGEID")) {
                                 $appAccessToken = (string)$page['access_token'];
                                 Globals::setSession("FB_appAccessToken", $appAccessToken);
                                 break;

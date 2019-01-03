@@ -6,6 +6,7 @@ use jennifer\exception\RequestException;
 use jennifer\http\Response;
 use jennifer\jwt\JWT;
 use jennifer\sys\Globals;
+use jennifer\sys\Config;
 
 /**
  * Class Authentication: responsible for checking user permission, api permission
@@ -47,7 +48,7 @@ class Authentication implements AuthenticationInterface
     {
         $jwt = Globals::session("jwt");
         if ($jwt) {
-            $decoded = JWT::decode($jwt, getenv("JWT_KEY_USER"), ['HS256']);
+            $decoded = JWT::decode($jwt, Config::getConfig("JWT_KEY_USER"), ['HS256']);
             if (isset($decoded->id) && isset($decoded->name) && isset($decoded->permission)) {
                 return $decoded;
             }
@@ -138,7 +139,7 @@ class Authentication implements AuthenticationInterface
     {
         switch ($checkType) {
             case "view":
-                $this->response->redirect(getenv("LOGIN_VIEW_URL"), $this->messages["NO_PERMISSION_VIEW"]);
+                $this->response->redirect(Config::getConfig("LOGIN_VIEW_URL"), $this->messages["NO_PERMISSION_VIEW"]);
                 break;
             case "controller":
                 throw new RequestException(RequestException::ERROR_MSG_NO_CONTROLLER_PERMISSION, RequestException::ERROR_CODE_NO_CONTROLLER_PERMISSION);
@@ -161,7 +162,7 @@ class Authentication implements AuthenticationInterface
      */
     public function encryptPassword($password)
     {
-        return md5(crypt($password, getenv("SALT_MD5")));
+        return md5(crypt($password, Config::getConfig("SALT_MD5")));
     }
 
     /**
@@ -171,7 +172,7 @@ class Authentication implements AuthenticationInterface
      */
     public function setJWT($data)
     {
-        $jwt = JWT::encode($data, getenv("JWT_KEY_USER"));
+        $jwt = JWT::encode($data, Config::getConfig("JWT_KEY_USER"));
         Globals::setSession("jwt", $jwt);
 
         return $jwt;

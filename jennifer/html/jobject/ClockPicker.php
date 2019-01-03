@@ -3,6 +3,7 @@
 namespace jennifer\html\jobject;
 
 use jennifer\html\JObject;
+use jennifer\sys\Config;
 
 /**
  * Class ClockPicker: render Jquery clock picker
@@ -15,8 +16,8 @@ class ClockPicker extends JObject
 
     public function __construct(array $attr = [], array $data = [])
     {
-        $this->metaFiles = [getenv("SITE_URL") . "/plugins/jquery/clockpicker/bootstrap.clockpicker.min.js",
-            getenv("SITE_URL") . "/plugins/jquery/clockpicker/bootstrap.clockpicker.min.css",];
+        $this->metaFiles = [Config::getConfig("SITE_URL") . "/plugins/jquery/clockpicker/bootstrap.clockpicker.min.js",
+            Config::getConfig("SITE_URL") . "/plugins/jquery/clockpicker/bootstrap.clockpicker.min.css",];
         parent::__construct($attr, $data);
     }
 }

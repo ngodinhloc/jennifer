@@ -46,4 +46,13 @@ class Config
             }
         }
     }
+
+    /**
+     * @param $name
+     * @return array|false|string
+     */
+    public static function getConfig($name)
+    {
+        return getenv($name);
+    }
 }

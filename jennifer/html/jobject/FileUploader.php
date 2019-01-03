@@ -3,6 +3,7 @@
 namespace jennifer\html\jobject;
 
 use jennifer\html\JObject;
+use jennifer\sys\Config;
 
 /**
  * Class FileUploader: render Jquery file uploader
@@ -21,8 +22,8 @@ class FileUploader extends JObject
 
     public function __construct(array $attr = [], array $data = [])
     {
-        $this->metaFiles = [getenv("SITE_URL") . "/plugins/jquery/fileuploader/jquery.fileuploader.min.js",
-            getenv("SITE_URL") . "/plugins/jquery/fileuploader/jquery.fileuploader.css",];
+        $this->metaFiles = [Config::getConfig("SITE_URL") . "/plugins/jquery/fileuploader/jquery.fileuploader.min.js",
+            Config::getConfig("SITE_URL") . "/plugins/jquery/fileuploader/jquery.fileuploader.css",];
         parent::__construct($attr, $data);
     }
 }

@@ -4,6 +4,7 @@ namespace jennifer\http;
 
 use jennifer\exception\ConfigException;
 use jennifer\exception\RequestException;
+use jennifer\sys\Config;
 use jennifer\sys\Globals;
 
 class  Router
@@ -45,7 +46,7 @@ class  Router
      */
     public function loadController($action, $controller)
     {
-        $file = Globals::docRoot() . "/" . getenv("CONTROLLER_DIR") . $controller . ".php";
+        $file = Globals::docRoot() . "/" . Config::getConfig("CONTROLLER_DIR") . $controller . ".php";
         if (!file_exists($file)) {
             throw new RequestException(RequestException::ERROR_MSG_INVALID_CONTROLLER, RequestException::ERROR_CODE_INVALID_CONTROLLER);
         }
@@ -64,7 +65,7 @@ class  Router
     {
         if ($url = $this->getRoute($uri)) {
             $route = $this->routes[$url];
-            $file = Globals::docRoot() . "/" . getenv("VIEW_DIR") . $route . ".php";
+            $file = Globals::docRoot() . "/" . Config::getConfig("VIEW_DIR") . $route . ".php";
             if (!file_exists($file)) {
                 throw new RequestException(RequestException::ERROR_MSG_INVALID_VIEW, RequestException::ERROR_CODE_INVALID_VIEW);
             }
