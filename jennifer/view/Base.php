@@ -32,17 +32,16 @@ class Base
     protected $cache;
     /** @var array list of templates used in the view */
     protected $templates = [];
-    /** @var array view data */
+    /** @var bool|array required permission of the view */
+    protected $requiredPermission = false;
+    /** @var array store data that will be accessible from template */
     protected $data = [];
-    /** @var array meta data : module, view, title, description, keyword, metaTags, userData
-     * Only $data and $meta are accessible in templates */
+    /** @var array store meta data : userData , route, url, title, description, keyword, metaTags, metaFiles */
     protected $meta = [];
     /** @var array store para from uri */
     protected $para = [];
     /** @var array|bool user data */
     protected $userData = false;
-    /** @var bool|array required permission of the view */
-    protected $requiredPermission = false;
     /** @var string route of the view */
     protected $route;
     /** @var  string url of the view */
@@ -53,8 +52,9 @@ class Base
     protected $description;
     /** @var  string keywords of the view */
     protected $keyword;
-
+    /** @var array css, js */
     protected $metaFiles = ["header" => [], "footer" => []];
+    /** @var array tags */
     protected $metaTags = ["header" => "", "footer" => ""];
 
     /**
@@ -140,12 +140,14 @@ class Base
     }
 
     /**
-     * Set view data
-     * @param $data
+     * Set a value of data
+     * @param array name => var
      */
-    public function setData($data)
+    public function setData($array = [])
     {
-        $this->data = $data;
+        foreach ($array as $name => $var) {
+            $this->data["$name"] = $var;
+        }
     }
 
     /**
@@ -189,11 +191,13 @@ class Base
 
     /**
      * Add html code to header
-     * @param $tag
+     * @param array $tags
      */
-    public function addMetaTag($tag)
+    public function addMetaTags($tags)
     {
-        $this->metaTags["header"] .= $tag;
+        foreach ($tags as $tag) {
+            $this->metaTags["header"] .= $tag;
+        }
     }
 
     /**
@@ -203,25 +207,25 @@ class Base
     public function registerMetaFiles($object)
     {
         $metaFiles = $object->getMetaFiles();
-        foreach ($metaFiles as $file) {
-            $this->addMetaFile($file);
-        }
+        $this->addMetaFiles($metaFiles);
     }
 
     /**
      * Add meta file
-     * @param string $file
+     * @param array $files
      */
-    public function addMetaFile($file)
+    public function addMetaFiles($files)
     {
-        $ext = Common::getFileExtension($file);
-        switch ($ext) {
-            case "css":
-                array_push($this->metaFiles["header"], ["type" => $ext, "src" => $file]);
-                break;
-            case "js":
-                array_push($this->metaFiles["footer"], ["type" => $ext, "src" => $file]);
-                break;
+        foreach ($files as $file) {
+            $ext = Common::getFileExtension($file);
+            switch ($ext) {
+                case "css":
+                    array_push($this->metaFiles["header"], ["type" => $ext, "src" => $file]);
+                    break;
+                case "js":
+                    array_push($this->metaFiles["footer"], ["type" => $ext, "src" => $file]);
+                    break;
+            }
         }
     }
 
