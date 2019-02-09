@@ -8,6 +8,7 @@ use jennifer\http\Request;
 use jennifer\io\Output;
 use jennifer\jwt\JWT;
 use jennifer\sys\Config;
+use thedaysoflife\api\ServiceMapper;
 
 /**
  * API gateway which will call requested service to perform action
@@ -16,7 +17,6 @@ use jennifer\sys\Config;
  */
 class API implements APIInterface
 {
-    const API_REQUEST_NAME = "req";
     /** @var Request */
     protected $request;
     /** @var  ServiceFactory */
@@ -35,21 +35,26 @@ class API implements APIInterface
     protected $userData = [];
     /** @var array parameters */
     protected $para = [];
+    const API_REQUEST_NAME = "req";
 
     /**
      * API constructor.
-     * @param ServiceMap $serviceMap
+     * @param ServiceMap|null $serviceMapper
+     * @param ServiceFactory|null $serviceFactory
+     * @param Output|null $output
+     * @param Request|null $request
      * @throws ConfigException
      */
-    public function __construct(ServiceMap $serviceMap)
+    public function __construct(ServiceMap $serviceMapper = null, ServiceFactory $serviceFactory = null,
+                                Output $output = null, Request $request = null)
     {
-        if (!($serviceMap instanceof ServiceMap)) {
+        if (!($serviceMapper instanceof ServiceMap)) {
             throw new ConfigException(ConfigException::ERROR_MSG_MISSING_SERVICE_MAP, ConfigException::ERROR_CODE_MISSING_SERVICE_MAP);
         }
-        $this->mapper = $serviceMap;
-        $this->factory = new ServiceFactory();
-        $this->output = new Output();
-        $this->request = new Request();
+        $this->mapper = $serviceMapper ?: new ServiceMapper();
+        $this->factory = $serviceFactory ?: new ServiceFactory();
+        $this->output = $output ?: new Output();
+        $this->request = $request ?: new Request();
     }
 
     /**
@@ -116,4 +121,96 @@ class API implements APIInterface
 
         return false;
     }
+
+    /**
+     * @return Output
+     */
+    public function getOutput(): Output
+    {
+        return $this->output;
+    }
+
+    /**
+     * @param Output $output
+     * @return API
+     */
+    public function setOutput(Output $output): API
+    {
+        $this->output = $output;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getToken(): string
+    {
+        return $this->token;
+    }
+
+    /**
+     * @param string $token
+     * @return API
+     */
+    public function setToken(string $token): API
+    {
+        $this->token = $token;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAction(): string
+    {
+        return $this->action;
+    }
+
+    /**
+     * @param string $action
+     * @return API
+     */
+    public function setAction(string $action): API
+    {
+        $this->action = $action;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getUserData(): array
+    {
+        return $this->userData;
+    }
+
+    /**
+     * @param array $userData
+     * @return API
+     */
+    public function setUserData(array $userData): API
+    {
+        $this->userData = $userData;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPara(): array
+    {
+        return $this->para;
+    }
+
+    /**
+     * @param array $para
+     * @return API
+     */
+    public function setPara(array $para): API
+    {
+        $this->para = $para;
+        return $this;
+    }
+
+
 }

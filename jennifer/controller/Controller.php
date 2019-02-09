@@ -14,8 +14,6 @@ use jennifer\io\Output;
  */
 class Controller implements ControllerInterface
 {
-    const ERROR_CODE_CONTROLLER_NOT_FOUND = 1;
-    const ERROR_CODE_ACTION_NOT_FOUND = 2;
     /** @var Authentication */
     protected $authentication;
     /** @var  Request */
@@ -28,16 +26,20 @@ class Controller implements ControllerInterface
     protected $requiredPermission = false;
     /** @var mixed result of the action */
     protected $result;
+    const ERROR_CODE_CONTROLLER_NOT_FOUND = 1;
+    const ERROR_CODE_ACTION_NOT_FOUND = 2;
 
     /**
      * Controller constructor.
+     * @param Request|null $request
+     * @param Output|null $output
      * @throws RequestException
      */
-    public function __construct()
+    public function __construct(Request $request = null, Output $output = null)
     {
-        $this->request = new Request();
+        $this->request = $request ?: new Request();
+        $this->output = $output ?: new Output();
         $this->authentication = new Authentication();
-        $this->output = new Output();
         try {
             $this->authentication->checkUserPermission($this->requiredPermission, "controller");
         } catch (RequestException $exception) {
@@ -75,5 +77,77 @@ class Controller implements ControllerInterface
     protected function loadRequiredPermission()
     {
 
+    }
+
+    /**
+     * @return Request
+     */
+    public function getRequest(): Request
+    {
+        return $this->request;
+    }
+
+    /**
+     * @param Request $request
+     * @return Controller
+     */
+    public function setRequest(Request $request): Controller
+    {
+        $this->request = $request;
+        return $this;
+    }
+
+    /**
+     * @return Output
+     */
+    public function getOutput(): Output
+    {
+        return $this->output;
+    }
+
+    /**
+     * @param Output $output
+     * @return Controller
+     */
+    public function setOutput(Output $output): Controller
+    {
+        $this->output = $output;
+        return $this;
+    }
+
+    /**
+     * @return array|bool
+     */
+    public function getUserData()
+    {
+        return $this->userData;
+    }
+
+    /**
+     * @param array|bool $userData
+     * @return Controller
+     */
+    public function setUserData($userData)
+    {
+        $this->userData = $userData;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getResult()
+    {
+        return $this->result;
+    }
+
+    /**
+     * @param mixed $result
+     * @return Controller
+     */
+    public function setResult($result)
+    {
+        $this->result = $result;
+        return $this;
     }
 }

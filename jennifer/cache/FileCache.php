@@ -57,7 +57,7 @@ class FileCache extends Cache implements CacheInterface
                         return $data;
                     }
                 }
-            } catch (IOException $exception) {
+            } catch (\Exception $exception) {
                 $exception->getMessage();
 
                 return false;

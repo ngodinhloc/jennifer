@@ -13,9 +13,9 @@ class Model
     /** @var Capsule */
     protected $db;
 
-    public function __construct()
+    public function __construct(Capsule $db = null)
     {
-        $this->db = new Capsule();
+        $this->db = $db ?: new Capsule();
     }
 
     public function __destruct()

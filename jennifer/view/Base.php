@@ -59,15 +59,18 @@ class Base
 
     /**
      * Base constructor.
+     * @param Request|null $request
+     * @param Output|null $output
+     * @param CacheInterface|null $cacher
      * @throws RequestException
      */
-    public function __construct()
+    public function __construct(Request $request = null, Output $output = null, CacheInterface $cacher = null)
     {
-        $this->authentication = new Authentication();
-        $this->request = new Request();
-        $this->output = new Output();
-        $this->cacher = new FileCache();
+        $this->request = $request ?: new Request();
+        $this->output = $output ?: new Output();
+        $this->cacher = $cacher ?: new FileCache();
         $this->url = $this->request->uri;
+        $this->authentication = new Authentication();
         try {
             $this->authentication->checkUserPermission($this->requiredPermission, "view");
         } catch (RequestException $exception) {

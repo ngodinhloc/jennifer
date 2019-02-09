@@ -60,9 +60,9 @@ abstract class Database implements DatabaseInterface
 
     /**
      * Database constructor.
-     * @param DriverInterface
+     * @param DriverInterface $driver
      */
-    public function __construct($driver = null)
+    public function __construct(DriverInterface $driver = null)
     {
         if ($driver instanceof DriverInterface) {
             $this->driver = $driver;

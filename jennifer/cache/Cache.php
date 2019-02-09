@@ -6,7 +6,7 @@ namespace jennifer\cache;
  * Class Cache
  * @package jennifer\cache
  */
-class Cache
+abstract class Cache
 {
     const CACHE_EXPIRE = 36000; // seconds
 
