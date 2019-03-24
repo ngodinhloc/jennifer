@@ -2,12 +2,13 @@
 
 namespace Jennifer\Db;
 
-use Jennifer\Cache\CacheInterface;
-use Jennifer\Cache\CacheFactory;
+use Jennifer\Cache\CacheEngineFactory;
+use Jennifer\Cache\CacheEngineInterface;
 use Jennifer\Db\Driver\DriverFactory;
 use Jennifer\Db\Driver\DriverInterface;
 use Jennifer\Db\Exception\DbException;
 use Jennifer\Http\Response;
+use Jennifer\Sys\Config;
 
 /**
  * Class Database
@@ -15,7 +16,7 @@ use Jennifer\Http\Response;
  */
 abstract class Database implements DatabaseInterface
 {
-    /** @var  CacheInterface */
+    /** @var  CacheEngineInterface */
     protected $cacher;
     /** @var  string table name */
     protected $tableName;
@@ -229,7 +230,7 @@ abstract class Database implements DatabaseInterface
         $sql = $this->buildQuery(self::QUERY_SELECT, $foundRows);
 
         if ($cache) {
-            $this->cacher = CacheFactory::createCache($cache);
+            $this->cacher = CacheEngineFactory::createCacheEngine($cache, Config::getConfig("CACHE_TIME"), Config::getConfig("CACHE_TIME"));
             $data = $this->cacher->getCache($sql);
             if ($data) {
                 $this->result = $data["data"];

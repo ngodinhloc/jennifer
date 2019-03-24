@@ -3,13 +3,12 @@
 namespace Jennifer\View;
 
 use Jennifer\Auth\Authentication;
-use Jennifer\Cache\CacheInterface;
-use Jennifer\Cache\Engine\FileCache;
+use Jennifer\Cache\CacheEngineFactory;
+use Jennifer\Cache\CacheEngineInterface;
 use Jennifer\Com\Common;
-use Jennifer\Http\Exception\RequestException;
-use Jennifer\Html\JObject;
 use Jennifer\Http\Request;
 use Jennifer\IO\Output;
+use Jennifer\Sys\Config;
 use Jennifer\Template\Template;
 
 /**
@@ -24,8 +23,8 @@ class Base
     protected $tpl;
     /** @var Output */
     protected $output;
-    /** @var CacheInterface */
-    protected $cacher;
+    /** @var CacheEngineInterface */
+    protected $cacheEngine;
     /** @var  Request */
     protected $request;
     /** @var  bool cache this view or not */
@@ -61,24 +60,20 @@ class Base
      * Base constructor.
      * @param \Jennifer\Http\Request|null $request
      * @param \Jennifer\IO\Output|null $output
-     * @param \Jennifer\Cache\CacheInterface|null $cacher
-     * @throws \Jennifer\Http\Exception\RequestException
      * @throws \Jennifer\Controller\Exception\ControllerException
      */
-    public function __construct(Request $request = null, Output $output = null, CacheInterface $cacher = null)
+    public function __construct(Request $request = null, Output $output = null)
     {
         $this->request = $request ?: new Request();
         $this->output = $output ?: new Output();
-        $this->cacher = $cacher ?: new FileCache();
         $this->url = $this->request->uri;
         $this->authentication = new Authentication();
-        try {
-            $this->authentication->checkUserPermission($this->requiredPermission, "view");
-        } catch (RequestException $exception) {
-            throw $exception;
-        }
+        $this->authentication->checkUserPermission($this->requiredPermission, "view");
         $this->userData = $this->authentication->getUserData();
-        if ($this->cache) {
+        if (Config::getConfig("CACHE_ENGINE")) {
+            $this->cacheEngine = CacheEngineFactory::createCacheEngine(Config::getConfig("CACHE_ENGINE"), Config::getConfig("CACHE_TIME"), Config::getConfig("CACHE_TIME"));
+        }
+        if ($this->cacheEngine && $this->cache) {
             $this->retrieveCache();
         }
     }
@@ -90,7 +85,7 @@ class Base
      */
     protected function retrieveCache()
     {
-        $cache = $this->cacher->getCache($this->url);
+        $cache = $this->cacheEngine->getCache($this->url);
         if ($cache) {
             $this->output->html($cache);
         }
@@ -245,7 +240,7 @@ class Base
         $html = $this->tpl->render($compress);
         // cache the whole view html
         if ($this->cache) {
-            $this->cacher->writeCache($this->url, $html);
+            $this->cacheEngine->writeCache($this->url, $html);
         }
 
         $this->output->html($html);
