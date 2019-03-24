@@ -8,7 +8,7 @@ composer require ngodinhloc/jennifer
 </pre>
 # Usage
 ## Single Point Entry
-### index.php
+#### index.php
 <pre>
 use Jennifer\Http\Response;
 use Jennifer\Http\Router;
@@ -22,7 +22,7 @@ try {
 }
 </pre>
 
-####api/index.php
+#### api/index.php
 <pre>
 use Jennifer\Api\Api;
 use Jennifer\Http\Response;
