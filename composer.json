@@ -16,9 +16,17 @@
   "require": {
     "php": "^7.0"
   },
+  "require-dev": {
+    "phpunit/phpunit": "^6.1"
+  },
   "autoload": {
     "psr-4": {
       "Jennifer\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Jennifer\\Test\\": "test/"
     }
   },
   "minimum-stability": "dev"

@@ -11,7 +11,12 @@ abstract class CacheEngine
     protected $dir;
     protected $time; // seconds
 
-    public function __construct(string $dir = null, int $time = 36000)
+    /**
+     * CacheEngine constructor.
+     * @param string|null $dir
+     * @param int $time
+     */
+    public function __construct($dir = null, $time = 36000)
     {
         $this->dir = $dir;
         $this->time = $time;
