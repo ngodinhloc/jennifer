@@ -71,7 +71,7 @@ class Base
         $this->authentication->checkUserPermission($this->requiredPermission, "view");
         $this->userData = $this->authentication->getUserData();
         if (Config::getConfig("CACHE_ENGINE")) {
-            $this->cacheEngine = CacheEngineFactory::createCacheEngine(Config::getConfig("CACHE_ENGINE"), Config::getConfig("CACHE_TIME"), Config::getConfig("CACHE_TIME"));
+            $this->cacheEngine = CacheEngineFactory::createCacheEngine(Config::getConfig("CACHE_ENGINE"), Config::getConfig("CACHE_DIR"), Config::getConfig("CACHE_TIME"));
         }
         if ($this->cacheEngine && $this->cache) {
             $this->retrieveCache();

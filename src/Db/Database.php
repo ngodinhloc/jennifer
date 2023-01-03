@@ -230,7 +230,7 @@ abstract class Database implements DatabaseInterface
         $sql = $this->buildQuery(self::QUERY_SELECT, $foundRows);
 
         if ($cache) {
-            $this->cacher = CacheEngineFactory::createCacheEngine($cache, Config::getConfig("CACHE_TIME"), Config::getConfig("CACHE_TIME"));
+            $this->cacher = CacheEngineFactory::createCacheEngine($cache, Config::getConfig("CACHE_DIR"), Config::getConfig("CACHE_TIME"));
             $data = $this->cacher->getCache($sql);
             if ($data) {
                 $this->result = $data["data"];
